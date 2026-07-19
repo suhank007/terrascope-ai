@@ -23,15 +23,17 @@ export function HudOverlay() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6"
       >
-        <div className="glass-panel pointer-events-auto flex items-center gap-2 self-start rounded-full py-2 pl-3 pr-4">
-          <Globe2 className="h-4 w-4 text-accent" />
-          <span className="text-sm font-semibold tracking-tight text-foreground">TerraScope AI</span>
+        <div className="pointer-events-auto flex flex-wrap items-center gap-2 self-start">
+          <div className="glass-panel flex items-center gap-2 rounded-full py-2 pl-3 pr-4">
+            <Globe2 className="h-4 w-4 text-accent" />
+            <span className="text-sm font-semibold tracking-tight text-foreground">TerraScope AI</span>
+          </div>
+          {layers.flights && <AirlineFilter />}
         </div>
 
         <div className="pointer-events-auto flex flex-wrap items-center gap-2">
           <KpiTicker />
           <LayerToggle />
-          {layers.flights && <AirlineFilter />}
           <AlertsBell />
           <AccountLauncher />
         </div>
