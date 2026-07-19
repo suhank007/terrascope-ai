@@ -42,7 +42,7 @@ export function HudOverlay() {
         <WildfireConfigHint />
       </div>
 
-      <div className="pointer-events-none absolute bottom-6 right-6 z-20">
+      <div className="pointer-events-auto absolute bottom-6 right-6 z-20">
         <CopilotLauncher />
       </div>
     </>
