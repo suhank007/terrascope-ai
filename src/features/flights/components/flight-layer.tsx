@@ -1,26 +1,31 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Cartesian3, Math as CesiumMath } from "cesium";
 import { Entity, BillboardGraphics } from "resium";
 import { useFlights } from "../hooks/use-flights";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { colorForAltitude } from "../lib/color-scale";
+import { filterFlightsByAirlines } from "../lib/filter-airlines";
 
 export function FlightLayer() {
   const { data } = useFlights();
-  const { flightsRef } = useGlobeUi();
+  const { flightsRef, selectedAirlines } = useGlobeUi();
+
+  const flights = useMemo(
+    () => (data ? filterFlightsByAirlines(data.flights, selectedAirlines) : []),
+    [data, selectedAirlines]
+  );
 
   useEffect(() => {
-    if (!data) return;
-    flightsRef.current = new Map(data.flights.map((flight) => [flight.icao24, flight]));
-  }, [data, flightsRef]);
+    flightsRef.current = new Map(flights.map((flight) => [flight.icao24, flight]));
+  }, [flights, flightsRef]);
 
   if (!data) return null;
 
   return (
     <>
-      {data.flights.map((flight) => (
+      {flights.map((flight) => (
         <Entity
           key={flight.icao24}
           id={flight.icao24}

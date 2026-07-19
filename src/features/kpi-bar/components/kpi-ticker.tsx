@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Activity, Gauge, Plane } from "lucide-react";
 import { useEarthquakes } from "@/features/earthquakes/hooks/use-earthquakes";
 import { useFlights } from "@/features/flights/hooks/use-flights";
+import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
+import { filterFlightsByAirlines } from "@/features/flights/lib/filter-airlines";
 import { deriveKpis } from "../lib/derive-kpis";
 import { formatMagnitude } from "@/lib/format";
 
@@ -35,8 +37,10 @@ function Stat({
 export function KpiTicker() {
   const { data: earthquakes } = useEarthquakes();
   const { data: flights } = useFlights();
+  const { selectedAirlines } = useGlobeUi();
 
-  const kpis = deriveKpis(earthquakes?.quakes, flights?.count, flights?.truncated ?? false);
+  const visibleFlightCount = flights ? filterFlightsByAirlines(flights.flights, selectedAirlines).length : 0;
+  const kpis = deriveKpis(earthquakes?.quakes, visibleFlightCount, flights?.truncated ?? false);
 
   return (
     <div className="glass-panel flex divide-x divide-border rounded-full px-1 py-1">

@@ -4,12 +4,16 @@ import { motion } from "framer-motion";
 import { Globe2 } from "lucide-react";
 import { KpiTicker } from "@/features/kpi-bar/components/kpi-ticker";
 import { FlightZoomHint } from "@/features/flights/components/flight-zoom-hint";
+import { AirlineFilter } from "@/features/flights/components/airline-filter";
 import { WildfireConfigHint } from "@/features/wildfires/components/wildfire-config-hint";
 import { AlertsBell } from "@/features/alerts/components/alerts-bell";
 import { CopilotLauncher } from "@/features/copilot/components/copilot-launcher";
 import { LayerToggle } from "./layer-toggle";
+import { useGlobeUi } from "../context/globe-ui-context";
 
 export function HudOverlay() {
+  const { layers } = useGlobeUi();
+
   return (
     <>
       <motion.div
@@ -26,6 +30,7 @@ export function HudOverlay() {
         <div className="pointer-events-auto flex flex-wrap items-center gap-2">
           <KpiTicker />
           <LayerToggle />
+          {layers.flights && <AirlineFilter />}
           <AlertsBell />
         </div>
       </motion.div>

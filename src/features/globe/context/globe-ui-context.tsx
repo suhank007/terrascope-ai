@@ -37,6 +37,9 @@ interface GlobeUiContextValue {
   citiesRef: RefObject<Map<string, WeatherCity>>;
   airQualityCitiesRef: RefObject<Map<string, WeatherCity>>;
   wildfiresRef: RefObject<Map<string, WildfireHotspot>>;
+  selectedAirlines: ReadonlySet<string>;
+  toggleAirline: (icaoPrefix: string) => void;
+  clearAirlineFilter: () => void;
 }
 
 const GlobeUiContext = createContext<GlobeUiContextValue | null>(null);
@@ -52,6 +55,7 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
   });
   const [cameraHeight, setCameraHeight] = useState<number | null>(null);
   const [cameraBounds, setCameraBounds] = useState<BBox | null>(null);
+  const [selectedAirlines, setSelectedAirlines] = useState<ReadonlySet<string>>(() => new Set());
 
   const earthquakesRef = useRef<Map<string, Earthquake>>(new Map());
   const flightsRef = useRef<Map<string, Flight>>(new Map());
@@ -68,6 +72,19 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
     setCameraHeight(height);
   }, []);
 
+  const toggleAirline = useCallback((icaoPrefix: string) => {
+    setSelectedAirlines((prev) => {
+      const next = new Set(prev);
+      if (next.has(icaoPrefix)) next.delete(icaoPrefix);
+      else next.add(icaoPrefix);
+      return next;
+    });
+  }, []);
+
+  const clearAirlineFilter = useCallback(() => {
+    setSelectedAirlines(new Set());
+  }, []);
+
   const value = useMemo<GlobeUiContextValue>(
     () => ({
       selectedEntity,
@@ -82,8 +99,21 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
       citiesRef,
       airQualityCitiesRef,
       wildfiresRef,
+      selectedAirlines,
+      toggleAirline,
+      clearAirlineFilter,
     }),
-    [selectedEntity, layers, toggleLayer, cameraHeight, cameraBounds, setCameraState]
+    [
+      selectedEntity,
+      layers,
+      toggleLayer,
+      cameraHeight,
+      cameraBounds,
+      setCameraState,
+      selectedAirlines,
+      toggleAirline,
+      clearAirlineFilter,
+    ]
   );
 
   return <GlobeUiContext.Provider value={value}>{children}</GlobeUiContext.Provider>;
