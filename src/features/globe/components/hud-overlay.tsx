@@ -8,6 +8,7 @@ import { AirlineFilter } from "@/features/flights/components/airline-filter";
 import { WildfireConfigHint } from "@/features/wildfires/components/wildfire-config-hint";
 import { AlertsBell } from "@/features/alerts/components/alerts-bell";
 import { CopilotLauncher } from "@/features/copilot/components/copilot-launcher";
+import { AccountLauncher } from "@/features/auth/components/account-launcher";
 import { LayerToggle } from "./layer-toggle";
 import { useGlobeUi } from "../context/globe-ui-context";
 
@@ -32,6 +33,7 @@ export function HudOverlay() {
           <LayerToggle />
           {layers.flights && <AirlineFilter />}
           <AlertsBell />
+          <AccountLauncher />
         </div>
       </motion.div>
 

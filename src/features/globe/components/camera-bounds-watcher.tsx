@@ -8,8 +8,17 @@ import { CAMERA_DEBOUNCE_MS } from "../lib/cesium-config";
 
 export function CameraBoundsWatcher() {
   const { viewer, camera, scene } = useCesium();
-  const { setCameraState } = useGlobeUi();
+  const { setCameraState, cesiumRef } = useGlobeUi();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!viewer || !camera || !scene) return;
+
+    cesiumRef.current = { camera, scene };
+    return () => {
+      cesiumRef.current = null;
+    };
+  }, [viewer, camera, scene, cesiumRef]);
 
   useEffect(() => {
     if (!viewer || !camera || !scene) return;

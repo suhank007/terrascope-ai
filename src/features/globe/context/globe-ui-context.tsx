@@ -10,6 +10,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
+import type { Camera, Scene } from "cesium";
 import type { Earthquake } from "@/features/earthquakes/types";
 import type { Flight, BBox } from "@/features/flights/types";
 import type { WeatherCity } from "@/features/weather/types";
@@ -29,6 +30,7 @@ interface GlobeUiContextValue {
   setSelectedEntity: (entity: SelectedEntity | null) => void;
   layers: Layers;
   toggleLayer: (key: keyof Layers) => void;
+  setAllLayers: (layers: Layers) => void;
   cameraHeight: number | null;
   cameraBounds: BBox | null;
   setCameraState: (bounds: BBox | null, height: number | null) => void;
@@ -40,6 +42,11 @@ interface GlobeUiContextValue {
   selectedAirlines: ReadonlySet<string>;
   toggleAirline: (icaoPrefix: string) => void;
   clearAirlineFilter: () => void;
+  setAirlineFilter: (icaoPrefixes: ReadonlySet<string>) => void;
+  /** Live Cesium camera/scene handles, populated from inside the Viewer tree
+   *  so HUD components outside it (e.g. "Save current view") can read/set
+   *  the camera imperatively without themselves living inside <Viewer>. */
+  cesiumRef: RefObject<{ camera: Camera; scene: Scene } | null>;
 }
 
 const GlobeUiContext = createContext<GlobeUiContextValue | null>(null);
@@ -62,9 +69,14 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
   const citiesRef = useRef<Map<string, WeatherCity>>(new Map());
   const airQualityCitiesRef = useRef<Map<string, WeatherCity>>(new Map());
   const wildfiresRef = useRef<Map<string, WildfireHotspot>>(new Map());
+  const cesiumRef = useRef<{ camera: Camera; scene: Scene } | null>(null);
 
   const toggleLayer = useCallback((key: keyof Layers) => {
     setLayers((prev) => ({ ...prev, [key]: !prev[key] }));
+  }, []);
+
+  const setAllLayers = useCallback((next: Layers) => {
+    setLayers(next);
   }, []);
 
   const setCameraState = useCallback((bounds: BBox | null, height: number | null) => {
@@ -85,12 +97,17 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
     setSelectedAirlines(new Set());
   }, []);
 
+  const setAirlineFilter = useCallback((icaoPrefixes: ReadonlySet<string>) => {
+    setSelectedAirlines(new Set(icaoPrefixes));
+  }, []);
+
   const value = useMemo<GlobeUiContextValue>(
     () => ({
       selectedEntity,
       setSelectedEntity,
       layers,
       toggleLayer,
+      setAllLayers,
       cameraHeight,
       cameraBounds,
       setCameraState,
@@ -102,17 +119,21 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
       selectedAirlines,
       toggleAirline,
       clearAirlineFilter,
+      setAirlineFilter,
+      cesiumRef,
     }),
     [
       selectedEntity,
       layers,
       toggleLayer,
+      setAllLayers,
       cameraHeight,
       cameraBounds,
       setCameraState,
       selectedAirlines,
       toggleAirline,
       clearAirlineFilter,
+      setAirlineFilter,
     ]
   );
 
