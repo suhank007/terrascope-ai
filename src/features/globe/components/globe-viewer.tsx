@@ -3,8 +3,8 @@
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import { useMemo } from "react";
 import { Viewer } from "resium";
-import { ImageryLayer, OpenStreetMapImageryProvider } from "cesium";
-import { OSM_TILE_URL } from "../lib/cesium-config";
+import { ImageryLayer, UrlTemplateImageryProvider } from "cesium";
+import { BASEMAP_CREDIT, BASEMAP_SUBDOMAINS, BASEMAP_TILE_URL_TEMPLATE } from "../lib/cesium-config";
 import { useGlobeUi } from "../context/globe-ui-context";
 import { CameraBoundsWatcher } from "./camera-bounds-watcher";
 import { GlobalClickHandler } from "./global-click-handler";
@@ -22,7 +22,14 @@ export function GlobeViewer() {
   const { layers } = useGlobeUi();
 
   const baseLayer = useMemo(
-    () => new ImageryLayer(new OpenStreetMapImageryProvider({ url: OSM_TILE_URL })),
+    () =>
+      new ImageryLayer(
+        new UrlTemplateImageryProvider({
+          url: BASEMAP_TILE_URL_TEMPLATE,
+          subdomains: BASEMAP_SUBDOMAINS,
+          credit: BASEMAP_CREDIT,
+        })
+      ),
     []
   );
 

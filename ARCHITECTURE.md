@@ -53,14 +53,20 @@ Entity click routing is intentionally centralized in one file, `features/globe/c
 
 ## Why no separate backend
 
-The original spec called for FastAPI + Celery + Redis + PostGIS. This build uses Next.js Route Handlers instead — deliberately, not as a shortcut:
+The original spec called for FastAPI + Celery + Redis + PostGIS. This build uses Next.js Route Handlers instead (plus Supabase for the one piece that genuinely needs a database — see below) — deliberately, not as a shortcut:
 
-- There's no persisted state yet (nothing gated behind auth, no saved views), so there's nothing for Celery or PostGIS to actually do.
-- Every external API here is free-tier-friendly and doesn't need a job queue to poll on a schedule — Next's own `fetch` cache (`next: { revalidate: N }`) does that per-route.
-- One language, one deploy target, one place to look for "how does data get from a public API to the globe."
-
-If a future phase adds heavy geospatial aggregation, scheduled batch jobs, or something that genuinely needs Postgres, the natural next step is Supabase (Postgres + PostGIS extension + Auth in one managed service) rather than standing up the original FastAPI/Celery/Redis stack — see the README's "What's not built" section for why that hasn't happened yet.
+- Every live-data external API is free-tier-friendly and doesn't need a job queue to poll on a schedule — Next's own `fetch` cache (`next: { revalidate: N }`) does that per-route.
+- The one feature that needs persistence (saved views) needs a database and auth, not a task queue or heavy geospatial aggregation — Supabase (Postgres + Auth in one managed service) covers that without standing up a separate Python service.
+- One language for the app itself, one deploy target, one place to look for "how does data get from a public API to the globe."
 
 ## AI Copilot
 
 The copilot is a server-side manual tool-use loop (`app/api/copilot/route.ts`), not the SDK's beta tool runner — deliberately, to avoid taking a beta dependency for a straightforward bounded loop (max 6 iterations). Each turn: call the model with the five tools defined in `features/copilot/lib/tools.ts` → if it requests a tool, execute it via the corresponding `fetch-server.ts` function and feed the JSON result back → repeat until `end_turn`. The system prompt explicitly tells the model to use tools rather than answer from training knowledge, since the whole point is that the tools return *live* data.
+
+## Auth & saved views
+
+The only feature that's gated: signed-in users can save the current camera position, layer toggles, and airline filter as a named view, and restore it later. Everything else stays fully public.
+
+- **Auth**: Supabase Auth, magic-link (passwordless) sign-in. `src/lib/supabase/client.ts` (browser) and `server.ts` (Server Components/Route Handlers, cookie-based) follow the standard `@supabase/ssr` split. `src/proxy.ts` refreshes the session cookie on every request — Next.js 16 renamed the `middleware.ts` file convention to `proxy.ts`; same API, new filename.
+- **Storage**: a single `saved_views` table (`supabase/migrations/0001_saved_views.sql`) with row-level security scoping every row to `auth.uid() = user_id` — enforced by Postgres itself, not application code, so a bug in the Route Handler can't leak one user's views to another.
+- **Camera capture/restore**: `features/saved-views/lib/camera-state.ts` reads/writes Cesium's `Camera` (longitude, latitude, height, heading, pitch, roll) via a `cesiumRef` populated from inside the `<Viewer>` tree (`camera-bounds-watcher.tsx`) and exposed through `GlobeUiContext`, so the "Save" button — which lives in the HUD, outside the Cesium tree — can read and fly the camera imperatively.

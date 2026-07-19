@@ -14,6 +14,16 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/public ./public
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# NEXT_PUBLIC_* vars are inlined into the client bundle at build time, not
+# read at container startup — they must be build args, not runtime env vars.
+# Both are optional: the account/saved-views feature is simply unreachable
+# from the browser if omitted, everything else in the app is unaffected.
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 RUN npm run build
 
 # ---- runner ----
