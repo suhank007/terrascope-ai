@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { capByCount, clampBbox, quantizeBbox } from "./sampling";
+import { bboxToPointRadius, capByCount, clampBbox, quantizeBbox } from "./sampling";
 import type { Flight } from "../types";
 
 describe("clampBbox", () => {
@@ -36,12 +36,32 @@ describe("quantizeBbox", () => {
   });
 });
 
+describe("bboxToPointRadius", () => {
+  it("centers on the bbox and covers it within the 250nm cap", () => {
+    const { lat, lon, distNm } = bboxToPointRadius({ west: -1, south: -1, east: 1, north: 1 });
+    expect(lat).toBeCloseTo(0);
+    expect(lon).toBeCloseTo(0);
+    expect(distNm).toBeGreaterThan(0);
+    expect(distNm).toBeLessThanOrEqual(250);
+  });
+
+  it("clamps the radius to 250nm for a large bbox", () => {
+    const { distNm } = bboxToPointRadius({ west: -5, south: -5, east: 5, north: 5 });
+    expect(distNm).toBe(250);
+  });
+
+  it("floors the radius to 5nm for a tiny bbox", () => {
+    const { distNm } = bboxToPointRadius({ west: 0, south: 0, east: 0.001, north: 0.001 });
+    expect(distNm).toBe(5);
+  });
+});
+
 describe("capByCount", () => {
   function makeFlight(icao24: string, velocityMs: number | null): Flight {
     return {
       icao24,
       callsign: null,
-      originCountry: "Testland",
+      aircraftType: null,
       longitude: 0,
       latitude: 0,
       altitudeM: 1000,

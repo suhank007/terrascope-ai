@@ -11,7 +11,7 @@ export function FlightPanelContent({ data }: { data: Flight }) {
         </span>
         <div>
           <p className="text-base font-medium text-foreground">{data.callsign ?? data.icao24.toUpperCase()}</p>
-          <p className="text-xs text-muted">{data.originCountry}</p>
+          <p className="text-xs text-muted">{data.aircraftType ?? data.icao24.toUpperCase()}</p>
         </div>
       </div>
 

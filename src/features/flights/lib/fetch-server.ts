@@ -1,103 +1,40 @@
 import "server-only";
-import { normalizeFlights, type OpenSkyStatesResponse } from "./normalize";
-import { capByCount, clampBbox } from "./sampling";
+import { normalizeFlights, type AdsbStatesResponse } from "./normalize";
+import { bboxToPointRadius, capByCount, clampBbox } from "./sampling";
 import type { BBox, FlightsResponse } from "../types";
 
-const TOKEN_URL = "https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token";
-const STATES_URL = "https://opensky-network.org/api/states/all";
-
-interface CachedToken {
-  value: string;
-  expiresAt: number;
-}
-
-let cachedToken: CachedToken | null = null;
-
-// OpenSky retired anonymous basic auth in March 2026 — the API now requires
-// an OAuth2 client_credentials token (30 min lifetime). Cached in module
-// scope so we don't request a fresh token on every flights poll.
-async function getAccessToken(): Promise<string | null> {
-  const clientId = process.env.OPENSKY_CLIENT_ID;
-  const clientSecret = process.env.OPENSKY_CLIENT_SECRET;
-  if (!clientId || !clientSecret) {
-    return null;
-  }
-
-  if (cachedToken && cachedToken.expiresAt > Date.now()) {
-    return cachedToken.value;
-  }
-
-  let res: Response;
-  try {
-    res = await fetch(TOKEN_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        grant_type: "client_credentials",
-        client_id: clientId,
-        client_secret: clientSecret,
-      }),
-    });
-  } catch (err) {
-    console.error("[opensky] token fetch failed:", err);
-    return null;
-  }
-
-  if (!res.ok) {
-    console.error("[opensky] token endpoint returned", res.status, await res.text().catch(() => ""));
-    return null;
-  }
-
-  const json = (await res.json()) as { access_token: string; expires_in: number };
-  cachedToken = {
-    value: json.access_token,
-    // Refresh a bit early so a request never lands right on the expiry edge.
-    expiresAt: Date.now() + (json.expires_in - 60) * 1000,
-  };
-  return cachedToken.value;
-}
+// OpenSky (the original data source) blocks connections from Vercel's
+// network entirely — confirmed via production logs, both the states
+// endpoint and its OAuth2 token host time out. adsb.fi is a free,
+// keyless, community-run mirror with the same underlying ADS-B data and a
+// much more generous rate limit; no auth needed.
+const STATES_URL = "https://opendata.adsb.fi/api/v3";
 
 function degradedResponse(): FlightsResponse {
   return { generatedAt: new Date().toISOString(), count: 0, truncated: false, degraded: true, flights: [] };
 }
 
-async function fetchStates(url: string, token: string | null): Promise<Response | null> {
-  try {
-    return await fetch(url, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-      next: { revalidate: 60 },
-    });
-  } catch (err) {
-    console.error("[opensky] states fetch failed:", err);
-    return null;
-  }
-}
-
 export async function fetchFlightsData(bbox: BBox): Promise<FlightsResponse> {
   const clamped = clampBbox(bbox);
-  const url = `${STATES_URL}?lamin=${clamped.south}&lomin=${clamped.west}&lamax=${clamped.north}&lomax=${clamped.east}`;
+  const { lat, lon, distNm } = bboxToPointRadius(clamped);
+  const url = `${STATES_URL}/lat/${lat}/lon/${lon}/dist/${distNm}`;
 
-  const token = await getAccessToken();
-  let res = await fetchStates(url, token);
-
-  if (res?.status === 401 && token) {
-    // Token expired mid-flight — force a refresh and retry once.
-    cachedToken = null;
-    const freshToken = await getAccessToken();
-    res = await fetchStates(url, freshToken);
-  }
-
-  if (!res || !res.ok) {
-    // OpenSky's rate limits (429/503) still apply even when authenticated —
-    // treat as a soft "degraded" state rather than a hard error so the UI
-    // stays calm instead of showing a broken flights layer.
-    if (res) {
-      console.error("[opensky] states endpoint returned", res.status, await res.text().catch(() => ""));
-    }
+  let res: Response;
+  try {
+    res = await fetch(url, { next: { revalidate: 60 } });
+  } catch (err) {
+    console.error("[adsb.fi] fetch failed:", err);
     return degradedResponse();
   }
 
-  let raw: OpenSkyStatesResponse;
+  if (!res.ok) {
+    // adsb.fi rate-limits to 1 req/s — treat as a soft "degraded" state
+    // rather than a hard error so the UI stays calm.
+    console.error("[adsb.fi] endpoint returned", res.status, await res.text().catch(() => ""));
+    return degradedResponse();
+  }
+
+  let raw: AdsbStatesResponse;
   try {
     raw = await res.json();
   } catch {

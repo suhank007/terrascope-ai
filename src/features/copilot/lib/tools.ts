@@ -139,7 +139,7 @@ export async function executeCopilotTool(name: string, input: unknown): Promise<
         totalCount: data.count,
         flights: data.flights.slice(0, MAX_LIST_ITEMS).map((f) => ({
           callsign: f.callsign,
-          originCountry: f.originCountry,
+          aircraftType: f.aircraftType,
           altitudeM: f.altitudeM,
           onGround: f.onGround,
         })),

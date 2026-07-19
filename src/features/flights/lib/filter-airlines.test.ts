@@ -6,7 +6,7 @@ function makeFlight(callsign: string | null): Flight {
   return {
     icao24: `icao-${callsign ?? "none"}`,
     callsign,
-    originCountry: "Testland",
+    aircraftType: null,
     longitude: 0,
     latitude: 0,
     altitudeM: 1000,
