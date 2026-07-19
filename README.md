@@ -24,7 +24,7 @@ No backend service, no database, no auth — see [What's not built](#whats-not-b
 | Weather | [Open-Meteo](https://open-meteo.com) — 20 preset cities + click-anywhere | 10min | No |
 | Air quality | [Open-Meteo Air Quality](https://open-meteo.com/en/docs/air-quality-api) — US AQI at the same 20 cities | 15min | No |
 | Flights | [OpenSky Network](https://opensky-network.org) — live state vectors | 60s | No (viewport-gated, see below) |
-| Wildfires | [NASA FIRMS](https://firms.modaps.eosdis.gov/api/) — VIIRS active fire detections | 30min | **Yes** — free, instant signup |
+| Wildfires | [NASA FIRMS](https://firms.modaps.eosdis.nasa.gov/api/) — VIIRS active fire detections | 30min | **Yes** — free, instant signup |
 
 Every source is proxied through `src/app/api/*/route.ts` — nothing calls third-party APIs directly from the browser, and each route delegates to a `lib/fetch-server.ts` function that the AI copilot's tools call directly (no self-HTTP round trip).
 
@@ -41,7 +41,7 @@ At the default 60s poll interval this uses well under half the free daily quota 
 
 ### Wildfires: free key, graceful without it
 
-NASA FIRMS requires a free, instant API key ([firms.modaps.eosdis.gov/api/map_key](https://firms.modaps.eosdis.gov/api/map_key)). Without `NASA_FIRMS_MAP_KEY` set, the layer shows a "add a free NASA_FIRMS_MAP_KEY to enable" hint instead of failing — the rest of the platform is unaffected.
+NASA FIRMS requires a free, instant API key ([firms.modaps.eosdis.nasa.gov/api/map_key](https://firms.modaps.eosdis.nasa.gov/api/map_key)). Without `NASA_FIRMS_MAP_KEY` set, the layer shows a "add a free NASA_FIRMS_MAP_KEY to enable" hint instead of failing — the rest of the platform is unaffected.
 
 ### Globe: no Cesium ion account needed
 
@@ -67,7 +67,7 @@ Open [http://localhost:3000](http://localhost:3000). The globe, earthquakes, wea
 To enable the optional pieces, create `.env.local`:
 
 ```bash
-NASA_FIRMS_MAP_KEY=...       # free at firms.modaps.eosdis.gov/api/map_key — enables wildfires
+NASA_FIRMS_MAP_KEY=...       # free at firms.modaps.eosdis.nasa.gov/api/map_key — enables wildfires
 ANTHROPIC_API_KEY=sk-ant-... # enables the AI copilot
 ```
 
