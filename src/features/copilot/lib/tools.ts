@@ -6,6 +6,7 @@ import { fetchWildfiresData } from "@/features/wildfires/lib/fetch-server";
 import { fetchWeatherData } from "@/features/weather/lib/fetch-server";
 import { fetchAirQualityData } from "@/features/air-quality/lib/fetch-server";
 import { fetchFlightsData } from "@/features/flights/lib/fetch-server";
+import { getAirlineName } from "@/features/flights/lib/airlines";
 
 const MAX_LIST_ITEMS = 15;
 const FLIGHT_RADIUS_DEG = 2.5;
@@ -139,7 +140,9 @@ export async function executeCopilotTool(name: string, input: unknown): Promise<
         totalCount: data.count,
         flights: data.flights.slice(0, MAX_LIST_ITEMS).map((f) => ({
           callsign: f.callsign,
+          airline: getAirlineName(f.callsign),
           aircraftType: f.aircraftType,
+          registration: f.registration,
           altitudeM: f.altitudeM,
           onGround: f.onGround,
         })),

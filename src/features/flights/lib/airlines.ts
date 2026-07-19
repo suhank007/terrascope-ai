@@ -26,3 +26,16 @@ export const AIRLINES: Airline[] = [
   { icaoPrefix: "IGO", name: "IndiGo" },
   { icaoPrefix: "CCA", name: "Air China" },
 ];
+
+const AIRLINES_BY_PREFIX = new Map(AIRLINES.map((airline) => [airline.icaoPrefix, airline.name]));
+
+/**
+ * Resolves a callsign to an airline name for the ~20 major carriers above.
+ * Returns null for private/charter/military flights and anything else not
+ * in the curated list — there's no reliable way to name every operator.
+ */
+export function getAirlineName(callsign: string | null): string | null {
+  const trimmed = callsign?.trim();
+  if (!trimmed || trimmed.length < 3) return null;
+  return AIRLINES_BY_PREFIX.get(trimmed.slice(0, 3).toUpperCase()) ?? null;
+}

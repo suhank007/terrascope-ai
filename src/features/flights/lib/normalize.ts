@@ -9,6 +9,7 @@ interface AdsbAircraft {
   hex: string;
   flight?: string;
   desc?: string;
+  r?: string;
   lat?: number;
   lon?: number;
   alt_baro?: number | "ground";
@@ -47,6 +48,7 @@ export function normalizeFlights(raw: AdsbStatesResponse): Flight[] {
       icao24: ac.hex,
       callsign: ac.flight?.trim() || null,
       aircraftType: ac.desc ?? null,
+      registration: ac.r ?? null,
       longitude: ac.lon,
       latitude: ac.lat,
       altitudeM: altitudeFt !== null ? altitudeFt * FEET_TO_METERS : null,

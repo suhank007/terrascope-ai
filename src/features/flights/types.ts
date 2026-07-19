@@ -2,6 +2,7 @@ export interface Flight {
   icao24: string;
   callsign: string | null;
   aircraftType: string | null;
+  registration: string | null;
   longitude: number;
   latitude: number;
   altitudeM: number | null;

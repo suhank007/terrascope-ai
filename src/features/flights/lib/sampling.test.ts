@@ -62,6 +62,7 @@ describe("capByCount", () => {
       icao24,
       callsign: null,
       aircraftType: null,
+      registration: null,
       longitude: 0,
       latitude: 0,
       altitudeM: 1000,

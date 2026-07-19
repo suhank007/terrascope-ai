@@ -14,6 +14,7 @@ describe("normalizeFlights", () => {
           hex: "abc123",
           flight: "UAL123  ",
           desc: "BOEING 737-800",
+          r: "N123AB",
           lat: 48.85,
           lon: 2.35,
           alt_baro: 16404, // ~5000m
@@ -28,6 +29,7 @@ describe("normalizeFlights", () => {
     expect(flight.icao24).toBe("abc123");
     expect(flight.callsign).toBe("UAL123");
     expect(flight.aircraftType).toBe("BOEING 737-800");
+    expect(flight.registration).toBe("N123AB");
     expect(flight.longitude).toBe(2.35);
     expect(flight.latitude).toBe(48.85);
     expect(flight.onGround).toBe(false);

@@ -1,8 +1,12 @@
 import { ArrowUpRight, Gauge, Navigation, TrendingUp } from "lucide-react";
 import type { Flight } from "../types";
 import { formatAltitudeFt, formatRelativeTime, formatSpeedKt } from "@/lib/format";
+import { getAirlineName } from "../lib/airlines";
 
 export function FlightPanelContent({ data }: { data: Flight }) {
+  const airlineName = getAirlineName(data.callsign);
+  const subtitle = [airlineName, data.aircraftType].filter(Boolean).join(" · ") || data.icao24.toUpperCase();
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-3">
@@ -11,7 +15,7 @@ export function FlightPanelContent({ data }: { data: Flight }) {
         </span>
         <div>
           <p className="text-base font-medium text-foreground">{data.callsign ?? data.icao24.toUpperCase()}</p>
-          <p className="text-xs text-muted">{data.aircraftType ?? data.icao24.toUpperCase()}</p>
+          <p className="text-xs text-muted">{subtitle}</p>
         </div>
       </div>
 
@@ -46,6 +50,12 @@ export function FlightPanelContent({ data }: { data: Flight }) {
           <dt className="text-xs text-muted">Last contact</dt>
           <dd className="mt-1 font-medium text-foreground">{formatRelativeTime(data.lastContact)}</dd>
         </div>
+        {data.registration && (
+          <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+            <dt className="text-xs text-muted">Registration</dt>
+            <dd className="mt-1 font-medium text-foreground">{data.registration}</dd>
+          </div>
+        )}
       </dl>
     </div>
   );
