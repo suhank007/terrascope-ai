@@ -36,7 +36,7 @@ export function AirlineFilter() {
       >
         <Plane className="h-3.5 w-3.5" />
         <span className="hidden sm:inline">
-          {activeCount > 0 ? `${activeCount} airline${activeCount > 1 ? "s" : ""}` : "Airlines"}
+          {activeCount > 0 ? `${activeCount} airline${activeCount > 1 ? "s" : ""}` : "Filter by Airline"}
         </span>
       </button>
 
