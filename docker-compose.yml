@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3001:3000"
+    environment:
+      # Optional — omit either and that feature degrades gracefully instead of failing.
+      - NASA_FIRMS_MAP_KEY=${NASA_FIRMS_MAP_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    restart: unless-stopped
