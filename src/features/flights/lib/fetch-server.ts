@@ -38,11 +38,13 @@ async function getAccessToken(): Promise<string | null> {
         client_secret: clientSecret,
       }),
     });
-  } catch {
+  } catch (err) {
+    console.error("[opensky] token fetch failed:", err);
     return null;
   }
 
   if (!res.ok) {
+    console.error("[opensky] token endpoint returned", res.status, await res.text().catch(() => ""));
     return null;
   }
 
@@ -65,7 +67,8 @@ async function fetchStates(url: string, token: string | null): Promise<Response 
       headers: token ? { Authorization: `Bearer ${token}` } : {},
       next: { revalidate: 60 },
     });
-  } catch {
+  } catch (err) {
+    console.error("[opensky] states fetch failed:", err);
     return null;
   }
 }
@@ -88,6 +91,9 @@ export async function fetchFlightsData(bbox: BBox): Promise<FlightsResponse> {
     // OpenSky's rate limits (429/503) still apply even when authenticated —
     // treat as a soft "degraded" state rather than a hard error so the UI
     // stays calm instead of showing a broken flights layer.
+    if (res) {
+      console.error("[opensky] states endpoint returned", res.status, await res.text().catch(() => ""));
+    }
     return degradedResponse();
   }
 
