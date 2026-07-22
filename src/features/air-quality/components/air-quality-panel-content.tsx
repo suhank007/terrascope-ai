@@ -22,9 +22,9 @@ export function AirQualityPanelContent({ lat, lon, label }: { lat: number; lon: 
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <span
-          className="flex h-14 w-14 items-center justify-center rounded-full text-lg font-semibold text-background"
+          className="flex h-12 w-12 items-center justify-center rounded-full text-sm font-semibold text-background"
           style={{ backgroundColor: color }}
         >
           {Math.round(data.current.usAqi)}

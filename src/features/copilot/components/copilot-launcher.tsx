@@ -16,9 +16,9 @@ export function CopilotLauncher() {
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close AI Copilot" : "Open AI Copilot"}
         whileTap={{ scale: 0.94 }}
-        className="glass-panel flex items-center gap-2 rounded-full py-3 pl-4 pr-5 text-accent shadow-xl"
+        className="flex items-center gap-2 rounded-full bg-accent py-3 pl-4 pr-5 text-background shadow-xl transition-colors hover:bg-accent-strong"
       >
-        {open ? <X className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
+        {open ? <X className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
         <span className="text-sm font-medium">{open ? "Close" : "Ask AI"}</span>
       </motion.button>
     </div>

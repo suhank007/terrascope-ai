@@ -103,7 +103,7 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
             e.preventDefault();
             submit(input);
           }}
-          className="flex items-center gap-2 border-t border-border p-3"
+          className="flex items-center gap-2 border-t border-border px-4 py-3"
         >
           <input
             value={input}

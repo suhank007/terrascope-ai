@@ -73,7 +73,7 @@ export function SearchBar() {
 
   return (
     <div ref={containerRef} className="relative w-full max-w-sm">
-      <div className="glass-panel flex items-center gap-2 rounded-full py-2 pl-4 pr-3">
+      <div className="glass-panel flex items-center gap-2 rounded-full py-2 pl-4 pr-3 transition-colors focus-within:border-accent/50">
         <Search className="h-4 w-4 shrink-0 text-muted" />
         <input
           value={query}

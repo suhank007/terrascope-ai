@@ -52,7 +52,7 @@ export function AirlineFilter() {
             <div className="flex items-center justify-between px-2 py-1.5">
               <p className="text-xs font-medium uppercase tracking-wide text-muted">Filter airlines</p>
               {activeCount > 0 && (
-                <button onClick={clearAirlineFilter} className="text-[10px] text-accent hover:underline">
+                <button onClick={clearAirlineFilter} className="text-xs text-accent hover:underline">
                   Clear
                 </button>
               )}

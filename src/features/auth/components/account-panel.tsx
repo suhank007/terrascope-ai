@@ -125,9 +125,9 @@ function SavedViewRow({ view }: { view: SavedView }) {
       <button
         onClick={() => deleteView.mutate(view.id)}
         aria-label={`Delete ${view.name}`}
-        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:text-danger"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:text-danger"
       >
-        <Trash2 className="h-3 w-3" />
+        <Trash2 className="h-3.5 w-3.5" />
       </button>
     </li>
   );
@@ -149,7 +149,7 @@ function SignedInView() {
         <button
           onClick={handleSignOut}
           aria-label="Sign out"
-          className="flex items-center gap-1 text-[10px] text-muted transition-colors hover:text-foreground"
+          className="flex items-center gap-1 text-xs text-muted transition-colors hover:text-foreground"
         >
           <LogOut className="h-3 w-3" /> Sign out
         </button>
@@ -161,7 +161,7 @@ function SignedInView() {
 
       <div className="my-1 border-t border-border" />
 
-      <p className="px-2 pb-1 pt-0.5 text-[10px] font-medium uppercase tracking-wide text-muted">Saved views</p>
+      <p className="px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-muted">Saved views</p>
       {isLoading ? (
         <div className="flex items-center justify-center gap-2 py-6 text-xs text-muted">
           <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading…

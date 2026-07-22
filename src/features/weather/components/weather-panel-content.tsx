@@ -22,9 +22,9 @@ export function WeatherPanelContent({ lat, lon, label }: { lat: number; lon: num
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-4">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-accent/30 bg-accent-soft">
-          <Icon className="h-7 w-7 text-accent" />
+      <div className="flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-accent/30 bg-accent-soft">
+          <Icon className="h-5 w-5 text-accent" />
         </div>
         <div>
           <p className="text-2xl font-semibold text-foreground">

@@ -54,7 +54,7 @@ export function MapLegend() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="glass-panel-elevated absolute bottom-11 left-0 z-30 w-64 max-h-96 overflow-y-auto rounded-2xl p-3 shadow-2xl"
+            className="glass-panel-elevated absolute bottom-11 left-0 z-30 w-64 max-h-96 overflow-y-auto rounded-2xl p-2 shadow-2xl"
           >
             <div className="mb-1 flex items-center justify-between px-1">
               <p className="text-xs font-medium uppercase tracking-wide text-muted">Legend</p>
@@ -70,7 +70,7 @@ export function MapLegend() {
             <div className="flex flex-col gap-3">
               {activeGroups.map((group) => (
                 <div key={group.key}>
-                  <p className="mb-1 px-1 text-[11px] font-medium text-foreground">{group.title}</p>
+                  <p className="mb-1 px-1 text-xs font-medium text-foreground">{group.title}</p>
                   <ul className="flex flex-col gap-1">
                     {group.entries.map((entry) => (
                       <li key={entry.label} className="flex items-center gap-2 px-1 text-xs text-muted">
