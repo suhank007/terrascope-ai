@@ -4,12 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { PlaneTakeoff } from "lucide-react";
 import { useFlights } from "../hooks/use-flights";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
+import { useDemoModeOptional } from "@/features/demo/context/demo-mode-context";
 
 export function FlightZoomHint() {
   const { layers } = useGlobeUi();
   const { isZoomedIn } = useFlights();
+  const demo = useDemoModeOptional();
 
-  const show = layers.flights && !isZoomedIn;
+  // Recording-friendly: transient hints never appear during a demo capture.
+  const show = !demo && layers.flights && !isZoomedIn;
 
   return (
     <AnimatePresence>

@@ -4,12 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Flame } from "lucide-react";
 import { useWildfires } from "../hooks/use-wildfires";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
+import { useDemoModeOptional } from "@/features/demo/context/demo-mode-context";
 
 export function WildfireConfigHint() {
   const { layers } = useGlobeUi();
   const { data } = useWildfires();
+  const demo = useDemoModeOptional();
 
-  const show = layers.wildfires && data?.configured === false;
+  // Never surface setup/config instructions during a recorded demo.
+  const show = !demo && layers.wildfires && data?.configured === false;
 
   return (
     <AnimatePresence>

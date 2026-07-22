@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Activity, CloudSun, Flame, Plane, Wind, X } from "lucide-react";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
+import { useDemoModeOptional } from "@/features/demo/context/demo-mode-context";
 import { SPRING_PANEL } from "@/lib/motion";
 import { EarthquakePanelContent } from "@/features/earthquakes/components/earthquake-panel-content";
 import { FlightPanelContent } from "@/features/flights/components/flight-panel-content";
@@ -33,8 +34,9 @@ function panelHeader(selected: NonNullable<ReturnType<typeof useGlobeUi>["select
 
 export function EntitySidePanel() {
   const { selectedEntity, setSelectedEntity } = useGlobeUi();
+  const demo = useDemoModeOptional();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const isOpen = selectedEntity !== null;
+  const isOpen = selectedEntity !== null && !demo?.uiHidden;
 
   useEffect(() => {
     if (!isOpen) return;

@@ -10,11 +10,25 @@ const RESUME_DELAY_MS = 4000;
 /** One full revolution every 4 minutes — present, never distracting. */
 const RADIANS_PER_MS = (2 * Math.PI) / (240 * 1000);
 
-export function GlobeAutoRotate() {
+interface GlobeAutoRotateProps {
+  /** Omit for the default ambient behavior: idle timer, auto-resumes a few
+   *  seconds after the user lets go. Pass a boolean to drive rotation
+   *  directly instead — e.g. demo mode's toolbar toggle, where resuming
+   *  should be an explicit choice, not a timer, and should happen the
+   *  instant the presenter releases the globe rather than after a delay. */
+  enabled?: boolean;
+  onInteract?: () => void;
+}
+
+export function GlobeAutoRotate({ enabled, onInteract }: GlobeAutoRotateProps = {}) {
   const { viewer, scene, camera } = useCesium();
   const { isCameraAnimatingRef } = useGlobeUi();
   const resumeAtRef = useRef(Date.now() + INITIAL_DELAY_MS);
   const pointerDownRef = useRef(false);
+  const enabledRef = useRef(enabled);
+  enabledRef.current = enabled;
+  const onInteractRef = useRef(onInteract);
+  onInteractRef.current = onInteract;
 
   useEffect(() => {
     if (!viewer || !scene || !camera) return;
@@ -26,16 +40,21 @@ export function GlobeAutoRotate() {
     const onPointerDown = () => {
       pointerDownRef.current = true;
       markInteraction();
+      onInteractRef.current?.();
     };
     const onPointerUp = () => {
       pointerDownRef.current = false;
       markInteraction();
     };
+    const onWheel = () => {
+      markInteraction();
+      onInteractRef.current?.();
+    };
 
     canvas.addEventListener("pointerdown", onPointerDown);
     canvas.addEventListener("pointerup", onPointerUp);
     canvas.addEventListener("pointercancel", onPointerUp);
-    canvas.addEventListener("wheel", markInteraction, { passive: true });
+    canvas.addEventListener("wheel", onWheel, { passive: true });
 
     let lastFrameTime = performance.now();
     const onPostRender = () => {
@@ -46,7 +65,13 @@ export function GlobeAutoRotate() {
       if (pointerDownRef.current) return;
       if (isCameraAnimatingRef.current) return;
       if (document.hidden) return;
-      if (Date.now() < resumeAtRef.current) return;
+
+      const isControlled = enabledRef.current !== undefined;
+      if (isControlled) {
+        if (!enabledRef.current) return;
+      } else if (Date.now() < resumeAtRef.current) {
+        return;
+      }
 
       camera.rotate(Cartesian3.UNIT_Z, -RADIANS_PER_MS * dt);
     };
@@ -56,7 +81,7 @@ export function GlobeAutoRotate() {
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("pointerup", onPointerUp);
       canvas.removeEventListener("pointercancel", onPointerUp);
-      canvas.removeEventListener("wheel", markInteraction);
+      canvas.removeEventListener("wheel", onWheel);
       scene.postRender.removeEventListener(onPostRender);
     };
   }, [viewer, scene, camera, isCameraAnimatingRef]);

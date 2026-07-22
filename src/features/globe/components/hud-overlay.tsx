@@ -13,10 +13,14 @@ import { SearchBar } from "@/features/search/components/search-bar";
 import { LayerToggle } from "./layer-toggle";
 import { MapLegend } from "./map-legend";
 import { useGlobeUi } from "../context/globe-ui-context";
+import { useDemoModeOptional } from "@/features/demo/context/demo-mode-context";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 
 export function HudOverlay() {
   const { layers } = useGlobeUi();
+  const demo = useDemoModeOptional();
+
+  if (demo?.uiHidden) return null;
 
   return (
     <>
@@ -39,7 +43,7 @@ export function HudOverlay() {
             <KpiTicker />
             <LayerToggle />
             <AlertsBell />
-            <AccountLauncher />
+            {!demo && <AccountLauncher />}
           </div>
         </div>
 

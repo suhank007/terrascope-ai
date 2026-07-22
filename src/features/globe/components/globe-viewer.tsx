@@ -9,6 +9,7 @@ import { useGlobeUi } from "../context/globe-ui-context";
 import { CameraBoundsWatcher } from "./camera-bounds-watcher";
 import { GlobalClickHandler } from "./global-click-handler";
 import { GlobeAutoRotate } from "./globe-auto-rotate";
+import { useDemoModeOptional } from "@/features/demo/context/demo-mode-context";
 import { EarthquakeLayer } from "@/features/earthquakes/components/earthquake-layer";
 import { WeatherLayer } from "@/features/weather/components/weather-layer";
 import { FlightLayer } from "@/features/flights/components/flight-layer";
@@ -21,6 +22,16 @@ if (typeof window !== "undefined") {
 
 export function GlobeViewer() {
   const { layers } = useGlobeUi();
+  const demo = useDemoModeOptional();
+
+  // Outside demo mode `demo` is null, so both are `undefined` — GlobeAutoRotate
+  // falls back to its normal idle-timer behavior, unchanged.
+  const autoRotateEnabled = demo ? demo.guidedRotateOverride ?? demo.autoRotate : undefined;
+  const handleInteract = demo
+    ? () => {
+        if (demo.isGuidedDemoRunning) demo.stopGuidedDemo();
+      }
+    : undefined;
 
   const baseLayer = useMemo(
     () =>
@@ -51,7 +62,7 @@ export function GlobeViewer() {
     >
       <CameraBoundsWatcher />
       <GlobalClickHandler />
-      <GlobeAutoRotate />
+      <GlobeAutoRotate enabled={autoRotateEnabled} onInteract={handleInteract} />
       <EarthquakeLayer active={layers.earthquakes} />
       <WeatherLayer active={layers.weather} />
       <FlightLayer active={layers.flights} />
