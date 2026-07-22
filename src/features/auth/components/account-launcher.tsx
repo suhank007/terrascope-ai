@@ -28,7 +28,7 @@ export function AccountLauncher() {
         aria-expanded={open}
         aria-label="Account"
         className={cn(
-          "glass-panel flex h-9 w-9 items-center justify-center rounded-full transition-colors",
+          "glass-panel flex h-9 w-9 items-center justify-center rounded-full transition-colors active:scale-90",
           user ? "text-accent" : "text-muted hover:text-foreground"
         )}
       >

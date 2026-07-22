@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Activity, CloudSun, Flame, Plane, Wind, X } from "lucide-react";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
+import { SPRING_PANEL } from "@/lib/motion";
 import { EarthquakePanelContent } from "@/features/earthquakes/components/earthquake-panel-content";
 import { FlightPanelContent } from "@/features/flights/components/flight-panel-content";
 import { WeatherPanelContent } from "@/features/weather/components/weather-panel-content";
@@ -67,7 +68,7 @@ export function EntitySidePanel() {
             initial={{ x: 24, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 24, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 320, damping: 32 }}
+            transition={SPRING_PANEL}
             className="glass-panel-elevated absolute right-4 top-20 z-20 w-[calc(100%-2rem)] max-w-sm rounded-2xl p-5 shadow-2xl sm:right-6 sm:top-24 sm:w-96"
           >
             <div className="mb-4 flex items-center justify-between">
@@ -82,7 +83,7 @@ export function EntitySidePanel() {
                 ref={closeButtonRef}
                 onClick={() => setSelectedEntity(null)}
                 aria-label="Close"
-                className="rounded-full p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground"
+                className="rounded-full p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground active:scale-90"
               >
                 <X className="h-4 w-4" />
               </button>

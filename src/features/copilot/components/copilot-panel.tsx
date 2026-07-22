@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { KeyRound, Loader2, Send, Sparkles, X } from "lucide-react";
 import { useCopilotChat } from "../hooks/use-copilot-chat";
 import { cn } from "@/lib/utils";
+import { DURATION, EASE_OUT_EXPO, SPRING_PANEL, STAGGER_LIST } from "@/lib/motion";
 
 const SUGGESTIONS = [
   "Summarize today's strongest earthquakes",
@@ -33,7 +34,7 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
       initial={{ opacity: 0, y: 16, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 16, scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 320, damping: 32 }}
+      transition={SPRING_PANEL}
       className="glass-panel-elevated flex h-[28rem] w-[calc(100vw-3rem)] max-w-sm flex-col overflow-hidden rounded-2xl shadow-2xl"
     >
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
@@ -44,7 +45,7 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
         <button
           onClick={onClose}
           aria-label="Close copilot"
-          className="rounded-full p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground"
+          className="rounded-full p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground active:scale-90"
         >
           <X className="h-4 w-4" />
         </button>
@@ -61,22 +62,31 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
             </p>
           </div>
         ) : messages.length === 0 ? (
-          <div className="flex flex-col gap-2 py-4">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={STAGGER_LIST.container}
+            className="flex flex-col gap-2 py-4"
+          >
             <p className="text-sm text-muted">Ask about live conditions anywhere on the globe.</p>
             {SUGGESTIONS.map((s) => (
-              <button
+              <motion.button
                 key={s}
+                variants={STAGGER_LIST.item}
                 onClick={() => submit(s)}
-                className="rounded-lg border border-border bg-surface-elevated/40 px-3 py-2 text-left text-xs text-muted transition-colors hover:border-accent/40 hover:text-foreground"
+                className="rounded-lg border border-border bg-surface-elevated/40 px-3 py-2 text-left text-xs text-muted transition-colors hover:border-accent/40 hover:text-foreground active:scale-[0.98]"
               >
                 {s}
-              </button>
+              </motion.button>
             ))}
-          </div>
+          </motion.div>
         ) : (
           messages.map((m, i) => (
-            <div
+            <motion.div
               key={i}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: DURATION.base, ease: EASE_OUT_EXPO }}
               className={cn(
                 "max-w-[85%] rounded-xl px-3 py-2 text-sm leading-relaxed",
                 m.role === "user"
@@ -85,7 +95,7 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
               )}
             >
               {m.content}
-            </div>
+            </motion.div>
           ))
         )}
 
@@ -110,13 +120,13 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask the copilot…"
             disabled={isLoading}
-            className="flex-1 rounded-full border border-border bg-surface-elevated/40 px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted focus:border-accent/50"
+            className="flex-1 rounded-full border border-border bg-surface-elevated/40 px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted focus:border-accent/50"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
             aria-label="Send"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent transition-opacity disabled:opacity-40"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent transition disabled:opacity-40 disabled:active:scale-100 hover:enabled:-translate-y-0.5 active:scale-90"
           >
             <Send className="h-4 w-4" />
           </button>

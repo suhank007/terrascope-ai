@@ -9,6 +9,7 @@ import { FLIGHT_LEGEND } from "@/features/flights/lib/color-scale";
 import { WILDFIRE_LEGEND } from "@/features/wildfires/lib/color-scale";
 import { AQI_LEGEND } from "@/features/air-quality/lib/aqi-scale";
 import { useGlobeUi, type Layers } from "../context/globe-ui-context";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
 interface LegendEntry {
   label: string;
@@ -53,12 +54,16 @@ export function MapLegend() {
             initial={{ opacity: 0, y: 8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.97 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
             className="glass-panel-elevated absolute bottom-11 left-0 z-30 w-64 max-h-96 overflow-y-auto rounded-2xl p-2 shadow-2xl"
           >
             <div className="mb-1 flex items-center justify-between px-1">
               <p className="text-xs font-medium uppercase tracking-wide text-muted">Legend</p>
-              <button onClick={() => setOpen(false)} aria-label="Close legend" className="text-muted hover:text-foreground">
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close legend"
+                className="text-muted hover:text-foreground active:scale-90"
+              >
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -93,7 +98,7 @@ export function MapLegend() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={open ? "Close legend" : "Show map legend"}
-        className="glass-panel flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:text-foreground"
+        className="glass-panel flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:text-foreground active:scale-95"
       >
         <Info className="h-3.5 w-3.5" />
         <span>Legend</span>

@@ -9,6 +9,7 @@ import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { deriveAlerts } from "../lib/derive-alerts";
 import { formatMagnitude, formatRelativeTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
 export function AlertsBell() {
   const { data: earthquakes } = useEarthquakes();
@@ -37,7 +38,7 @@ export function AlertsBell() {
         onClick={() => setOpen((o) => !o)}
         aria-label={`${alerts.length} active alerts`}
         aria-expanded={open}
-        className="glass-panel relative flex h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:text-foreground"
+        className="glass-panel relative flex h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:text-foreground active:scale-90"
       >
         <Bell className="h-4 w-4" />
         {alerts.length > 0 && (
@@ -53,7 +54,7 @@ export function AlertsBell() {
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
             className="glass-panel-elevated absolute right-0 top-11 z-30 max-h-96 w-80 overflow-y-auto rounded-2xl p-2 shadow-2xl"
           >
             <p className="px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-muted">
@@ -83,7 +84,7 @@ export function AlertsBell() {
                           );
                           setOpen(false);
                         }}
-                        className="flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left transition-colors hover:bg-surface-elevated"
+                        className="flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left transition-colors hover:bg-surface-elevated active:scale-[0.99]"
                       >
                         <span
                           className={cn(

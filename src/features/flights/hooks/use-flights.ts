@@ -19,13 +19,13 @@ function useTabVisible() {
   return visible;
 }
 
-export function useFlights() {
+export function useFlights(active = true) {
   const { cameraBounds, cameraHeight } = useGlobeUi();
   const tabVisible = useTabVisible();
 
   const isZoomedIn = cameraHeight !== null && cameraHeight < CLOSE_ZOOM_HEIGHT_THRESHOLD;
   const quantized = cameraBounds ? quantizeBbox(clampBbox(cameraBounds)) : null;
-  const enabled = isZoomedIn && tabVisible && quantized !== null;
+  const enabled = active && isZoomedIn && tabVisible && quantized !== null;
 
   const query = useQuery({
     queryKey: ["flights", quantized],

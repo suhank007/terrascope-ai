@@ -47,6 +47,9 @@ interface GlobeUiContextValue {
    *  so HUD components outside it (e.g. "Save current view") can read/set
    *  the camera imperatively without themselves living inside <Viewer>. */
   cesiumRef: RefObject<{ camera: Camera; scene: Scene } | null>;
+  /** True while a programmatic camera.flyTo is in flight, so the idle
+   *  auto-rotate loop knows to stay out of the way instead of fighting it. */
+  isCameraAnimatingRef: RefObject<boolean>;
 }
 
 const GlobeUiContext = createContext<GlobeUiContextValue | null>(null);
@@ -70,6 +73,7 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
   const airQualityCitiesRef = useRef<Map<string, WeatherCity>>(new Map());
   const wildfiresRef = useRef<Map<string, WildfireHotspot>>(new Map());
   const cesiumRef = useRef<{ camera: Camera; scene: Scene } | null>(null);
+  const isCameraAnimatingRef = useRef(false);
 
   const toggleLayer = useCallback((key: keyof Layers) => {
     setLayers((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -121,6 +125,7 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
       clearAirlineFilter,
       setAirlineFilter,
       cesiumRef,
+      isCameraAnimatingRef,
     }),
     [
       selectedEntity,

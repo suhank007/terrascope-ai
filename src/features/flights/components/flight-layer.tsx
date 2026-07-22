@@ -5,12 +5,14 @@ import { Cartesian3, Math as CesiumMath } from "cesium";
 import { Entity, BillboardGraphics } from "resium";
 import { useFlights } from "../hooks/use-flights";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
+import { useFadeVisibility } from "@/features/globe/hooks/use-fade-visibility";
 import { colorForAltitude } from "../lib/color-scale";
 import { filterFlightsByAirlines } from "../lib/filter-airlines";
 
-export function FlightLayer() {
-  const { data } = useFlights();
+export function FlightLayer({ active }: { active: boolean }) {
+  const { data } = useFlights(active);
   const { flightsRef, selectedAirlines } = useGlobeUi();
+  const { mounted, opacity } = useFadeVisibility(active);
 
   const flights = useMemo(
     () => (data ? filterFlightsByAirlines(data.flights, selectedAirlines) : []),
@@ -21,7 +23,7 @@ export function FlightLayer() {
     flightsRef.current = new Map(flights.map((flight) => [flight.icao24, flight]));
   }, [flights, flightsRef]);
 
-  if (!data) return null;
+  if (!mounted || !data) return null;
 
   return (
     <>
@@ -34,7 +36,7 @@ export function FlightLayer() {
           <BillboardGraphics
             image="/icons/aircraft.svg"
             scale={0.45}
-            color={colorForAltitude(flight.altitudeM, flight.onGround)}
+            color={colorForAltitude(flight.altitudeM, flight.onGround).withAlpha(opacity)}
             rotation={CesiumMath.toRadians(-(flight.trueTrack ?? 0))}
             alignedAxis={Cartesian3.UNIT_Z}
           />

@@ -77,6 +77,20 @@
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+  transition: outline-offset 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Baseline smoothing for every interactive primitive. Components that need
+   a different feel (springs, staggered lists, press-scale) set their own
+   transition and simply override this. */
+button,
+a,
+input,
+select,
+textarea {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: 0.15s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html {
@@ -142,4 +156,15 @@ body {
 .cesium-credit-textContainer,
 .cesium-credit-imageContainer {
   filter: grayscale(1) brightness(1.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -8,9 +8,17 @@ import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { aqiCesiumColor } from "../lib/aqi-scale";
 import type { WeatherCity } from "@/features/weather/types";
 
-export function AirQualityCityEntity({ city }: { city: WeatherCity }) {
+export function AirQualityCityEntity({
+  city,
+  active,
+  opacity,
+}: {
+  city: WeatherCity;
+  active: boolean;
+  opacity: number;
+}) {
   const entityId = `aqi-${city.id}`;
-  const { data } = useAirQuality(city.lat, city.lon);
+  const { data } = useAirQuality(city.lat, city.lon, active);
   const { airQualityCitiesRef } = useGlobeUi();
 
   useEffect(() => {
@@ -25,7 +33,12 @@ export function AirQualityCityEntity({ city }: { city: WeatherCity }) {
 
   return (
     <Entity id={entityId} position={Cartesian3.fromDegrees(city.lon, city.lat)}>
-      <PointGraphics pixelSize={9} color={color} outlineColor={Color.BLACK} outlineWidth={1} />
+      <PointGraphics
+        pixelSize={9}
+        color={color.withAlpha(opacity)}
+        outlineColor={Color.BLACK.withAlpha(opacity)}
+        outlineWidth={1}
+      />
     </Entity>
   );
 }

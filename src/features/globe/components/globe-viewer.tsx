@@ -8,6 +8,7 @@ import { BASEMAP_CREDIT, BASEMAP_SUBDOMAINS, BASEMAP_TILE_URL_TEMPLATE } from ".
 import { useGlobeUi } from "../context/globe-ui-context";
 import { CameraBoundsWatcher } from "./camera-bounds-watcher";
 import { GlobalClickHandler } from "./global-click-handler";
+import { GlobeAutoRotate } from "./globe-auto-rotate";
 import { EarthquakeLayer } from "@/features/earthquakes/components/earthquake-layer";
 import { WeatherLayer } from "@/features/weather/components/weather-layer";
 import { FlightLayer } from "@/features/flights/components/flight-layer";
@@ -50,11 +51,12 @@ export function GlobeViewer() {
     >
       <CameraBoundsWatcher />
       <GlobalClickHandler />
-      {layers.earthquakes && <EarthquakeLayer />}
-      {layers.weather && <WeatherLayer />}
-      {layers.flights && <FlightLayer />}
-      {layers.airQuality && <AirQualityLayer />}
-      {layers.wildfires && <WildfireLayer />}
+      <GlobeAutoRotate />
+      <EarthquakeLayer active={layers.earthquakes} />
+      <WeatherLayer active={layers.weather} />
+      <FlightLayer active={layers.flights} />
+      <AirQualityLayer active={layers.airQuality} />
+      <WildfireLayer active={layers.wildfires} />
     </Viewer>
   );
 }

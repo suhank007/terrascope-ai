@@ -6,6 +6,7 @@ import { Check, Plane } from "lucide-react";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { AIRLINES } from "../lib/airlines";
 import { cn } from "@/lib/utils";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
 export function AirlineFilter() {
   const { selectedAirlines, toggleAirline, clearAirlineFilter } = useGlobeUi();
@@ -30,7 +31,7 @@ export function AirlineFilter() {
         aria-expanded={open}
         aria-label="Filter flights by airline"
         className={cn(
-          "glass-panel flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+          "glass-panel flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors active:scale-95",
           activeCount > 0 ? "text-accent" : "text-muted hover:text-foreground"
         )}
       >
@@ -46,13 +47,13 @@ export function AirlineFilter() {
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
             className="glass-panel-elevated absolute right-0 top-11 z-30 max-h-96 w-64 overflow-y-auto rounded-2xl p-2 shadow-2xl"
           >
             <div className="flex items-center justify-between px-2 py-1.5">
               <p className="text-xs font-medium uppercase tracking-wide text-muted">Filter airlines</p>
               {activeCount > 0 && (
-                <button onClick={clearAirlineFilter} className="text-xs text-accent hover:underline">
+                <button onClick={clearAirlineFilter} className="text-xs text-accent hover:underline active:scale-95">
                   Clear
                 </button>
               )}
@@ -65,7 +66,7 @@ export function AirlineFilter() {
                     <button
                       onClick={() => toggleAirline(airline.icaoPrefix)}
                       aria-pressed={active}
-                      className="flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-sm transition-colors hover:bg-surface-elevated"
+                      className="flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-sm transition-colors hover:bg-surface-elevated active:scale-[0.99]"
                     >
                       <span className="text-foreground">{airline.name}</span>
                       <span className="flex items-center gap-2">

@@ -8,8 +8,16 @@ import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { colorForTemperature } from "../lib/color-scale";
 import type { WeatherCity } from "../types";
 
-export function WeatherCityEntity({ city }: { city: WeatherCity }) {
-  const { data } = useWeather(city.lat, city.lon);
+export function WeatherCityEntity({
+  city,
+  active,
+  opacity,
+}: {
+  city: WeatherCity;
+  active: boolean;
+  opacity: number;
+}) {
+  const { data } = useWeather(city.lat, city.lon, active);
   const { citiesRef } = useGlobeUi();
 
   useEffect(() => {
@@ -24,7 +32,12 @@ export function WeatherCityEntity({ city }: { city: WeatherCity }) {
 
   return (
     <Entity id={city.id} position={Cartesian3.fromDegrees(city.lon, city.lat)}>
-      <PointGraphics pixelSize={9} color={color} outlineColor={Color.BLACK} outlineWidth={1} />
+      <PointGraphics
+        pixelSize={9}
+        color={color.withAlpha(opacity)}
+        outlineColor={Color.BLACK.withAlpha(opacity)}
+        outlineWidth={1}
+      />
     </Entity>
   );
 }

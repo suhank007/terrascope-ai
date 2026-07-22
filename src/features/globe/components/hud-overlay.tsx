@@ -13,6 +13,7 @@ import { SearchBar } from "@/features/search/components/search-bar";
 import { LayerToggle } from "./layer-toggle";
 import { MapLegend } from "./map-legend";
 import { useGlobeUi } from "../context/globe-ui-context";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 
 export function HudOverlay() {
   const { layers } = useGlobeUi();
@@ -22,7 +23,7 @@ export function HudOverlay() {
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
         className="pointer-events-none absolute inset-x-0 top-0 z-20 flex flex-col gap-3 p-4 sm:p-6"
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

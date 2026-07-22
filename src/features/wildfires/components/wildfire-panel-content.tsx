@@ -1,6 +1,8 @@
+import { motion } from "framer-motion";
 import { Flame, Gauge, Satellite } from "lucide-react";
 import type { WildfireHotspot } from "../types";
 import { formatRelativeTime } from "@/lib/format";
+import { STAGGER_LIST } from "@/lib/motion";
 
 const CONFIDENCE_LABEL: Record<WildfireHotspot["confidence"], string> = {
   low: "Low confidence",
@@ -21,28 +23,33 @@ export function WildfirePanelContent({ data }: { data: WildfireHotspot }) {
         </div>
       </div>
 
-      <dl className="grid grid-cols-2 gap-3 text-sm">
-        <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+      <motion.dl
+        initial="hidden"
+        animate="visible"
+        variants={STAGGER_LIST.container}
+        className="grid grid-cols-2 gap-3 text-sm"
+      >
+        <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
           <dt className="flex items-center gap-1 text-xs text-muted">
             <Gauge className="h-3 w-3" /> Radiative power
           </dt>
           <dd className="mt-1 font-medium text-foreground">{data.frp.toFixed(1)} MW</dd>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+        </motion.div>
+        <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
           <dt className="text-xs text-muted">Brightness</dt>
           <dd className="mt-1 font-medium text-foreground">{data.brightnessK.toFixed(0)} K</dd>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+        </motion.div>
+        <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
           <dt className="flex items-center gap-1 text-xs text-muted">
             <Satellite className="h-3 w-3" /> Satellite
           </dt>
           <dd className="mt-1 font-medium text-foreground">{data.satellite}</dd>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+        </motion.div>
+        <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
           <dt className="text-xs text-muted">Detected</dt>
           <dd className="mt-1 font-medium text-foreground">{formatRelativeTime(data.acquiredAt)}</dd>
-        </div>
-      </dl>
+        </motion.div>
+      </motion.dl>
 
       <p className="text-xs text-muted">
         {data.latitude.toFixed(3)}, {data.longitude.toFixed(3)}

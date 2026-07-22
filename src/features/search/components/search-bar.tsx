@@ -2,18 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Cartesian3, Rectangle } from "cesium";
+import { Cartesian3, EasingFunction, Rectangle } from "cesium";
 import { Loader2, MapPin, Search, X } from "lucide-react";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { useGeocodeSearch } from "../hooks/use-geocode-search";
 import { clampBboxSpan } from "../lib/clamp-bbox";
+import { EASE_OUT_EXPO, STAGGER_LIST } from "@/lib/motion";
 import type { GeocodeResult } from "../types";
 
 const DEBOUNCE_MS = 400;
 const DEFAULT_FLY_HEIGHT_M = 80_000;
+const FLY_DURATION_S = 2.8;
 
 export function SearchBar() {
-  const { cesiumRef } = useGlobeUi();
+  const { cesiumRef, isCameraAnimatingRef } = useGlobeUi();
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -47,16 +49,27 @@ export function SearchBar() {
     const live = cesiumRef.current;
     if (!live) return;
 
+    isCameraAnimatingRef.current = true;
+    const onSettled = () => {
+      isCameraAnimatingRef.current = false;
+    };
+
     if (result.bbox) {
       const clamped = clampBboxSpan(result.bbox);
       live.camera.flyTo({
         destination: Rectangle.fromDegrees(clamped.west, clamped.south, clamped.east, clamped.north),
-        duration: 2.5,
+        duration: FLY_DURATION_S,
+        easingFunction: EasingFunction.QUADRATIC_IN_OUT,
+        complete: onSettled,
+        cancel: onSettled,
       });
     } else {
       live.camera.flyTo({
         destination: Cartesian3.fromDegrees(result.longitude, result.latitude, DEFAULT_FLY_HEIGHT_M),
-        duration: 2.5,
+        duration: FLY_DURATION_S,
+        easingFunction: EasingFunction.QUADRATIC_IN_OUT,
+        complete: onSettled,
+        cancel: onSettled,
       });
     }
 
@@ -88,7 +101,11 @@ export function SearchBar() {
         />
         {isFetching && <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-muted" />}
         {query && !isFetching && (
-          <button onClick={clear} aria-label="Clear search" className="shrink-0 text-muted hover:text-foreground">
+          <button
+            onClick={clear}
+            aria-label="Clear search"
+            className="shrink-0 text-muted transition-colors hover:text-foreground active:scale-90"
+          >
             <X className="h-3.5 w-3.5" />
           </button>
         )}
@@ -100,18 +117,23 @@ export function SearchBar() {
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
             className="glass-panel-elevated absolute left-0 right-0 top-11 z-30 max-h-80 overflow-y-auto rounded-2xl p-2 shadow-2xl"
           >
             {results.length === 0 && !isFetching && (
               <p className="px-2 py-3 text-center text-xs text-muted">No places found</p>
             )}
-            <ul className="flex flex-col gap-0.5">
+            <motion.ul
+              initial="hidden"
+              animate="visible"
+              variants={STAGGER_LIST.container}
+              className="flex flex-col gap-0.5"
+            >
               {results.map((result) => (
-                <li key={result.id}>
+                <motion.li key={result.id} variants={STAGGER_LIST.item}>
                   <button
                     onClick={() => flyTo(result)}
-                    className="flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left text-sm transition-colors hover:bg-surface-elevated"
+                    className="flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left text-sm transition-colors hover:bg-surface-elevated active:scale-[0.99]"
                   >
                     <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
                     <span className="flex flex-col">
@@ -119,9 +141,9 @@ export function SearchBar() {
                       <span className="text-xs text-muted">{result.displayName}</span>
                     </span>
                   </button>
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           </motion.div>
         )}
       </AnimatePresence>

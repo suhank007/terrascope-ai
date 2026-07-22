@@ -25,7 +25,7 @@ export function LayerToggle() {
             onClick={() => toggleLayer(key)}
             aria-pressed={active}
             className={cn(
-              "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+              "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors active:scale-95",
               active ? "bg-accent-soft text-accent" : "text-muted hover:text-foreground"
             )}
           >

@@ -1,7 +1,9 @@
+import { motion } from "framer-motion";
 import { ArrowUpRight, Gauge, Navigation, TrendingUp } from "lucide-react";
 import type { Flight } from "../types";
 import { formatAltitudeFt, formatRelativeTime, formatSpeedKt } from "@/lib/format";
 import { getAirlineName } from "../lib/airlines";
+import { STAGGER_LIST } from "@/lib/motion";
 
 export function FlightPanelContent({ data }: { data: Flight }) {
   const airlineName = getAirlineName(data.callsign);
@@ -25,38 +27,43 @@ export function FlightPanelContent({ data }: { data: Flight }) {
         </div>
       )}
 
-      <dl className="grid grid-cols-2 gap-3 text-sm">
-        <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+      <motion.dl
+        initial="hidden"
+        animate="visible"
+        variants={STAGGER_LIST.container}
+        className="grid grid-cols-2 gap-3 text-sm"
+      >
+        <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
           <dt className="flex items-center gap-1 text-xs text-muted">
             <TrendingUp className="h-3 w-3" /> Altitude
           </dt>
           <dd className="mt-1 font-medium text-foreground">{formatAltitudeFt(data.altitudeM)}</dd>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+        </motion.div>
+        <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
           <dt className="flex items-center gap-1 text-xs text-muted">
             <Gauge className="h-3 w-3" /> Speed
           </dt>
           <dd className="mt-1 font-medium text-foreground">{formatSpeedKt(data.velocityMs)}</dd>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+        </motion.div>
+        <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
           <dt className="flex items-center gap-1 text-xs text-muted">
             <Navigation className="h-3 w-3" /> Heading
           </dt>
           <dd className="mt-1 font-medium text-foreground">
             {data.trueTrack !== null ? `${Math.round(data.trueTrack)}°` : "—"}
           </dd>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+        </motion.div>
+        <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
           <dt className="text-xs text-muted">Last contact</dt>
           <dd className="mt-1 font-medium text-foreground">{formatRelativeTime(data.lastContact)}</dd>
-        </div>
+        </motion.div>
         {data.registration && (
-          <div className="rounded-lg border border-border bg-surface-elevated/40 p-3">
+          <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">
             <dt className="text-xs text-muted">Registration</dt>
             <dd className="mt-1 font-medium text-foreground">{data.registration}</dd>
-          </div>
+          </motion.div>
         )}
-      </dl>
+      </motion.dl>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { useCreateSavedView, useDeleteSavedView, useSavedViews } from "@/features/saved-views/hooks/use-saved-views";
 import { captureCameraState, flyToCameraState } from "@/features/saved-views/lib/camera-state";
 import { formatRelativeTime } from "@/lib/format";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 import type { SavedView } from "@/features/saved-views/types";
 
 function SignInForm() {
@@ -57,7 +58,7 @@ function SignInForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="rounded-lg bg-accent-soft py-2 text-sm font-medium text-accent transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="rounded-lg bg-accent-soft py-2 text-sm font-medium text-accent transition hover:opacity-90 disabled:opacity-50 disabled:active:scale-100 active:scale-[0.98]"
       >
         {status === "sending" ? "Sending…" : "Send magic link"}
       </button>
@@ -98,7 +99,7 @@ function SaveCurrentView() {
         type="submit"
         disabled={!name.trim() || createView.isPending}
         aria-label="Save current view"
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent disabled:opacity-40"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent transition-transform disabled:opacity-40 disabled:active:scale-100 active:scale-90"
       >
         {createView.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
       </button>
@@ -107,25 +108,30 @@ function SaveCurrentView() {
 }
 
 function SavedViewRow({ view }: { view: SavedView }) {
-  const { setAllLayers, setAirlineFilter, cesiumRef } = useGlobeUi();
+  const { setAllLayers, setAirlineFilter, cesiumRef, isCameraAnimatingRef } = useGlobeUi();
   const deleteView = useDeleteSavedView();
 
   function restore() {
     setAllLayers(view.layers);
     setAirlineFilter(new Set(view.selectedAirlines));
-    if (cesiumRef.current) flyToCameraState(cesiumRef.current.camera, view.camera);
+    if (cesiumRef.current) {
+      isCameraAnimatingRef.current = true;
+      flyToCameraState(cesiumRef.current.camera, view.camera, () => {
+        isCameraAnimatingRef.current = false;
+      });
+    }
   }
 
   return (
-    <li className="flex items-center gap-1 rounded-lg px-2 py-1.5 hover:bg-surface-elevated">
-      <button onClick={restore} className="min-w-0 flex-1 text-left">
+    <li className="flex items-center gap-1 rounded-lg px-2 py-1.5 transition-colors hover:bg-surface-elevated">
+      <button onClick={restore} className="min-w-0 flex-1 text-left active:scale-[0.99]">
         <span className="block truncate text-sm text-foreground">{view.name}</span>
         <span className="block text-[10px] text-muted">{formatRelativeTime(view.createdAt)}</span>
       </button>
       <button
         onClick={() => deleteView.mutate(view.id)}
         aria-label={`Delete ${view.name}`}
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:text-danger"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:text-danger active:scale-90"
       >
         <Trash2 className="h-3.5 w-3.5" />
       </button>
@@ -149,7 +155,7 @@ function SignedInView() {
         <button
           onClick={handleSignOut}
           aria-label="Sign out"
-          className="flex items-center gap-1 text-xs text-muted transition-colors hover:text-foreground"
+          className="flex items-center gap-1 text-xs text-muted transition-colors hover:text-foreground active:scale-95"
         >
           <LogOut className="h-3 w-3" /> Sign out
         </button>
@@ -191,7 +197,7 @@ export function AccountPanel() {
       initial={{ opacity: 0, y: -8, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -8, scale: 0.97 }}
-      transition={{ duration: 0.15 }}
+      transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
       className="glass-panel-elevated absolute right-0 top-11 z-30 w-72 overflow-hidden rounded-2xl p-2 shadow-2xl"
     >
       <div className="flex items-center gap-2 px-2 py-1.5">
