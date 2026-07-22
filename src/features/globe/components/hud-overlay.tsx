@@ -9,6 +9,7 @@ import { WildfireConfigHint } from "@/features/wildfires/components/wildfire-con
 import { AlertsBell } from "@/features/alerts/components/alerts-bell";
 import { CopilotLauncher } from "@/features/copilot/components/copilot-launcher";
 import { AccountLauncher } from "@/features/auth/components/account-launcher";
+import { SearchBar } from "@/features/search/components/search-bar";
 import { LayerToggle } from "./layer-toggle";
 import { useGlobeUi } from "../context/globe-ui-context";
 
@@ -29,6 +30,10 @@ export function HudOverlay() {
             <span className="text-sm font-semibold tracking-tight text-foreground">TerraScope AI</span>
           </div>
           {layers.flights && <AirlineFilter />}
+        </div>
+
+        <div className="pointer-events-auto flex flex-1 justify-center px-2">
+          <SearchBar />
         </div>
 
         <div className="pointer-events-auto flex flex-wrap items-center gap-2">
