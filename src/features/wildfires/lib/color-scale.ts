@@ -1,5 +1,11 @@
 import { Color } from "cesium";
 
+export const WILDFIRE_LEGEND = [
+  { label: "Low confidence", hex: "#facc15" },
+  { label: "Nominal confidence", hex: "#fb923c" },
+  { label: "High confidence", hex: "#f2545b" },
+];
+
 export function colorForConfidence(confidence: "low" | "nominal" | "high"): Color {
   if (confidence === "high") return Color.fromCssColorString("#f2545b");
   if (confidence === "nominal") return Color.fromCssColorString("#fb923c");

@@ -5,7 +5,7 @@ interface AqiBand {
   hex: string;
 }
 
-const BANDS: AqiBand[] = [
+export const AQI_LEGEND: AqiBand[] = [
   { label: "Good", hex: "#4ade80" },
   { label: "Moderate", hex: "#facc15" },
   { label: "Unhealthy for sensitive groups", hex: "#fb923c" },
@@ -15,12 +15,12 @@ const BANDS: AqiBand[] = [
 ];
 
 function bandForAqi(usAqi: number): AqiBand {
-  if (usAqi <= 50) return BANDS[0];
-  if (usAqi <= 100) return BANDS[1];
-  if (usAqi <= 150) return BANDS[2];
-  if (usAqi <= 200) return BANDS[3];
-  if (usAqi <= 300) return BANDS[4];
-  return BANDS[5];
+  if (usAqi <= 50) return AQI_LEGEND[0];
+  if (usAqi <= 100) return AQI_LEGEND[1];
+  if (usAqi <= 150) return AQI_LEGEND[2];
+  if (usAqi <= 200) return AQI_LEGEND[3];
+  if (usAqi <= 300) return AQI_LEGEND[4];
+  return AQI_LEGEND[5];
 }
 
 export function aqiLabel(usAqi: number): string {
