@@ -24,9 +24,12 @@ export function GlobeViewer() {
   const { layers } = useGlobeUi();
   const demo = useDemoModeOptional();
 
-  // Outside demo mode `demo` is null, so both are `undefined` — GlobeAutoRotate
-  // falls back to its normal idle-timer behavior, unchanged.
-  const autoRotateEnabled = demo ? demo.guidedRotateOverride ?? demo.autoRotate : undefined;
+  // Auto-rotate only exists in demo mode (explicit toolbar toggle / guided
+  // script). The main app never rotates the camera on its own — it used to,
+  // via an idle timer, and that timer kept fighting search: it had no way
+  // to tell "the user deliberately navigated somewhere" apart from "nobody's
+  // touched the globe in a while," so it would drift off a searched city.
+  const autoRotateEnabled = demo ? demo.guidedRotateOverride ?? demo.autoRotate : false;
   const handleInteract = demo
     ? () => {
         if (demo.isGuidedDemoRunning) demo.stopGuidedDemo();
@@ -62,7 +65,7 @@ export function GlobeViewer() {
     >
       <CameraBoundsWatcher />
       <GlobalClickHandler />
-      <GlobeAutoRotate enabled={autoRotateEnabled} onInteract={handleInteract} />
+      {demo && <GlobeAutoRotate enabled={autoRotateEnabled} onInteract={handleInteract} />}
       <EarthquakeLayer active={layers.earthquakes} />
       <WeatherLayer active={layers.weather} />
       <FlightLayer active={layers.flights} />
