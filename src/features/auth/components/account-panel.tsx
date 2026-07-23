@@ -99,6 +99,7 @@ function SaveCurrentView() {
         type="submit"
         disabled={!name.trim() || createView.isPending}
         aria-label="Save current view"
+        title="Save current view"
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent transition-transform disabled:opacity-40 disabled:active:scale-100 active:scale-90"
       >
         {createView.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
@@ -131,6 +132,7 @@ function SavedViewRow({ view }: { view: SavedView }) {
       <button
         onClick={() => deleteView.mutate(view.id)}
         aria-label={`Delete ${view.name}`}
+        title={`Delete ${view.name}`}
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:text-danger active:scale-90"
       >
         <Trash2 className="h-3.5 w-3.5" />

@@ -104,6 +104,7 @@ export function SearchBar() {
           <button
             onClick={clear}
             aria-label="Clear search"
+            title="Clear search"
             className="shrink-0 text-muted transition-colors hover:text-foreground active:scale-90"
           >
             <X className="h-3.5 w-3.5" />

@@ -147,7 +147,7 @@ export function DemoToolbar() {
         aria-pressed={demo.isGuidedDemoRunning}
         title={demo.isGuidedDemoRunning ? "Stop guided demo" : "Start guided demo"}
         className={cn(
-          "flex flex-col items-center gap-0.5 rounded-full px-2 py-2 text-[10px] font-medium transition-colors active:scale-95",
+          "flex flex-col items-center gap-0.5 rounded-full px-2 py-2 text-xs font-medium transition-colors active:scale-95",
           demo.isGuidedDemoRunning ? "text-danger" : "text-accent"
         )}
       >

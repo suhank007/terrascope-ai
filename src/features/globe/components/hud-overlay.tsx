@@ -1,17 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Globe2 } from "lucide-react";
 import { KpiTicker } from "@/features/kpi-bar/components/kpi-ticker";
 import { FlightZoomHint } from "@/features/flights/components/flight-zoom-hint";
 import { AirlineFilter } from "@/features/flights/components/airline-filter";
-import { WildfireConfigHint } from "@/features/wildfires/components/wildfire-config-hint";
+import { WildfireStatusHint } from "@/features/wildfires/components/wildfire-status-hint";
+import { EarthquakeStatusHint } from "@/features/earthquakes/components/earthquake-status-hint";
 import { AlertsBell } from "@/features/alerts/components/alerts-bell";
 import { CopilotLauncher } from "@/features/copilot/components/copilot-launcher";
 import { AccountLauncher } from "@/features/auth/components/account-launcher";
 import { SearchBar } from "@/features/search/components/search-bar";
 import { LayerToggle } from "./layer-toggle";
 import { MapLegend } from "./map-legend";
+import { BrandMark } from "./brand-mark";
 import { useGlobeUi } from "../context/globe-ui-context";
 import { useDemoModeOptional } from "@/features/demo/context/demo-mode-context";
 import { EASE_OUT_EXPO } from "@/lib/motion";
@@ -32,10 +33,7 @@ export function HudOverlay() {
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="pointer-events-auto flex flex-wrap items-center gap-2 self-start">
-            <div className="glass-panel flex items-center gap-2 rounded-full py-2 pl-3 pr-4">
-              <Globe2 className="h-4 w-4 text-accent" />
-              <span className="text-sm font-semibold tracking-tight text-foreground">TerraScope AI</span>
-            </div>
+            <BrandMark />
             {layers.flights && <AirlineFilter />}
           </div>
 
@@ -54,7 +52,8 @@ export function HudOverlay() {
 
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-20 flex flex-col items-center gap-2">
         <FlightZoomHint />
-        <WildfireConfigHint />
+        <WildfireStatusHint />
+        <EarthquakeStatusHint />
       </div>
 
       <div className="pointer-events-auto absolute bottom-6 left-6 z-20">

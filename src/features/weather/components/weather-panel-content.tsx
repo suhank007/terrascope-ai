@@ -7,20 +7,20 @@ import { STAGGER_LIST } from "@/lib/motion";
 
 function WeatherSkeleton() {
   return (
-    <div className="flex animate-pulse flex-col gap-5">
+    <div className="flex flex-col gap-5">
       <div className="flex items-center gap-3">
-        <div className="h-12 w-12 rounded-full bg-surface-elevated" />
+        <div className="skeleton-shimmer h-12 w-12 rounded-full bg-surface-elevated" />
         <div className="flex flex-col gap-2">
-          <div className="h-6 w-16 rounded bg-surface-elevated" />
-          <div className="h-3 w-20 rounded bg-surface-elevated" />
+          <div className="skeleton-shimmer h-6 w-16 rounded bg-surface-elevated" />
+          <div className="skeleton-shimmer h-3 w-20 rounded bg-surface-elevated" />
         </div>
       </div>
-      <div className="h-3 w-40 rounded bg-surface-elevated" />
+      <div className="skeleton-shimmer h-3 w-40 rounded bg-surface-elevated" />
       <div className="grid grid-cols-2 gap-3">
-        <div className="h-14 rounded-lg bg-surface-elevated/60" />
-        <div className="h-14 rounded-lg bg-surface-elevated/60" />
+        <div className="skeleton-shimmer h-14 rounded-lg bg-surface-elevated/60" />
+        <div className="skeleton-shimmer h-14 rounded-lg bg-surface-elevated/60" />
       </div>
-      <div className="h-3 w-32 rounded bg-surface-elevated" />
+      <div className="skeleton-shimmer h-3 w-32 rounded bg-surface-elevated" />
     </div>
   );
 }

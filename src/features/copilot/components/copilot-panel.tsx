@@ -45,6 +45,7 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
         <button
           onClick={onClose}
           aria-label="Close copilot"
+          title="Close"
           className="rounded-full p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground active:scale-90"
         >
           <X className="h-4 w-4" />
@@ -126,6 +127,7 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
             type="submit"
             disabled={isLoading || !input.trim()}
             aria-label="Send"
+            title="Send"
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent transition disabled:opacity-40 disabled:active:scale-100 hover:enabled:-translate-y-0.5 active:scale-90"
           >
             <Send className="h-4 w-4" />

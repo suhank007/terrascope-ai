@@ -38,6 +38,7 @@ export function AlertsBell() {
         onClick={() => setOpen((o) => !o)}
         aria-label={`${alerts.length} active alerts`}
         aria-expanded={open}
+        title="Alerts"
         className="glass-panel relative flex h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:text-foreground active:scale-90"
       >
         <Bell className="h-4 w-4" />

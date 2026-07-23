@@ -155,6 +155,15 @@ Points and billboards on the globe itself (earthquakes, weather, flights, wildfi
 ### Navigation (HUD)
 Top bar and bottom-corner widgets are all `glass-panel` pills or panels, floating over the globe rather than docked to an opaque bar. No traditional nav — the globe itself is the canvas; HUD elements are overlays, not a frame around it.
 
+### Status System
+Three honest states, not one static "LIVE" badge that never changes: **Connecting** (muted dot, no pulse — first load, no data yet), **Live** (accent dot, slow breathing pulse via `animate-pulse-ring`), **Updating** (accent dot, `animate-pulse` — a background refetch is in flight). Lives in the [brand mark](src/features/globe/components/brand-mark.tsx) next to the wordmark, computed by `useLiveStatus`. The dot animation is the only place in the system two different pulse rhythms are intentionally used side by side — everywhere else, one animation per purpose.
+
+### Loading
+Skeletons are shaped like their eventual content (a circle where the icon will be, bars where text will be), never a generic spinner-in-a-box. Each shape gets `.skeleton-shimmer` — a light-band sweep clipped to that shape — instead of a whole-block opacity pulse, which reads as "waiting" rather than "loading." Reserve a plain centered spinner for places too small or transient to be worth a shaped skeleton (inline search-as-you-type, a send button mid-request).
+
+### Empty States
+Every "zero results" state gets its own considered sentence, never a bare "No data." Two tiers: a reassuring one for an empty-but-healthy result ("No active wildfire alerts detected right now" — `ShieldCheck` icon, default muted tone) and a neutral instructional one for "nothing to show yet, here's why" ("Zoom in to see live flights"). Both route through the shared [StatusHint](src/features/globe/components/status-hint.tsx) component so they never drift from each other visually.
+
 ## 6. Do's and Don'ts
 
 ### Do:

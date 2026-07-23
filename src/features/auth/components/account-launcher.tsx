@@ -27,6 +27,7 @@ export function AccountLauncher() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label="Account"
+        title="Account"
         className={cn(
           "glass-panel flex h-9 w-9 items-center justify-center rounded-full transition-colors active:scale-90",
           user ? "text-accent" : "text-muted hover:text-foreground"

@@ -85,6 +85,7 @@ export function EntitySidePanel() {
                 ref={closeButtonRef}
                 onClick={() => setSelectedEntity(null)}
                 aria-label="Close"
+                title="Close"
                 className="rounded-full p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground active:scale-90"
               >
                 <X className="h-4 w-4" />

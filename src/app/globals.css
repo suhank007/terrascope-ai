@@ -139,6 +139,27 @@ body {
   backdrop-filter: blur(var(--glass-blur));
 }
 
+/* Skeleton loading: a soft light-band sweep, not an opacity flicker. Apply
+   directly to each placeholder shape (its own bg/rounded/size utilities
+   still apply — this only adds the sweep, clipped to that shape). */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(238, 241, 245, 0.07), transparent);
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 /* Cesium's default toolbar/controls are hidden; we render our own.
    Attribution credits (OpenStreetMap requires this) are kept but restyled. */
 .cesium-viewer-toolbar,
