@@ -61,13 +61,26 @@ export function GlobeAutoRotate({ enabled, onInteract }: GlobeAutoRotateProps = 
     canvas.addEventListener("wheel", onWheel, { passive: true });
 
     let lastFrameTime = performance.now();
+    let wasAnimating = false;
     const onPostRender = () => {
       const now = performance.now();
       const dt = now - lastFrameTime;
       lastFrameTime = now;
 
+      if (isCameraAnimatingRef.current) {
+        wasAnimating = true;
+        return;
+      }
+      if (wasAnimating) {
+        // A programmatic flyTo (search, saved view) just finished — treat
+        // landing on it as a fresh interaction. Without this, idle-mode
+        // rotation resumes on the very next frame with zero grace period,
+        // so the camera drifts off the searched place immediately.
+        wasAnimating = false;
+        resumeAtRef.current = Date.now() + RESUME_DELAY_MS;
+      }
+
       if (pointerDownRef.current) return;
-      if (isCameraAnimatingRef.current) return;
       if (document.hidden) return;
 
       const isControlled = enabledRef.current !== undefined;
