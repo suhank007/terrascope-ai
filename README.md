@@ -2,6 +2,11 @@
 
 ### A real-time, 3D globe that shows you what's happening on Earth right now — earthquakes, weather, wildfires, air quality, and live flights — plus an AI assistant you can ask questions to.
 
+**[Live demo → terrascope-ai.vercel.app](https://terrascope-ai.vercel.app)** · [Presentation mode](https://terrascope-ai.vercel.app/demo)
+
+[![CI](https://github.com/suhank007/terrascope-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/suhank007/terrascope-ai/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-35e0c8.svg)](LICENSE)
+
 > **New here and not a programmer?** This README is written for you too. Every technical term is explained the first time it shows up. Skip straight to [What is this, really?](#what-is-this-really) if you just want the plain-English version.
 
 ---
@@ -18,6 +23,8 @@
 8. [Getting it running on your own computer](#getting-it-running-on-your-own-computer)
 9. [Project structure](#project-structure)
 10. [Roadmap — what's next](#roadmap--whats-next)
+
+For deeper technical detail than this file goes into, see [`ARCHITECTURE.md`](ARCHITECTURE.md) (data flow, state layers, key decisions) and [`DESIGN.md`](DESIGN.md) (the design system — colors, type scale, component rules).
 
 ---
 
@@ -108,6 +115,8 @@ flowchart LR
     Server -- "sends the answer back" --> Globe & Chat
 ```
 
+For a fuller, more illustrated breakdown of the same idea — data sources, services, frontend, infrastructure — see [`docs/architecture-diagram.png`](docs/architecture-diagram.png).
+
 The important idea: **your browser never talks directly to USGS, NASA, or any outside data source.** Every request goes through TerraScope's own server first. This matters for three reasons a non-technical reader can understand:
 
 1. **Privacy/security** — your browser never needs to know any secret passwords or API keys; only the server does, and they never leave it.
@@ -173,7 +182,7 @@ Being upfront about this matters more than pretending everything is finished. No
 
 - **Shipping/cargo vessel tracking.** The original brief asked for this, but unlike flights, there is no free, key-free way to get real-time global ship positions — that kind of data is sold commercially by specialized companies. Rather than fake it with pretend data, it was left out.
 - **Ocean/marine data** (sea temperature, wave height). A free data source for this exists and would follow the exact same pattern as the weather feature — it just hasn't been built yet; it's the lowest-priority "easy addition" left on the list.
-- **Deployment to a public web address.** Everything currently runs locally (on this computer) or in a local Docker container. Putting it on the public internet (e.g., via Vercel, a popular hosting service for this kind of app) is a natural next step, not yet done.
+- **Component/integration test coverage.** The automated test suite covers every pure data-transformation function (normalizing API responses, filtering, sampling) but not component rendering or end-to-end flows. The highest-value next addition if this grows past a portfolio piece.
 
 ---
 
@@ -241,7 +250,7 @@ Every data feature (earthquakes, weather, flights, etc.) follows the exact same 
 ## Roadmap — what's next
 
 - Ocean/marine data layer (same pattern as weather, just not built yet)
-- Deploying it to a real, public web address
+- Component and end-to-end test coverage, on top of the existing unit tests
 - An executive-style analytics/statistics dashboard using the data already being collected
 - More airlines and refinements to the flight filter
 

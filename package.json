@@ -2,6 +2,23 @@
   "name": "terrascope-ai",
   "version": "0.1.0",
   "private": true,
+  "description": "Real-time global intelligence platform — a live 3D globe streaming earthquakes, weather, flights, wildfires, and air quality, with an AI copilot that answers questions against the live data.",
+  "homepage": "https://terrascope-ai.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suhank007/terrascope-ai"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cesium",
+    "3d-globe",
+    "nextjs",
+    "react",
+    "typescript",
+    "real-time-data",
+    "geospatial",
+    "claude-ai"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

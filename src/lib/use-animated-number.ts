@@ -13,7 +13,10 @@ import { EASE_OUT_EXPO } from "./motion";
 export function useAnimatedNumber(value: number, durationMs = 600, decimals = 0): number {
   const [display, setDisplay] = useState(value);
   const displayRef = useRef(value);
-  displayRef.current = display;
+
+  useEffect(() => {
+    displayRef.current = display;
+  }, [display]);
 
   useEffect(() => {
     if (displayRef.current === value) return;

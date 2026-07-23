@@ -23,15 +23,19 @@ interface GlobeAutoRotateProps {
 export function GlobeAutoRotate({ enabled, onInteract }: GlobeAutoRotateProps = {}) {
   const { viewer, scene, camera } = useCesium();
   const { isCameraAnimatingRef } = useGlobeUi();
-  const resumeAtRef = useRef(Date.now() + INITIAL_DELAY_MS);
+  const resumeAtRef = useRef(0);
   const pointerDownRef = useRef(false);
   const enabledRef = useRef(enabled);
-  enabledRef.current = enabled;
   const onInteractRef = useRef(onInteract);
-  onInteractRef.current = onInteract;
+
+  useEffect(() => {
+    enabledRef.current = enabled;
+    onInteractRef.current = onInteract;
+  }, [enabled, onInteract]);
 
   useEffect(() => {
     if (!viewer || !scene || !camera) return;
+    resumeAtRef.current = Date.now() + INITIAL_DELAY_MS;
     const canvas = viewer.canvas;
 
     const markInteraction = () => {

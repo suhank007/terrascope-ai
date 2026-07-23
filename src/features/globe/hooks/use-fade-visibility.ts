@@ -16,11 +16,21 @@ export function useFadeVisibility(active: boolean, durationMs = 450) {
   const [mounted, setMounted] = useState(active);
   const [opacity, setOpacity] = useState(active ? 1 : 0);
   const opacityRef = useRef(opacity);
-  opacityRef.current = opacity;
+
+  // Mounting back on needs to happen the instant `active` flips true, not on
+  // the next effect pass — this is React's own sanctioned pattern for that
+  // ("adjusting state when a prop changes" during render, not in an effect).
+  const [prevActive, setPrevActive] = useState(active);
+  if (active !== prevActive) {
+    setPrevActive(active);
+    if (active) setMounted(true);
+  }
 
   useEffect(() => {
-    if (active) setMounted(true);
+    opacityRef.current = opacity;
+  }, [opacity]);
 
+  useEffect(() => {
     const controls = animate(opacityRef.current, active ? 1 : 0, {
       duration: durationMs / 1000,
       ease: EASE_OUT_EXPO,
