@@ -72,12 +72,13 @@ export function GlobeAutoRotate({ enabled, onInteract }: GlobeAutoRotateProps = 
         return;
       }
       if (wasAnimating) {
-        // A programmatic flyTo (search, saved view) just finished — treat
-        // landing on it as a fresh interaction. Without this, idle-mode
-        // rotation resumes on the very next frame with zero grace period,
-        // so the camera drifts off the searched place immediately.
+        // A programmatic flyTo (search, saved view) just finished. This is
+        // a deliberate "go here" from the user, not idle browsing — ambient
+        // rotation should not drift the camera away from it on any timer.
+        // Only suspend, don't just delay: only a real touch on the canvas
+        // (markInteraction, below) is allowed to re-arm the idle resume.
         wasAnimating = false;
-        resumeAtRef.current = Date.now() + RESUME_DELAY_MS;
+        resumeAtRef.current = Infinity;
       }
 
       if (pointerDownRef.current) return;
