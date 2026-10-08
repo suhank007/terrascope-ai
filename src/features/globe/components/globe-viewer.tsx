@@ -4,7 +4,7 @@ import "cesium/Build/Cesium/Widgets/widgets.css";
 import { useMemo } from "react";
 import { Viewer } from "resium";
 import { ImageryLayer, UrlTemplateImageryProvider } from "cesium";
-import { BASEMAP_CREDIT, BASEMAP_SUBDOMAINS, BASEMAP_TILE_URL_TEMPLATE } from "../lib/cesium-config";
+import { BASEMAP_CREDIT, BASEMAP_TILE_URL_TEMPLATE } from "../lib/cesium-config";
 import { useGlobeUi } from "../context/globe-ui-context";
 import { CameraBoundsWatcher } from "./camera-bounds-watcher";
 import { GlobalClickHandler } from "./global-click-handler";
@@ -41,7 +41,6 @@ export function GlobeViewer() {
       new ImageryLayer(
         new UrlTemplateImageryProvider({
           url: BASEMAP_TILE_URL_TEMPLATE,
-          subdomains: BASEMAP_SUBDOMAINS,
           credit: BASEMAP_CREDIT,
         })
       ),

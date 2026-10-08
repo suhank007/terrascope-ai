@@ -1,12 +1,10 @@
-// CARTO's free Voyager basemap, not plain OpenStreetMap tiles — same data,
-// same no-API-key/no-account requirement, but labels render in English
-// (technically "name:en" where available) instead of each place's local
-// script. Verified visually: standard OSM tiles over Beijing/Riyadh show
-// Chinese/Arabic place names; these show "Beijing"/"Riyadh". Subdomains
-// a-d exist purely for browser request parallelism.
-export const BASEMAP_TILE_URL_TEMPLATE = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png";
-export const BASEMAP_SUBDOMAINS = ["a", "b", "c", "d"];
-export const BASEMAP_CREDIT = "© OpenStreetMap contributors © CARTO";
+// Esri World Street Map: keyless, English-labelled basemap. CARTO's free
+// Voyager tiles used to fill this role, but CARTO now serves a "API KEY
+// REQUIRED" watermark tile to unauthenticated clients. Note Esri's tile URL
+// order is {z}/{y}/{x}, and there are no subdomains to rotate across.
+export const BASEMAP_TILE_URL_TEMPLATE =
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}";
+export const BASEMAP_CREDIT = "Tiles © Esri — Source: Esri, DeLorme, NAVTEQ, USGS, and the GIS User Community";
 
 /** Camera height (meters) below which flight/close-zoom layers activate. */
 export const CLOSE_ZOOM_HEIGHT_THRESHOLD = 6_000_000;
