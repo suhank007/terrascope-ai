@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { AppQueryProvider } from "@/lib/query-client";
@@ -7,6 +7,12 @@ import "./globals.css";
 const title = "TerraScope AI — Real-Time Global Intelligence Platform";
 const description =
   "A live 3D globe streaming earthquakes, weather, flights, wildfires, and air quality from public data feeds — plus an AI copilot that can answer questions against the live data.";
+
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  themeColor: "#05070a",
+  colorScheme: "dark",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://terrascope-ai.vercel.app"),

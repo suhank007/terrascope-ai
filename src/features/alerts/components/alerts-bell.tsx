@@ -39,7 +39,7 @@ export function AlertsBell() {
         aria-label={`${alerts.length} active alerts`}
         aria-expanded={open}
         title="Alerts"
-        className="glass-panel relative flex h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:text-foreground active:scale-90"
+        className="glass-panel-elevated relative flex h-10 w-10 items-center justify-center rounded-full text-muted xl:h-9 xl:w-9 transition-colors hover:text-foreground active:scale-90"
       >
         <Bell className="h-4 w-4" />
         {alerts.length > 0 && (

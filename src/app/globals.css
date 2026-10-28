@@ -139,6 +139,25 @@ body {
   backdrop-filter: blur(var(--glass-blur));
 }
 
+/* Docked workspace panels (desktop layout). Unlike .glass-panel these sit on
+   the solid page background beside the globe, not over it — so they use an
+   opaque surface and the same hairline border, no blur. */
+.dock-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 5px;
+  background: rgba(238, 241, 245, 0.03);
+}
+
 /* Skeleton loading: a soft light-band sweep, not an opacity flicker. Apply
    directly to each placeholder shape (its own bg/rounded/size utilities
    still apply — this only adds the sweep, clipped to that shape). */

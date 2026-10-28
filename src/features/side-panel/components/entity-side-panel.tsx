@@ -13,7 +13,9 @@ import { AirQualityPanelContent } from "@/features/air-quality/components/air-qu
 import { WildfirePanelContent } from "@/features/wildfires/components/wildfire-panel-content";
 import { formatMagnitude } from "@/lib/format";
 
-function panelHeader(selected: NonNullable<ReturnType<typeof useGlobeUi>["selectedEntity"]>) {
+type Selected = NonNullable<ReturnType<typeof useGlobeUi>["selectedEntity"]>;
+
+export function panelHeader(selected: Selected) {
   switch (selected.type) {
     case "earthquake":
       return { icon: Activity, title: formatMagnitude(selected.data.magnitude), subtitle: "Earthquake" };
@@ -32,6 +34,24 @@ function panelHeader(selected: NonNullable<ReturnType<typeof useGlobeUi>["select
   }
 }
 
+export function EntityDetailContent({ selected }: { selected: Selected }) {
+  return (
+    <>
+      {selected.type === "earthquake" && <EarthquakePanelContent data={selected.data} />}
+      {selected.type === "flight" && <FlightPanelContent data={selected.data} />}
+      {selected.type === "weather-point" && (
+        <WeatherPanelContent lat={selected.lat} lon={selected.lon} label={selected.label} />
+      )}
+      {selected.type === "air-quality-point" && (
+        <AirQualityPanelContent lat={selected.lat} lon={selected.lon} label={selected.label} />
+      )}
+      {selected.type === "wildfire" && <WildfirePanelContent data={selected.data} />}
+    </>
+  );
+}
+
+/** The floating detail dialog, used by /demo. The main app shows entity
+ *  detail inside the docked right panel (xl+) or the mobile bottom sheet. */
 export function EntitySidePanel() {
   const { selectedEntity, setSelectedEntity } = useGlobeUi();
   const demo = useDemoModeOptional();
@@ -92,19 +112,7 @@ export function EntitySidePanel() {
               </button>
             </div>
 
-            {selectedEntity.type === "earthquake" && <EarthquakePanelContent data={selectedEntity.data} />}
-            {selectedEntity.type === "flight" && <FlightPanelContent data={selectedEntity.data} />}
-            {selectedEntity.type === "weather-point" && (
-              <WeatherPanelContent lat={selectedEntity.lat} lon={selectedEntity.lon} label={selectedEntity.label} />
-            )}
-            {selectedEntity.type === "air-quality-point" && (
-              <AirQualityPanelContent
-                lat={selectedEntity.lat}
-                lon={selectedEntity.lon}
-                label={selectedEntity.label}
-              />
-            )}
-            {selectedEntity.type === "wildfire" && <WildfirePanelContent data={selectedEntity.data} />}
+            <EntityDetailContent selected={selectedEntity} />
           </motion.div>
         </>
       )}

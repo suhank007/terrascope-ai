@@ -99,7 +99,7 @@ export function MapLegend() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={open ? "Close legend" : "Show map legend"}
-        className="glass-panel flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:text-foreground active:scale-95"
+        className="glass-panel-elevated flex h-10 items-center gap-1.5 rounded-full px-3.5 text-xs xl:h-auto xl:px-3 xl:py-1.5 font-medium text-muted transition-colors hover:text-foreground active:scale-95"
       >
         <Info className="h-3.5 w-3.5" />
         <span>Legend</span>

@@ -8,18 +8,37 @@ import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { useGeocodeSearch } from "../hooks/use-geocode-search";
 import { clampBboxSpan } from "../lib/clamp-bbox";
 import { EASE_OUT_EXPO, STAGGER_LIST } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 import type { GeocodeResult } from "../types";
 
 const DEBOUNCE_MS = 400;
 const DEFAULT_FLY_HEIGHT_M = 80_000;
 const FLY_DURATION_S = 2.8;
 
-export function SearchBar() {
+export function SearchBar({ className, placeholder }: { className?: string; placeholder?: string }) {
   const { cesiumRef, isCameraAnimatingRef } = useGlobeUi();
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [focused, setFocused] = useState(false);
+
+  // ⌘K / Ctrl+K focuses search. Two SearchBars can be mounted (desktop top bar
+  // and the mobile HUD, one hidden by CSS), so only the visible one answers.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        const input = inputRef.current;
+        if (!input || input.offsetParent === null) return;
+        e.preventDefault();
+        input.focus();
+        input.select();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedQuery(query), DEBOUNCE_MS);
@@ -85,21 +104,27 @@ export function SearchBar() {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-sm">
-      <div className="glass-panel flex items-center gap-2 rounded-full py-2 pl-4 pr-3 transition-colors focus-within:border-accent/50">
+    <div ref={containerRef} className={cn("relative w-full max-w-sm", className)}>
+      <div className="glass-panel-elevated flex items-center gap-2 rounded-full py-2 pl-4 pr-3 transition-colors focus-within:border-accent/50">
         <Search className="h-4 w-4 shrink-0 text-muted" />
         <input
+          ref={inputRef}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
             setOpen(true);
           }}
-          onFocus={() => setOpen(true)}
-          placeholder="Search a city or country..."
+          onFocus={() => {
+            setOpen(true);
+            setFocused(true);
+          }}
+          onBlur={() => setFocused(false)}
+          placeholder={placeholder ?? "Search a city or country..."}
           aria-label="Search a city or country"
-          className="w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none"
+          className="w-full bg-transparent text-base text-foreground placeholder:text-muted focus:outline-none xl:text-sm"
         />
         {isFetching && <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-muted" />}
+        {!query && !focused && <kbd className="kbd hidden xl:block">⌘K</kbd>}
         {query && !isFetching && (
           <button
             onClick={clear}

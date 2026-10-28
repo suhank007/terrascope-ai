@@ -164,6 +164,19 @@ Skeletons are shaped like their eventual content (a circle where the icon will b
 ### Empty States
 Every "zero results" state gets its own considered sentence, never a bare "No data." Two tiers: a reassuring one for an empty-but-healthy result ("No active wildfire alerts detected right now" — `ShieldCheck` icon, default muted tone) and a neutral instructional one for "nothing to show yet, here's why" ("Zoom in to see live flights"). Both route through the shared [StatusHint](src/features/globe/components/status-hint.tsx) component so they never drift from each other visually.
 
+## 5b. Workspace layout (xl and up, 1280px+)
+
+At 1280px and wider the app is a docked **mission-control workspace** rather than a floating HUD: top bar (brand, ⌘K search, source health, alerts, account), a left rail (Data layers with live counts and switches, then Filters), the globe in the centre, and a right **Signal Explorer** dock. Below 1280px the original full-bleed globe with floating HUD is unchanged, and `/demo` keeps the floating HUD at every width. One globe is mounted either way; only its container changes.
+
+- **Docked panels are opaque** (`.dock-panel`: `--surface` + hairline border, no blur). Glass (`.glass-panel*`) is reserved for anything that floats *over* the globe, and every overlay on the globe is a glass pill so it stays legible over bright map tiles.
+- **Explorer is the detail view too.** Selecting a signal (from the list or by clicking the globe) swaps the dock to that signal's detail with a back arrow and Esc; nothing floats over the globe on desktop.
+- **Every list has four states**: loading skeleton, error with retry, empty (with a way out, e.g. "Show all magnitudes"), and layer-hidden (with a one-click "Show").
+- **Home view** is `HOME_VIEW` in `workspace/hooks/use-fly-to.ts`; the reset control and the first-load framing both use it.
+
+### Below 1280px: map plus bottom sheet
+
+Phones and tablets keep the full-bleed globe. The chrome is a compact top bar (identity, alerts, account, then search at 16px so iOS doesn't zoom on focus) and a **bottom sheet** that carries the same Signal Explorer. The sheet has three snap points (peek, half, full); drag the handle, tap it, or tap a layer tab. A selection lifts a collapsed sheet to half and shows the detail with a back button. Half stays under the viewport midpoint because that is where the camera lands a flown-to signal. The explorer is compacted here (source and update time fold into one line; filters become a header icon), the top bar fades out at full height, and every touch target is at least 40px. The old floating HUD (`HudOverlay`) now only serves `/demo`.
+
 ## 6. Do's and Don'ts
 
 ### Do:

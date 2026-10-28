@@ -30,6 +30,12 @@ interface GlobeUiContextValue {
   setSelectedEntity: (entity: SelectedEntity | null) => void;
   layers: Layers;
   toggleLayer: (key: keyof Layers) => void;
+  /** Which layer the docked Signal Explorer is currently listing. */
+  focusedLayer: keyof Layers;
+  setFocusedLayer: (key: keyof Layers) => void;
+  /** Hides earthquakes weaker than this magnitude (0 = show everything). */
+  minMagnitude: number;
+  setMinMagnitude: (magnitude: number) => void;
   setAllLayers: (layers: Layers) => void;
   cameraHeight: number | null;
   cameraBounds: BBox | null;
@@ -63,6 +69,8 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
     airQuality: false,
     wildfires: true,
   });
+  const [focusedLayer, setFocusedLayer] = useState<keyof Layers>("earthquakes");
+  const [minMagnitude, setMinMagnitude] = useState(0);
   const [cameraHeight, setCameraHeight] = useState<number | null>(null);
   const [cameraBounds, setCameraBounds] = useState<BBox | null>(null);
   const [selectedAirlines, setSelectedAirlines] = useState<ReadonlySet<string>>(() => new Set());
@@ -111,6 +119,10 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
       setSelectedEntity,
       layers,
       toggleLayer,
+      focusedLayer,
+      setFocusedLayer,
+      minMagnitude,
+      setMinMagnitude,
       setAllLayers,
       cameraHeight,
       cameraBounds,
@@ -131,6 +143,8 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
       selectedEntity,
       layers,
       toggleLayer,
+      focusedLayer,
+      minMagnitude,
       setAllLayers,
       cameraHeight,
       cameraBounds,
