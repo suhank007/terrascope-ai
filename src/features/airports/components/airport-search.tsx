@@ -63,7 +63,7 @@ export function AirportSearch({ autoFocus = false }: { autoFocus?: boolean }) {
         />
         {isFetching && <Loader2 className="h-4 w-4 shrink-0 animate-spin text-muted" aria-hidden />}
         {text && !isFetching && (
-          <button type="button" onClick={() => { setText(""); setDebounced(""); }} aria-label="Clear" className="shrink-0 text-muted hover:text-foreground">
+          <button type="button" onClick={() => { setText(""); setDebounced(""); }} aria-label="Clear" className="-m-3 shrink-0 p-3 text-muted hover:text-foreground">
             <X className="h-4 w-4" />
           </button>
         )}

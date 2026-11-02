@@ -99,7 +99,7 @@ export function AlertsBell() {
                           <span className="block truncate text-sm font-medium text-foreground">{title}</span>
                           <span className="block truncate text-xs text-muted">{subtitle}</span>
                         </span>
-                        <span className="shrink-0 text-[10px] text-muted">{formatRelativeTime(time)}</span>
+                        <span className="shrink-0 text-xs text-muted">{formatRelativeTime(time)}</span>
                       </button>
                     </li>
                   );

@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils";
 import { useLayerStats, type LayerStat } from "../hooks/use-layer-stats";
 import { LAYER_META, LAYER_ORDER, pluralize } from "../lib/layer-meta";
 import { Switch } from "./switch";
+import { Art, type ArtKind } from "@/components/ui/art";
+
+const LAYER_ART: Partial<Record<string, ArtKind>> = { earthquakes: "quake", wildfires: "fire", weather: "weather", airQuality: "air", flights: "flight" };
 
 function describe(stat: LayerStat, enabled: boolean, unit: (typeof LAYER_META)["weather"]["unit"]): string {
   if (!enabled) return "Hidden";
@@ -61,9 +64,13 @@ export function LayersPanel() {
                 aria-label={`Explore ${label}`}
                 className="flex min-w-0 flex-1 items-center gap-3 rounded-xl p-2.5 text-left"
               >
-                <span className={cn("flex h-6 w-6 shrink-0 items-center justify-center transition-colors", enabled ? "text-accent" : "text-muted")}>
-                  <Icon className="h-5 w-5" />
-                </span>
+                {LAYER_ART[key] ? (
+                  <Art kind={LAYER_ART[key]!} size={40} float={enabled} className={cn("transition-[opacity,filter] duration-300", !enabled && "opacity-40 grayscale")} />
+                ) : (
+                  <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center transition-colors", enabled ? "text-accent" : "text-muted")}>
+                    <Icon className="h-5 w-5" />
+                  </span>
+                )}
                 <span className="min-w-0">
                   <span className={cn("block text-sm font-medium", enabled ? "text-foreground" : "text-muted")}>
                     {label}

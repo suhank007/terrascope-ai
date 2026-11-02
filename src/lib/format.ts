@@ -20,8 +20,8 @@ export function formatWindKph(kph: number): string {
   return `${Math.round(kph)} km/h`;
 }
 
-export function formatRelativeTime(iso: string): string {
-  const deltaMs = Date.now() - new Date(iso).getTime();
+export function formatRelativeTime(iso: string, now = Date.now()): string {
+  const deltaMs = now - new Date(iso).getTime();
   const deltaSec = Math.round(deltaMs / 1000);
   if (deltaSec < 60) return "just now";
   const deltaMin = Math.round(deltaSec / 60);

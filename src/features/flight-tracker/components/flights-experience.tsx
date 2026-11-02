@@ -21,7 +21,7 @@ export function FlightsExperience() {
   const onSearch = useCallback((q: string) => router.replace(`/flights?q=${encodeURIComponent(q)}`, { scroll: false }), [router]);
 
   return (
-    <TravelShell title="Flights" intro="Track a flight live: where it is, how high, how fast and how far it has left to go. Works for any flight in the air with an ADS-B transponder.">
+    <TravelShell art="flight" title="Flights" intro="Track a flight live: where it is, how high, how fast and how far it has left to go. Works for any flight in the air with an ADS-B transponder.">
       <FlightSearch key={query ?? "empty"} initial={query ?? ""} onSearch={onSearch} />
 
       {raw && !parsed ? (

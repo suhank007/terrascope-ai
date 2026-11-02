@@ -100,7 +100,7 @@ function SaveCurrentView() {
         disabled={!name.trim() || createView.isPending}
         aria-label="Save current view"
         title="Save current view"
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent transition-transform disabled:opacity-40 disabled:active:scale-100 active:scale-90"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent transition-transform xl:h-8 xl:w-8 disabled:opacity-40 disabled:active:scale-100 active:scale-90"
       >
         {createView.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
       </button>
@@ -127,13 +127,13 @@ function SavedViewRow({ view }: { view: SavedView }) {
     <li className="flex items-center gap-1 rounded-lg px-2 py-1.5 transition-colors hover:bg-surface-elevated">
       <button onClick={restore} className="min-w-0 flex-1 text-left active:scale-[0.99]">
         <span className="block truncate text-sm text-foreground">{view.name}</span>
-        <span className="block text-[10px] text-muted">{formatRelativeTime(view.createdAt)}</span>
+        <span className="block text-xs text-muted">{formatRelativeTime(view.createdAt)}</span>
       </button>
       <button
         onClick={() => deleteView.mutate(view.id)}
         aria-label={`Delete ${view.name}`}
         title={`Delete ${view.name}`}
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:text-danger active:scale-90"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:text-danger active:scale-90 xl:h-8 xl:w-8"
       >
         <Trash2 className="h-3.5 w-3.5" />
       </button>

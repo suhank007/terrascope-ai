@@ -63,7 +63,7 @@ export function MapLegend() {
                 onClick={() => setOpen(false)}
                 aria-label="Close legend"
                 title="Close"
-                className="text-muted hover:text-foreground active:scale-90"
+                className="-m-3 flex h-11 w-11 items-center justify-center text-muted hover:text-foreground active:scale-90"
               >
                 <X className="h-3.5 w-3.5" />
               </button>

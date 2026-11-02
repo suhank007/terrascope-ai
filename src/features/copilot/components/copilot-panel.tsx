@@ -46,7 +46,7 @@ export function CopilotPanel({ onClose }: { onClose: () => void }) {
           onClick={onClose}
           aria-label="Close copilot"
           title="Close"
-          className="rounded-full p-1.5 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground active:scale-90"
+          className="-m-2 rounded-full p-3 text-muted transition-colors hover:bg-surface-elevated hover:text-foreground active:scale-90 xl:m-0 xl:p-1.5"
         >
           <X className="h-4 w-4" />
         </button>

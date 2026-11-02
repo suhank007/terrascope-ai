@@ -86,7 +86,7 @@ export function TripExperience() {
   };
 
   return (
-    <TravelShell title="Trip Brief" intro="Know before you go: official advisories, health notices, live hazards, the forecast and what to see.">
+    <TravelShell art="city" title="Trip Brief" intro="Know before you go: official advisories, health notices, live hazards, the forecast and what to see.">
         <TripPlanner query={query} mode={mode} onChange={onChange} />
 
         {query === null ? (

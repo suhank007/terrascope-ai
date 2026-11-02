@@ -70,7 +70,7 @@ export function AirlineFilter() {
                     >
                       <span className="text-foreground">{airline.name}</span>
                       <span className="flex items-center gap-2">
-                        <span className="text-[10px] text-muted">{airline.icaoPrefix}</span>
+                        <span className="text-xs text-muted">{airline.icaoPrefix}</span>
                         {active && <Check className="h-3.5 w-3.5 text-accent" />}
                       </span>
                     </button>

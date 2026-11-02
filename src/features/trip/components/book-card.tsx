@@ -1,3 +1,4 @@
+import { Art } from "@/components/ui/art";
 import { LinkList } from "@/components/ui/link-list";
 import { OFFICIAL_RULE_LINKS, orderLinkGroups } from "../lib/link-order";
 import type { TravelMode, TripBrief } from "../types";
@@ -8,6 +9,12 @@ export function BookCard({ brief, mode, className }: { brief: TripBrief; mode: T
 
   return (
     <TripCard id="book" title="Plan and book" className={className}>
+      <div className="mb-6 flex items-center gap-4">
+        <Art kind="hotel" size={72} />
+        <p className="max-w-prose text-xs leading-relaxed text-muted">
+          Each link opens the provider&apos;s own search for this trip. TerraScope doesn&apos;t earn from them yet, and you book and pay on their site.
+        </p>
+      </div>
       <div className="flex flex-col gap-6">
         {groups.map((group) => (
           <div key={group.group}>
@@ -16,9 +23,6 @@ export function BookCard({ brief, mode, className }: { brief: TripBrief; mode: T
           </div>
         ))}
       </div>
-      <p className="mt-4 max-w-prose text-xs leading-relaxed text-muted">
-        Each link opens the provider&apos;s own search for this trip. TerraScope doesn&apos;t earn from them yet, and you book and pay on their site.
-      </p>
     </TripCard>
   );
 }

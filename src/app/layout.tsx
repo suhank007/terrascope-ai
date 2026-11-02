@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { AppQueryProvider } from "@/lib/query-client";
+import { AppMotionProvider } from "@/lib/motion-provider";
 import "./globals.css";
 
 const title = "TerraScope AI: Real-Time Global Intelligence Platform";
@@ -36,7 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} dark`}>
       <body>
-        <AppQueryProvider>{children}</AppQueryProvider>
+        <AppMotionProvider>
+          <AppQueryProvider>{children}</AppQueryProvider>
+        </AppMotionProvider>
       </body>
     </html>
   );

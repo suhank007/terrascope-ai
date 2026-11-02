@@ -37,7 +37,7 @@ export function AirportPage({ code }: { code: string }) {
   const { data, isLoading, isError, refetch } = useAirportBrief(code);
 
   return (
-    <TravelShell title="Airport" intro="Live weather, FAA delay programmes for US airports, and the aircraft arriving and departing right now.">
+    <TravelShell art="airport" title="Airport" intro="Live weather, FAA delay programmes for US airports, and the aircraft arriving and departing right now.">
       <section aria-label="Find another airport" className="dock-panel rounded-2xl p-5">
         <AirportSearch />
       </section>

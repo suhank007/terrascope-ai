@@ -136,7 +136,7 @@ export function SearchBar({ className, placeholder, solid = false }: { className
             onClick={clear}
             aria-label="Clear search"
             title="Clear search"
-            className="shrink-0 text-muted transition-colors hover:text-foreground active:scale-90"
+            className="-my-2 -mr-2 flex h-11 w-11 shrink-0 items-center justify-center text-muted transition-colors hover:text-foreground active:scale-90 xl:h-8 xl:w-8"
           >
             <X className="h-3.5 w-3.5" />
           </button>

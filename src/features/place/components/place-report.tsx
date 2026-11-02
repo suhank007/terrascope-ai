@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Activity, CloudSun, Flame, Loader2, MapPinned, Wind, X, type LucideIcon } from "lucide-react";
+import { Art, type ArtKind } from "@/components/ui/art";
 import { Facts } from "@/components/ui/facts";
 import { useGlobeUi, type Layers } from "@/features/globe/context/globe-ui-context";
 import { colorForMagnitude } from "@/features/earthquakes/lib/color-scale";
@@ -12,6 +14,7 @@ import { Unavailable } from "@/features/trip/components/trip-card";
 import { Switch } from "@/features/workspace/components/switch";
 import { useCameraActions } from "@/features/workspace/hooks/use-fly-to";
 import { weatherCodeInfo } from "@/features/weather/lib/weather-code";
+import { EASE_OUT_EXPO } from "@/lib/motion";
 import { formatCoordinate, formatMagnitude, formatRelativeTime, formatTemperature, formatWindKph } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { usePlaceReport } from "../hooks/use-place-report";
@@ -19,6 +22,8 @@ import { aqiAdvice, compassPoint, fireIntensity, quakeFeel } from "../lib/advice
 import type { PlaceReport as Report, SearchedPlace } from "../types";
 
 type TabKey = "weather" | "airQuality" | "earthquakes" | "wildfires";
+
+const TAB_ART: Record<TabKey, ArtKind> = { weather: "weather", airQuality: "air", earthquakes: "quake", wildfires: "fire" };
 
 const TABS: { key: TabKey; label: string; icon: LucideIcon }[] = [
   { key: "weather", label: "Weather", icon: CloudSun },
@@ -264,7 +269,7 @@ export function PlaceReport({ place }: { place: SearchedPlace }) {
             onClick={() => setSearchedPlace(null)}
             aria-label="Close place report"
             title="Close"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-elevated hover:text-foreground"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted xl:h-9 xl:w-9 transition-colors hover:bg-surface-elevated hover:text-foreground"
           >
             <X className="h-4 w-4" />
           </button>
@@ -281,7 +286,7 @@ export function PlaceReport({ place }: { place: SearchedPlace }) {
       </header>
 
       <div role="tablist" aria-label="Conditions" className="sticky top-0 z-10 grid shrink-0 grid-cols-4 gap-1 border-y border-border bg-surface px-3 py-2 xl:static">
-        {TABS.map(({ key, label, icon: Icon }) => {
+        {TABS.map(({ key, label }) => {
           const s = summary(key, data);
           const active = tab === key;
           return (
@@ -296,7 +301,7 @@ export function PlaceReport({ place }: { place: SearchedPlace }) {
                 active ? "bg-accent-soft text-accent" : "text-foreground/80 hover:bg-surface-elevated"
               )}
             >
-              <Icon className="h-4 w-4" aria-hidden />
+              <Art kind={TAB_ART[key]} size={36} float={active} className={cn("transition-[opacity,filter] duration-300", !active && "opacity-70")} />
               <span className="text-xs font-medium">{label}</span>
               <span className="font-mono text-xs tabular-nums" style={!active && s.tone ? { color: s.tone } : undefined}>
                 {isLoading ? <Loader2 className="inline h-3 w-3 animate-spin" aria-label="Loading" /> : s.text}
@@ -319,14 +324,18 @@ export function PlaceReport({ place }: { place: SearchedPlace }) {
             <div className="h-10 w-40 animate-pulse rounded bg-surface-elevated" />
             <div className="h-24 animate-pulse rounded bg-surface-elevated" />
           </div>
-        ) : tab === "weather" ? (
-          <WeatherTab report={data} />
-        ) : tab === "airQuality" ? (
-          <AirQualityTab report={data} />
-        ) : tab === "earthquakes" ? (
-          <EarthquakesTab report={data} place={place} />
         ) : (
-          <WildfiresTab report={data} place={place} />
+          <motion.div key={tab} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}>
+            {tab === "weather" ? (
+              <WeatherTab report={data} />
+            ) : tab === "airQuality" ? (
+              <AirQualityTab report={data} />
+            ) : tab === "earthquakes" ? (
+              <EarthquakesTab report={data} place={place} />
+            ) : (
+              <WildfiresTab report={data} place={place} />
+            )}
+          </motion.div>
         )}
 
         {place.scope === "region" && (

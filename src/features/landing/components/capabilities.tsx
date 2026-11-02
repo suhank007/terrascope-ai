@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Activity, Bell, Bot, Compass, Globe2, PlaneTakeoff, Radar, Save, type LucideIcon } from "lucide-react";
 import { useEarthquakes } from "@/features/earthquakes/hooks/use-earthquakes";
 import { useWildfires } from "@/features/wildfires/hooks/use-wildfires";
+import { Art, type ArtKind } from "@/components/ui/art";
 import { cn } from "@/lib/utils";
 import { CountUp } from "./count-up";
 
@@ -14,6 +15,7 @@ interface Card {
   specs: string[];
   className: string;
   tone?: string;
+  art?: ArtKind;
   /** Extra live content between the description and the spec list. */
   extra?: React.ReactNode;
 }
@@ -23,19 +25,19 @@ function LiveLayers() {
   const quakes = useEarthquakes();
   const fires = useWildfires();
 
-  const rows: { dot: string; name: string; source: string; value: React.ReactNode }[] = [
-    { dot: "#fb923c", name: "Earthquakes", source: "USGS, magnitude 2.5 and up", value: quakes.data ? <CountUp to={quakes.data.quakes.length} /> : "…" },
-    { dot: "#ef233c", name: "Wildfires", source: "NASA FIRMS, last 24 hours", value: fires.data ? fires.data.configured ? <CountUp to={fires.data.count} /> : "n/a" : "…" },
-    { dot: "#38bdf8", name: "Weather", source: "Open-Meteo, major cities", value: "20" },
-    { dot: "#4ade80", name: "Air quality", source: "US AQI, major cities", value: "20" },
-    { dot: "#35e0c8", name: "Flights", source: "adsb.fi, in the area you view", value: "Live" },
+  const rows: { art: ArtKind; name: string; source: string; value: React.ReactNode }[] = [
+    { art: "quake", name: "Earthquakes", source: "USGS, magnitude 2.5 and up", value: quakes.data ? <CountUp to={quakes.data.quakes.length} /> : "…" },
+    { art: "fire", name: "Wildfires", source: "NASA FIRMS, last 24 hours", value: fires.data ? fires.data.configured ? <CountUp to={fires.data.count} /> : "n/a" : "…" },
+    { art: "weather", name: "Weather", source: "Open-Meteo, major cities", value: "20" },
+    { art: "air", name: "Air quality", source: "US AQI, major cities", value: "20" },
+    { art: "flight", name: "Flights", source: "adsb.fi, in the area you view", value: "Live" },
   ];
 
   return (
     <ul className="relative mt-7 border-t border-white/10">
       {rows.map((r) => (
         <li key={r.name} className="flex items-center gap-4 border-b border-white/10 py-3.5">
-          <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: r.dot }} aria-hidden />
+          <Art kind={r.art} size={40} className="-my-1" />
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-medium text-white">{r.name}</span>
             <span className="block text-xs text-zinc-500">{r.source}</span>
@@ -60,13 +62,14 @@ const CARDS: Card[] = [
   {
     icon: Compass,
     title: "Trip Brief",
+    art: "hotel",
     text: "One verdict for a destination, then the detail behind it, for business or leisure.",
     specs: ["UK and US advisories", "CDC and WHO notices", "7-day forecast", "Exchange rate", "Top sights", "Booking links"],
     className: "lg:col-span-2",
     tone: "#35e0c8",
   },
-  { icon: Radar, title: "Flight tracker", text: "Position, altitude, speed, heading and distance to go for any flight in the air.", specs: ["Flight number", "Callsign", "Registration"], className: "", tone: "#3b82f6" },
-  { icon: PlaneTakeoff, title: "Airport outlook", text: "Decoded weather and FAA delay programmes, scored per airport.", specs: ["4,000+ airports", "METAR and TAF", "25 nm traffic"], className: "", tone: "#f5a623" },
+  { icon: Radar, title: "Flight tracker", art: "flight", text: "Position, altitude, speed, heading and distance to go for any flight in the air.", specs: ["Flight number", "Callsign", "Registration"], className: "", tone: "#3b82f6" },
+  { icon: PlaneTakeoff, title: "Airport outlook", art: "airport", text: "Decoded weather and FAA delay programmes, scored per airport.", specs: ["4,000+ airports", "METAR and TAF", "25 nm traffic"], className: "", tone: "#f5a623" },
   { icon: Bot, title: "AI copilot", text: "Ask in plain language. It reads the same live data before it answers, and cites what it used.", specs: ["Tool-using", "Live data only"], className: "lg:col-span-2", tone: "#a78bfa" },
   { icon: Bell, title: "Global alerts", text: "The strongest quakes and most intense fires, one tap from the globe.", specs: ["Severity ranked"], className: "", tone: "#ef233c" },
   { icon: Save, title: "Saved views", text: "Sign in with an email link and keep your camera, layers and filters.", specs: ["No password"], className: "", tone: "#35e0c8" },
@@ -91,6 +94,7 @@ export function Capabilities() {
               className={cn("group relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-zinc-900/50 to-black p-7 transition-colors hover:border-white/20", c.className)}
             >
               <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-[0.1]" style={{ background: `radial-gradient(circle at top right, ${c.tone}, transparent 70%)` }} aria-hidden />
+              {c.art && <Art kind={c.art} size={84} className="absolute right-4 top-4 opacity-95" />}
               <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5" style={{ color: c.tone }}>
                 <c.icon className="h-5 w-5" aria-hidden />
               </span>

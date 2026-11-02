@@ -282,3 +282,7 @@ Every data feature (earthquakes, weather, flights, etc.) follows the exact same 
 ---
 
 *Built as a portfolio project demonstrating full-stack engineering: real-time data integration, 3D geospatial rendering, AI integration, authentication, and production deployment practices — end to end, by one person, with an AI pair-programmer.*
+
+## Visual assets
+
+The 3D icons in `public/art` and the hero loop in `public/video` were generated with Higgsfield (images with `gpt_image_2_5`, video with `seedance_2_5`) and compressed for the web. They are decorative; the labels next to them carry the meaning.

@@ -7,7 +7,7 @@ import { AirportSearch } from "./airport-search";
 
 export function AirportsIndex() {
   return (
-    <TravelShell title="Airports" intro="Is the airport running normally right now? Live weather, FAA delay programmes for US airports, and the aircraft arriving and departing.">
+    <TravelShell art="airport" title="Airports" intro="Is the airport running normally right now? Live weather, FAA delay programmes for US airports, and the aircraft arriving and departing.">
       <section aria-label="Find an airport" className="dock-panel rounded-2xl p-5">
         <AirportSearch />
         <p className="mt-4 text-sm text-muted">

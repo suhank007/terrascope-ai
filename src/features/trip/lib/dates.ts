@@ -7,6 +7,6 @@ const MONTH = 30 * 86_400_000;
 export function formatNoticeDate(iso: string, now = Date.now()): string {
   const time = Date.parse(iso);
   if (Number.isNaN(time)) return "";
-  if (now - time <= MONTH) return formatRelativeTime(iso);
+  if (now - time <= MONTH) return formatRelativeTime(iso, now);
   return new Date(time).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 }

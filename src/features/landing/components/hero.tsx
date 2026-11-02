@@ -9,6 +9,7 @@ import { useWildfires } from "@/features/wildfires/hooks/use-wildfires";
 import type { Severity } from "@/features/trip/types";
 import { useAirportBoard } from "../hooks/use-airport-board";
 import { SOURCES } from "../lib/sources";
+import { HeroVideo } from "./hero-video";
 import { OrbitGlobe } from "./orbit-globe";
 
 const container: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.15 } } };
@@ -47,7 +48,8 @@ export function Hero() {
 
   return (
     <section className="relative flex min-h-dvh items-center px-6 pb-20 pt-32">
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
+      <HeroVideo />
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
         <motion.div variants={container} initial="hidden" animate="show" className="text-center lg:text-left">
           <motion.div variants={item} className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-md">
             <span className="relative flex h-2 w-2" aria-hidden>
