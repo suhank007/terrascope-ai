@@ -9,6 +9,7 @@ interface NominatimResult {
   display_name: string;
   addresstype?: string;
   type?: string;
+  address?: { country?: string; country_code?: string };
   // [south, north, west, east], all as strings.
   boundingbox?: [string, string, string, string];
 }
@@ -37,6 +38,8 @@ export function normalizeGeocodeResults(raw: NominatimResult[]): GeocodeResult[]
       latitude,
       longitude,
       category: item.addresstype ?? item.type ?? null,
+      countryCode: item.address?.country_code?.length === 2 ? item.address.country_code.toUpperCase() : null,
+      countryName: item.address?.country ?? null,
       bbox: bbox && Object.values(bbox).every((v) => !Number.isNaN(v)) ? bbox : null,
     });
   }

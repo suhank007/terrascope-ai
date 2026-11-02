@@ -1,6 +1,7 @@
 "use client";
 
-import { Globe2 } from "lucide-react";
+import Link from "next/link";
+import { Compass, Globe2 } from "lucide-react";
 import { AlertsBell } from "@/features/alerts/components/alerts-bell";
 import { AccountLauncher } from "@/features/auth/components/account-launcher";
 import { SearchBar } from "@/features/search/components/search-bar";
@@ -35,6 +36,15 @@ export function MobileTopBar({ hidden = false }: { hidden?: boolean }) {
           />
         </div>
         <div className="pointer-events-auto flex items-center gap-2">
+          <Link
+            href="/trip"
+            aria-label="Travel tools: trip brief, flights, airports"
+            title="Travel"
+            className="glass-panel-elevated flex h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium text-accent transition-colors active:scale-95"
+          >
+            <Compass className="h-4 w-4" aria-hidden />
+            <span className="hidden sm:inline">Travel</span>
+          </Link>
           <AlertsBell />
           <AccountLauncher />
         </div>

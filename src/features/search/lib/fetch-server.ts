@@ -13,7 +13,7 @@ export async function fetchGeocodeResults(query: string): Promise<GeocodeRespons
   // accept-language=en matches the basemap's English-labels choice (see
   // cesium-config.ts) — Nominatim defaults to each place's local-script name
   // otherwise (e.g. "東京都" instead of "Tokyo").
-  const url = `${NOMINATIM_URL}?q=${encodeURIComponent(query)}&format=json&limit=${RESULT_LIMIT}&accept-language=en`;
+  const url = `${NOMINATIM_URL}?q=${encodeURIComponent(query)}&format=json&limit=${RESULT_LIMIT}&accept-language=en&addressdetails=1`;
 
   let res: Response;
   try {

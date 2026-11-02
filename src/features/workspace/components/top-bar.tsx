@@ -1,6 +1,7 @@
 "use client";
 
-import { Globe2 } from "lucide-react";
+import Link from "next/link";
+import { Compass, Globe2 } from "lucide-react";
 import { AlertsBell } from "@/features/alerts/components/alerts-bell";
 import { AccountLauncher } from "@/features/auth/components/account-launcher";
 import { SearchBar } from "@/features/search/components/search-bar";
@@ -49,6 +50,13 @@ export function TopBar({ className }: { className?: string }) {
       <SearchBar className="max-w-xl" placeholder="Search a city or country…" />
 
       <div className="flex flex-1 items-center justify-end gap-1.5">
+        <Link
+          href="/trip"
+          className="mr-1 flex h-9 items-center gap-2 rounded-full border border-accent/30 bg-accent-soft px-3.5 text-sm font-medium text-accent transition-colors hover:border-accent/60 active:scale-95"
+        >
+          <Compass className="h-4 w-4" aria-hidden />
+          Travel
+        </Link>
         <SourcesStatus />
         <AlertsBell />
         <AccountLauncher />

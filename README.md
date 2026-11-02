@@ -78,6 +78,24 @@ A small bell icon that quietly counts up genuinely serious events — major eart
 ### 🤖 AI Copilot
 A chat assistant, built into the app, that you can ask questions like *"summarize today's strongest earthquakes"* or *"is there a wildfire near Sydney right now?"* It doesn't guess or make things up — it actually looks up the live data (the same data powering the globe) before answering, the same way a human analyst would check a dashboard before giving you a briefing.
 
+### 🧭 Trip Brief (`/trip`)
+"Know before you go." Pick a destination, say whether you're travelling for business or leisure, and get one page that combines **official advisories** (UK FCDO and US State Dept), **health notices** (CDC travel notices and WHO outbreak news), **live hazards and the 7-day forecast** (this app's own feeds plus Open-Meteo), **essentials** (currency with an ECB exchange rate, language, calling code, driving side), **top things to see**, and **booking links**.
+
+It is built only on free public sources, and it is deliberately honest about its limits:
+- The headline verdict is computed from the sources and lists every reason with a link. "Do not travel" is reserved for an official government or health-agency warning, and if a feed is down the verdict says it couldn't check instead of showing "no flags".
+- *Top things to see* are ranked by how many Wikipedia languages cover a place (via Wikidata), a free stand-in for fame. It is **not** a review score: ratings, restaurant rankings, hotel prices, airline schedules (so, a given flight's delay) and transit tickets need paid or partner APIs and are not included yet. Booking links are plain search links with no affiliate IDs.
+- Sources are fetched server-side with a descriptive User-Agent and cached; one failing source only blanks its own card.
+
+### ✈️ Flights (`/flights`)
+Type a flight number (`BA117`), a callsign (`BAW117`) or an aircraft registration (`G-BODO`) to track it live: position, altitude, speed, heading, whether it is climbing or descending, how far it has flown, and a rough time left. The route comes from adsbdb, the position from adsb.fi's community ADS-B receivers, and it refreshes every 20 seconds while the aircraft is in the air.
+
+**It cannot tell you if a flight is late.** That needs airline schedules, which need a paid data source, so the page says so and sends you to your airline. The time left is a straight-line estimate from current speed, not an airline ETA, and a route that doesn't match where the aircraft actually is gets flagged as probably out of date.
+
+### 🛫 Airports (`/airports`, `/airports/LHR`)
+For any of ~4,000 airports with scheduled service: an **outlook** ("Running normally", "Some disruption possible", "Disruption likely") built from NOAA's decoded METAR and TAF weather and, **for US airports only**, the FAA's live ground stops, ground delay programmes and arrival/departure delays. Plus the aircraft arriving, departing and on the ground within 25 nautical miles, a 7-day forecast, and links for getting there.
+
+Outside the US there is no free public delay feed, so those airports get a weather-only outlook and the page says exactly that. If the FAA feed is down for a US airport the page says it couldn't confirm, and never shows "running normally". The airport list is generated from OurAirports (public domain) by `scripts/build-airports.mjs` and is only ever loaded server-side.
+
 ### 👤 Accounts + Saved Views
 Sign in with just your email (no password to remember — you get a one-click "magic link" instead), and you can save your current globe setup — camera position, which data layers are turned on, which airlines you're filtering — as a named view, then jump back to it anytime. Nothing else in the app requires an account; this is the one optional, personal feature.
 

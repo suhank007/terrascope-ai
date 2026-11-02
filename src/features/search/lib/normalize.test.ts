@@ -55,3 +55,18 @@ describe("normalizeGeocodeResults", () => {
     expect(result.bbox).toBeNull();
   });
 });
+
+describe("normalizeGeocodeResults country", () => {
+  const base = { place_id: 1, lat: "48.85", lon: "2.35", display_name: "Paris, France" };
+
+  it("reads the country from addressdetails and upper-cases the code", () => {
+    const [r] = normalizeGeocodeResults([{ ...base, address: { country: "France", country_code: "fr" } }]);
+    expect(r.countryCode).toBe("FR");
+    expect(r.countryName).toBe("France");
+  });
+
+  it("falls back to null when the country is missing or malformed", () => {
+    expect(normalizeGeocodeResults([base])[0].countryCode).toBeNull();
+    expect(normalizeGeocodeResults([{ ...base, address: { country_code: "xyz" } }])[0].countryCode).toBeNull();
+  });
+});
