@@ -18,6 +18,7 @@ import { SightsCard } from "./sights-card";
 import { TripPlanner } from "./trip-planner";
 import { TripSkeleton } from "./trip-skeleton";
 import { VerdictBanner } from "./verdict-banner";
+import { LoopClip } from "@/components/ui/loop-clip";
 
 type CardKey = "safety" | "health" | "conditions" | "essentials" | "airports" | "sights" | "book" | "before";
 
@@ -90,9 +91,15 @@ export function TripExperience() {
         <TripPlanner query={query} mode={mode} onChange={onChange} />
 
         {query === null ? (
-          <p className="text-sm text-muted">
-            Pick a destination to see its brief. Everything here comes from free public sources, and each section says where it came from.
-          </p>
+          <div className="flex flex-col gap-5">
+            <p className="text-sm text-muted">
+              Pick a destination to see its brief. Everything here comes from free public sources, and each section says where it came from.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <LoopClip kind="quake" caption="Illustration: an earthquake and its aftershocks, on the magnitude scale. Not live data." />
+              <LoopClip kind="air" caption="Illustration: air quality rising through the US AQI bands. Not live data." />
+            </div>
+          </div>
         ) : brief.isLoading ? (
           <TripSkeleton />
         ) : brief.isError || !brief.data ? (

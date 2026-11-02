@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { LoopClip } from "@/components/ui/loop-clip";
 import { TravelShell } from "@/features/travel/components/travel-shell";
 import { HUBS } from "../lib/hubs";
 import { AirportSearch } from "./airport-search";
@@ -22,6 +23,7 @@ export function AirportsIndex() {
           ))}
         </p>
       </section>
+      <LoopClip kind="delay" caption="Illustration: how a delay shows up against the planned time. Not live data." className="max-w-3xl" />
       <p className="max-w-prose text-xs leading-relaxed text-muted">
         Weather comes from NOAA&apos;s Aviation Weather Center, delays from the FAA (US only), and aircraft from community ADS-B receivers. Outside the US there is no free
         public delay feed, so those airports show a weather-based outlook and say so.

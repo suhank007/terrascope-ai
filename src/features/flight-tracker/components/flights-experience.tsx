@@ -8,6 +8,7 @@ import { useFlightTrack } from "../hooks/use-flight-track";
 import { parseFlightQuery } from "../lib/query";
 import { FlightResult } from "./flight-result";
 import { FlightSearch } from "./flight-search";
+import { LoopClip } from "@/components/ui/loop-clip";
 
 export function FlightsExperience() {
   const router = useRouter();
@@ -29,7 +30,10 @@ export function FlightsExperience() {
           &ldquo;{raw.slice(0, 20)}&rdquo; doesn&apos;t look like a flight number, callsign or registration.
         </p>
       ) : query === null ? (
-        <p className="text-sm text-muted">Enter a flight to see it live. Position updates every 20 seconds while it&apos;s in the air.</p>
+        <div className="flex flex-col gap-5">
+          <p className="text-sm text-muted">Enter a flight to see it live. Position updates every 20 seconds while it&apos;s in the air.</p>
+          <LoopClip kind="routes" caption="Illustration: routes across the network, and a flight bending around a hazard. Not live data." className="max-w-3xl" />
+        </div>
       ) : isLoading ? (
         <div role="status" aria-busy="true" aria-label="Looking up the flight" className="dock-panel rounded-2xl p-6">
           <div className="skeleton-shimmer h-8 w-40 rounded bg-surface-elevated" />
