@@ -13,51 +13,43 @@ const MODES: { key: TravelMode; label: string; icon: typeof Briefcase; hint: str
 ];
 
 const fieldClass =
-  "h-11 w-full rounded-xl border border-border bg-surface-elevated/60 px-3 text-base text-foreground transition-colors focus:border-accent/50 focus:outline-none [color-scheme:dark] xl:text-sm";
+  "h-11 w-full rounded-xl border border-border bg-surface-elevated px-3 text-base text-foreground transition-colors focus:border-accent/60 focus:outline-none [color-scheme:dark] disabled:opacity-50 xl:text-sm";
 
-export function TripPlanner({
-  query,
-  mode,
-  onChange,
-}: {
-  query: TripQuery | null;
-  mode: TravelMode;
-  onChange: (patch: Partial<TripQuery>) => void;
-}) {
+export function TripPlanner({ query, mode, onChange }: { query: TripQuery | null; mode: TravelMode; onChange: (patch: Partial<TripQuery>) => void }) {
   const datesInvalid = Boolean(query?.from && query?.to && query.to < query.from);
-  // On a phone the form would fill the first screen, so dates and currency fold away once a trip exists.
   const [optionsOpen, setOptionsOpen] = useState(false);
-  const optionsSummary = [
-    query?.from && query?.to ? `${query.from} to ${query.to}` : query?.from ? `From ${query.from}` : "No dates",
-    query?.home ?? "USD",
-  ].join(" · ");
+  // On a phone, once a trip exists the form folds to one line so the verdict is on the first screen.
+  const [expanded, setExpanded] = useState(false);
+  const summary = [query?.from && query?.to ? `${query.from} to ${query.to}` : query?.from ? `from ${query.from}` : "no dates", query?.home ?? "USD"].join(", ");
 
   return (
-    <section aria-label="Plan your trip" className="dock-panel rounded-2xl p-4 sm:p-5">
-      <DestinationPicker current={query?.name ?? null} onPick={(dest) => onChange(dest)} />
-
-      {!query && (
-        <div className="mt-4">
-          <p className="mb-2 text-xs text-muted">Or try one:</p>
-          <div className="flex flex-wrap gap-2">
-            {EXAMPLE_DESTINATIONS.map((d) => (
-              <button
-                key={d.name}
-                type="button"
-                onClick={() => onChange(d)}
-                className="h-10 rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-accent/50 hover:text-accent active:scale-95"
-              >
-                {d.name}
-              </button>
-            ))}
-          </div>
-        </div>
+    <section aria-label="Plan your trip" className="dock-panel rounded-2xl p-5">
+      {query && (
+        <button
+          type="button"
+          onClick={() => setExpanded((e) => !e)}
+          aria-expanded={expanded}
+          aria-controls="trip-planner-form"
+          className="flex min-h-10 w-full items-center justify-between gap-3 text-left sm:hidden"
+        >
+          <span className="min-w-0 truncate text-sm">
+            <span className="font-medium text-foreground">{query.name}</span>
+            <span className="text-muted">, {mode}</span>
+          </span>
+          <span className="flex shrink-0 items-center gap-1 text-sm text-accent">
+            {expanded ? "Done" : "Change"}
+            <ChevronDown className={cn("h-4 w-4 transition-transform", expanded && "rotate-180")} aria-hidden />
+          </span>
+        </button>
       )}
-
-      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-[auto_1fr_1fr_auto]">
-        <fieldset className="sm:col-span-2 lg:col-span-1">
-          <legend className="mb-1.5 text-xs font-medium text-muted">I&apos;m travelling for</legend>
-          <div role="radiogroup" className="flex gap-1 rounded-xl border border-border bg-background/40 p-1">
+      <div id="trip-planner-form" className={cn(query && !expanded && "hidden sm:block", query && expanded && "mt-4 sm:mt-0")}>
+      <div className="flex flex-col gap-4 md:flex-row md:items-end">
+        <div className="min-w-0 flex-1">
+          <DestinationPicker current={query?.name ?? null} onPick={(dest) => onChange(dest)} />
+        </div>
+        <fieldset>
+          <legend className="mb-1.5 text-sm text-muted">Travelling for</legend>
+          <div role="radiogroup" className="flex gap-1 rounded-xl bg-surface-elevated p-1">
             {MODES.map((m) => (
               <button
                 key={m.key}
@@ -67,70 +59,71 @@ export function TripPlanner({
                 title={m.hint}
                 onClick={() => onChange({ mode: m.key })}
                 className={cn(
-                  "flex h-9 flex-1 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-colors active:scale-95",
-                  mode === m.key ? "bg-accent-soft text-accent" : "text-muted hover:text-foreground"
+                  "flex h-9 flex-1 items-center justify-center gap-2 rounded-lg px-4 text-sm transition-colors active:scale-[0.98]",
+                  mode === m.key ? "bg-background font-medium text-foreground" : "text-muted hover:text-foreground"
                 )}
               >
-                <m.icon className="h-4 w-4" aria-hidden />
+                <m.icon className={cn("h-4 w-4", mode === m.key && "text-accent")} aria-hidden />
                 {m.label}
               </button>
             ))}
           </div>
         </fieldset>
+      </div>
 
-        {query && (
+      {!query ? (
+        <p className="mt-4 text-sm text-muted">
+          Try{" "}
+          {EXAMPLE_DESTINATIONS.map((d, i) => (
+            <span key={d.name}>
+              <button type="button" onClick={() => onChange(d)} className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-accent hover:decoration-accent">
+                {d.name}
+              </button>
+              {i < EXAMPLE_DESTINATIONS.length - 1 ? ", " : ""}
+            </span>
+          ))}
+          .
+        </p>
+      ) : (
+        <div className="mt-3">
           <button
             type="button"
             onClick={() => setOptionsOpen((o) => !o)}
             aria-expanded={optionsOpen}
             aria-controls="trip-options"
-            className="flex h-11 items-center justify-between rounded-xl border border-border px-3 text-left text-sm text-muted transition-colors hover:text-foreground sm:hidden"
+            className="-ml-1 flex min-h-9 items-center gap-1.5 rounded-lg px-1 text-sm text-muted transition-colors hover:text-foreground"
           >
-            <span className="truncate">Dates and currency · {optionsSummary}</span>
-            <ChevronDown className={cn("h-4 w-4 shrink-0 transition-transform", optionsOpen && "rotate-180")} aria-hidden />
+            <ChevronDown className={cn("h-4 w-4 transition-transform", optionsOpen && "rotate-180")} aria-hidden />
+            Dates and currency <span className="text-muted/70">({summary})</span>
           </button>
-        )}
-        <div id="trip-options" className={cn("grid gap-4 sm:contents", query && !optionsOpen && "hidden sm:contents")}>
-        <div>
-            <label htmlFor="trip-from" className="mb-1.5 block text-xs font-medium text-muted">
-              From (optional)
-            </label>
-            <input id="trip-from" type="date" value={query?.from ?? ""} onChange={(e) => onChange({ from: e.target.value || undefined })} disabled={!query} className={cn(fieldClass, "disabled:opacity-50")} />
-          </div>
-          <div>
-            <label htmlFor="trip-to" className="mb-1.5 block text-xs font-medium text-muted">
-              To (optional)
-            </label>
-            <input
-              id="trip-to"
-              type="date"
-              value={query?.to ?? ""}
-              min={query?.from}
-              onChange={(e) => onChange({ to: e.target.value || undefined })}
-              disabled={!query}
-              aria-invalid={datesInvalid}
-              className={cn(fieldClass, "disabled:opacity-50", datesInvalid && "border-danger/60")}
-            />
-          </div>
-          <div>
-            <label htmlFor="trip-home" className="mb-1.5 block text-xs font-medium text-muted">
-              My currency
-            </label>
-            <select id="trip-home" value={query?.home ?? "USD"} onChange={(e) => onChange({ home: e.target.value })} disabled={!query} className={cn(fieldClass, "disabled:opacity-50 lg:w-28")}>
-              {HOME_CURRENCIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
+          {optionsOpen && (
+            <div id="trip-options" className="mt-3 grid gap-4 sm:grid-cols-3">
+              <div>
+                <label htmlFor="trip-from" className="mb-1.5 block text-sm text-muted">From</label>
+                <input id="trip-from" type="date" value={query.from ?? ""} onChange={(e) => onChange({ from: e.target.value || undefined })} className={fieldClass} />
+              </div>
+              <div>
+                <label htmlFor="trip-to" className="mb-1.5 block text-sm text-muted">To</label>
+                <input id="trip-to" type="date" value={query.to ?? ""} min={query.from} onChange={(e) => onChange({ to: e.target.value || undefined })} aria-invalid={datesInvalid} className={cn(fieldClass, datesInvalid && "border-danger/60")} />
+              </div>
+              <div>
+                <label htmlFor="trip-home" className="mb-1.5 block text-sm text-muted">Your currency</label>
+                <select id="trip-home" value={query.home} onChange={(e) => onChange({ home: e.target.value })} className={fieldClass}>
+                  {HOME_CURRENCIES.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+              {datesInvalid && (
+                <p role="alert" className="text-sm text-danger sm:col-span-3">
+                  The return date is before the start date, so it was left out of your booking links.
+                </p>
+              )}
+            </div>
+          )}
         </div>
-      </div>
-      {datesInvalid && (
-        <p role="alert" className="mt-2 text-xs text-danger">
-          The return date is before the start date, so it was left out of your booking links.
-        </p>
       )}
+      </div>
     </section>
   );
 }

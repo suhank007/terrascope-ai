@@ -2,7 +2,8 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { AlertCircle, Compass, RefreshCw } from "lucide-react";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { SectionLayout } from "@/features/travel/components/section-layout";
 import { TravelShell } from "@/features/travel/components/travel-shell";
 import { useTripBrief, useTripSights } from "../hooks/use-trip";
 import { paramsFromQuery, queryFromParams, type TripQuery } from "../lib/query";
@@ -24,6 +25,17 @@ type CardKey = "safety" | "health" | "conditions" | "essentials" | "airports" | 
 const ORDER: Record<TravelMode, CardKey[]> = {
   business: ["safety", "health", "essentials", "airports", "conditions", "book", "sights", "before"],
   leisure: ["safety", "sights", "conditions", "essentials", "airports", "book", "health", "before"],
+};
+
+const LABELS: Record<CardKey, string> = {
+  safety: "Safety",
+  health: "Health",
+  conditions: "Conditions",
+  essentials: "Essentials",
+  airports: "Airports",
+  sights: "Sights",
+  book: "Book",
+  before: "Before you fly",
 };
 
 const DEFAULTS: Omit<TripQuery, "name" | "cc" | "lat" | "lon"> = { home: "USD", mode: "leisure" };
@@ -74,11 +86,7 @@ export function TripExperience() {
   };
 
   return (
-    <TravelShell
-      icon={Compass}
-      title="Trip Brief"
-      intro="Know before you go. Official advisories, health notices, live hazards, the forecast and what to see, for business or leisure, in one place."
-    >
+    <TravelShell title="Trip Brief" intro="Know before you go: official advisories, health notices, live hazards, the forecast and what to see.">
         <TripPlanner query={query} mode={mode} onChange={onChange} />
 
         {query === null ? (
@@ -101,17 +109,14 @@ export function TripExperience() {
             </button>
           </div>
         ) : (
-          <>
+          <div className="flex flex-col gap-10">
             <VerdictBanner brief={brief.data} />
-            {/* Columns flow top to bottom, so tall and short cards balance without gaps; priority order reads down the left first. */}
-            <div className="gap-4 lg:columns-2">
+            <SectionLayout sections={ORDER[mode].map((key) => ({ id: key === "before" ? "before-fly" : key, label: LABELS[key] }))}>
               {ORDER[mode].map((key) => (
-                <div key={key} className="mb-4 break-inside-avoid">
-                  {renderCard(key, brief.data)}
-                </div>
+                <div key={key}>{renderCard(key, brief.data)}</div>
               ))}
-            </div>
-          </>
+            </SectionLayout>
+          </div>
         )}
     </TravelShell>
   );

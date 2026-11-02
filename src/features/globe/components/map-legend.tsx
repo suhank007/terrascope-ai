@@ -23,11 +23,11 @@ interface LegendGroup {
 }
 
 const LEGEND_GROUPS: LegendGroup[] = [
-  { key: "earthquakes", title: "Earthquakes — by magnitude", entries: EARTHQUAKE_LEGEND },
-  { key: "weather", title: "Weather — by temperature", entries: WEATHER_LEGEND },
-  { key: "flights", title: "Flights — by altitude", entries: FLIGHT_LEGEND },
-  { key: "wildfires", title: "Wildfires — by confidence", entries: WILDFIRE_LEGEND },
-  { key: "airQuality", title: "Air quality — by AQI", entries: AQI_LEGEND },
+  { key: "earthquakes", title: "Earthquakes by magnitude", entries: EARTHQUAKE_LEGEND },
+  { key: "weather", title: "Weather by temperature", entries: WEATHER_LEGEND },
+  { key: "flights", title: "Flights by altitude", entries: FLIGHT_LEGEND },
+  { key: "wildfires", title: "Wildfires by confidence", entries: WILDFIRE_LEGEND },
+  { key: "airQuality", title: "Air quality by AQI", entries: AQI_LEGEND },
 ];
 
 export function MapLegend() {

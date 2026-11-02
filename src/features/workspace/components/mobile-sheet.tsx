@@ -5,8 +5,10 @@ import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { SPRING_PANEL } from "@/lib/motion";
 import { useViewportHeight } from "../hooks/use-viewport-height";
 import { EntityDetailView } from "./entity-detail-view";
+import { PlaceReport } from "@/features/place/components/place-report";
 import { ExplorerForLayer } from "./explorer-for-layer";
 import { LayerTabs } from "./layer-tabs";
+import { MapPin } from "lucide-react";
 
 export type SheetSnap = "peek" | "half" | "full";
 
@@ -19,7 +21,7 @@ const SNAP_RATIO: Record<Exclude<SheetSnap, "peek">, number> = { half: 0.46, ful
 const ORDER: SheetSnap[] = ["peek", "half", "full"];
 
 export function MobileSheet({ snap, onSnapChange }: { snap: SheetSnap; onSnapChange: (snap: SheetSnap) => void }) {
-  const { selectedEntity, setSelectedEntity } = useGlobeUi();
+  const { selectedEntity, setSelectedEntity, searchedPlace } = useGlobeUi();
   const viewportHeight = useViewportHeight();
 
   const height = snap === "peek" ? PEEK_HEIGHT : Math.round(viewportHeight * SNAP_RATIO[snap]);
@@ -53,13 +55,27 @@ export function MobileSheet({ snap, onSnapChange }: { snap: SheetSnap; onSnapCha
         >
           <span className="h-1 w-10 rounded-full bg-muted/40 transition-colors group-hover:bg-muted/70" />
         </button>
-        <LayerTabs onPick={() => snap === "peek" && onSnapChange("half")} />
+        {searchedPlace ? (
+          // The expanded report has its own header and tabs; the layer tabs would
+          // compete with them. Collapsed, a one-line label keeps the sheet legible.
+          !expanded && (
+            <p className="flex h-10 items-center gap-2 px-5 pb-1 text-sm font-medium text-foreground">
+              <MapPin className="h-4 w-4 text-accent" aria-hidden />
+              <span className="truncate">{searchedPlace.name}</span>
+              <span className="shrink-0 text-xs font-normal text-muted">Conditions</span>
+            </p>
+          )
+        ) : (
+          <LayerTabs onPick={() => snap === "peek" && onSnapChange("half")} />
+        )}
       </motion.div>
 
       {expanded && (
         <div className="mt-2 flex min-h-0 flex-1 flex-col border-t border-border">
           {selectedEntity ? (
             <EntityDetailView selected={selectedEntity} onBack={() => setSelectedEntity(null)} />
+          ) : searchedPlace ? (
+            <PlaceReport place={searchedPlace} />
           ) : (
             <ExplorerForLayer />
           )}

@@ -7,6 +7,7 @@ import { Loader2, MapPin, Search, X } from "lucide-react";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { useGeocodeSearch } from "../hooks/use-geocode-search";
 import { clampBboxSpan } from "../lib/clamp-bbox";
+import { placeFromResult } from "@/features/place/lib/radius";
 import { EASE_OUT_EXPO, STAGGER_LIST } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import type { GeocodeResult } from "../types";
@@ -15,8 +16,9 @@ const DEBOUNCE_MS = 400;
 const DEFAULT_FLY_HEIGHT_M = 80_000;
 const FLY_DURATION_S = 2.8;
 
-export function SearchBar({ className, placeholder }: { className?: string; placeholder?: string }) {
-  const { cesiumRef, isCameraAnimatingRef } = useGlobeUi();
+/** `solid`: sitting on the page background (desktop top bar). Otherwise it floats over the globe and needs the glass treatment to stay legible. */
+export function SearchBar({ className, placeholder, solid = false }: { className?: string; placeholder?: string; solid?: boolean }) {
+  const { cesiumRef, isCameraAnimatingRef, setSearchedPlace, setSelectedEntity } = useGlobeUi();
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -65,6 +67,10 @@ export function SearchBar({ className, placeholder }: { className?: string; plac
   }, [open]);
 
   const flyTo = (result: GeocodeResult) => {
+    // The report is useful even if the globe isn't ready yet, so open it first.
+    setSelectedEntity(null);
+    setSearchedPlace(placeFromResult(result));
+
     const live = cesiumRef.current;
     if (!live) return;
 
@@ -105,7 +111,7 @@ export function SearchBar({ className, placeholder }: { className?: string; plac
 
   return (
     <div ref={containerRef} className={cn("relative w-full max-w-sm", className)}>
-      <div className="glass-panel-elevated flex items-center gap-2 rounded-full py-2 pl-4 pr-3 transition-colors focus-within:border-accent/50">
+      <div className={cn("flex items-center gap-2 rounded-full py-2 pl-4 pr-3 transition-colors focus-within:border-accent/50", solid ? "border border-border bg-surface" : "glass-panel-elevated")}>
         <Search className="h-4 w-4 shrink-0 text-muted" />
         <input
           ref={inputRef}

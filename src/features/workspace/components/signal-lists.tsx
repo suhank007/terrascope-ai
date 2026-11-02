@@ -245,7 +245,7 @@ function WeatherRow({ city }: { city: (typeof WEATHER_CITIES)[number] }) {
       icon={info?.icon ?? Activity}
       title={`${city.name}, ${city.countryCode}`}
       meta={info ? info.label : "Loading…"}
-      badge={data ? formatTemperature(data.current.temperatureC) : "—"}
+      badge={data ? formatTemperature(data.current.temperatureC) : "…"}
       badgeColor={data ? colorForTemperature(data.current.temperatureC).toCssColorString() : undefined}
       selected={selected}
       onSelect={() => {
@@ -267,7 +267,7 @@ function AirQualityRow({ city }: { city: (typeof WEATHER_CITIES)[number] }) {
       icon={Wind}
       title={`${city.name}, ${city.countryCode}`}
       meta={data ? aqiLabel(data.current.usAqi) : "Loading…"}
-      badge={data ? `AQI ${Math.round(data.current.usAqi)}` : "—"}
+      badge={data ? `AQI ${Math.round(data.current.usAqi)}` : "…"}
       badgeColor={data ? aqiHexColor(data.current.usAqi) : undefined}
       selected={selected}
       onSelect={() => {

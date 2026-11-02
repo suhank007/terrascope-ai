@@ -176,7 +176,7 @@ function SignedInView() {
         </div>
       ) : isError ? (
         <p className="px-2 py-4 text-center text-xs text-danger">
-          Couldn&apos;t load saved views — the database table may not be set up yet.
+          Couldn&apos;t load saved views. The database table may not be set up yet.
         </p>
       ) : !data || data.views.length === 0 ? (
         <p className="px-2 py-4 text-center text-xs text-muted">No saved views yet.</p>

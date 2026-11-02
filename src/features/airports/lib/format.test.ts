@@ -21,7 +21,7 @@ describe("describeWind", () => {
     expect(describeWind("VRB", 2, null)).toBe("Variable at 2 kt");
     expect(describeWind(null, 5, null)).toBe("5 kt");
     expect(describeWind(180, 0, null)).toBe("Calm");
-    expect(describeWind(null, null, null)).toBe("—");
+    expect(describeWind(null, null, null)).toBe("Not reported");
   });
 });
 
@@ -31,7 +31,7 @@ describe("describeVisibility / describeCeiling", () => {
     expect(describeVisibility(1.49)).toBe("1.5 mi");
     expect(describeVisibility(0.25)).toBe("0.25 mi");
     expect(describeVisibility(3)).toBe("3 mi");
-    expect(describeVisibility(null)).toBe("—");
+    expect(describeVisibility(null)).toBe("Not reported");
   });
 
   it("says when there is no low cloud", () => {

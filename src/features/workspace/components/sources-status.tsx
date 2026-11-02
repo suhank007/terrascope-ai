@@ -112,7 +112,7 @@ export function SourcesStatus() {
             transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
             className="glass-panel-elevated absolute right-0 top-11 z-30 w-72 rounded-2xl p-2 shadow-2xl"
           >
-            <p className="px-2 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted">
+            <p className="px-2 py-1.5 text-xs text-muted">
               Sources & coverage
             </p>
             <ul>

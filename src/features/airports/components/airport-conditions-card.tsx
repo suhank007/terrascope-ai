@@ -1,4 +1,4 @@
-import { CloudSun } from "lucide-react";
+import { Facts } from "@/components/ui/facts";
 import { ForecastStrip } from "@/features/trip/components/conditions-card";
 import { SEVERITY } from "@/features/trip/components/severity";
 import { TripCard, Unavailable } from "@/features/trip/components/trip-card";
@@ -7,22 +7,14 @@ import { cn } from "@/lib/utils";
 import { CATEGORY_INFO, describeCeiling, describeVisibility, describeWind, summarizeWeather } from "../lib/format";
 import type { AirportBrief, FlightCategory } from "../types";
 
-function CategoryChip({ category }: { category: FlightCategory }) {
+function Category({ category }: { category: FlightCategory }) {
   const info = CATEGORY_INFO[category];
   const style = SEVERITY[info.tone];
   return (
-    <span className={cn("inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-xs font-semibold", style.bg, style.border, style.text)} title={info.meaning}>
-      {info.label}
+    <span className="inline-flex items-center gap-2" title={info.meaning}>
+      <span className={cn("h-1.5 w-1.5 rounded-full", style.dot)} aria-hidden />
+      <span className={cn("font-mono text-sm font-semibold", style.text)}>{info.label}</span>
     </span>
-  );
-}
-
-function Fact({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-lg border border-border bg-background/40 p-3">
-      <dt className="text-xs text-muted">{label}</dt>
-      <dd className="mt-1 text-sm font-medium text-foreground">{children}</dd>
-    </div>
   );
 }
 
@@ -30,42 +22,40 @@ export function AirportConditionsCard({ brief, className }: { brief: AirportBrie
   const { metar, taf, forecast } = brief;
 
   return (
-    <TripCard id="airport-conditions" icon={CloudSun} title="Conditions now" className={className}>
-      <div className="flex flex-col gap-5">
+    <TripCard id="airport-conditions" title="Conditions" className={className}>
+      <div className="flex flex-col gap-6">
         {metar.status === "ok" ? (
-          <>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-              {metar.data.flightCategory && <CategoryChip category={metar.data.flightCategory} />}
-              <span className="text-sm text-muted">{metar.data.flightCategory ? CATEGORY_INFO[metar.data.flightCategory].meaning : "Flight category unknown."}</span>
-            </div>
-
-            <dl className="grid grid-cols-2 gap-2.5">
-              <Fact label="Wind">{describeWind(metar.data.windDir, metar.data.windKt, metar.data.gustKt)}</Fact>
-              <Fact label="Visibility">{describeVisibility(metar.data.visibilitySm)}</Fact>
-              <Fact label="Cloud ceiling">{describeCeiling(metar.data.ceilingFt)}</Fact>
-              <Fact label="Temperature">{metar.data.tempC !== null ? `${Math.round(metar.data.tempC)}°C` : "—"}</Fact>
-            </dl>
-
-            {metar.data.weather.length > 0 && (
-              <p className="text-sm text-foreground">
-                <span className="text-muted">Right now: </span>
-                {metar.data.weather.join(", ")}
-              </p>
-            )}
-            <p className="text-xs text-muted">Reported {formatRelativeTime(metar.data.observedAt)}</p>
-          </>
+          <div>
+            <p className="flex flex-wrap items-center gap-x-3 text-sm">
+              {metar.data.flightCategory && <Category category={metar.data.flightCategory} />}
+              <span className="text-muted">{metar.data.flightCategory ? CATEGORY_INFO[metar.data.flightCategory].meaning : "Flight category unknown."}</span>
+            </p>
+            <Facts
+              className="mt-2"
+              columns={2}
+              items={[
+                { label: "Wind", value: describeWind(metar.data.windDir, metar.data.windKt, metar.data.gustKt) },
+                { label: "Visibility", value: describeVisibility(metar.data.visibilitySm) },
+                { label: "Cloud ceiling", value: describeCeiling(metar.data.ceilingFt) },
+                { label: "Temperature", value: metar.data.tempC !== null ? `${Math.round(metar.data.tempC)}°C` : "Not reported" },
+              ]}
+            />
+            <p className="mt-3 text-xs text-muted">
+              {metar.data.weather.length > 0 ? `Right now: ${metar.data.weather.join(", ")}. ` : ""}Reported {formatRelativeTime(metar.data.observedAt)}.
+            </p>
+          </div>
         ) : (
           <Unavailable reason={metar.reason} />
         )}
 
         {taf.status === "ok" ? (
-          <div className="border-t border-border pt-4">
-            <p className="mb-2 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted">Next {taf.data.hours} hours (TAF)</p>
-            <p className="text-sm leading-relaxed text-foreground">
+          <div>
+            <h3 className="text-sm font-medium text-foreground">Next {taf.data.hours} hours</h3>
+            <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-muted">
               {taf.data.worstCategory ? (
                 <>
-                  Worst expected: <CategoryChip category={taf.data.worstCategory} />
-                  {taf.data.worstIsTemporary ? " at times" : ""}.{" "}
+                  Worst expected <Category category={taf.data.worstCategory} />
+                  {taf.data.worstIsTemporary ? ", at times" : ""}.{" "}
                 </>
               ) : null}
               {taf.data.thunderstorm ? "Thunderstorms possible. " : ""}
@@ -74,12 +64,10 @@ export function AirportConditionsCard({ brief, className }: { brief: AirportBrie
             </p>
           </div>
         ) : (
-          <p className="border-t border-border pt-4 text-sm text-muted">{taf.reason}</p>
+          <p className="text-sm text-muted">{taf.reason}</p>
         )}
 
-        <div className="border-t border-border pt-4">
-          <ForecastStrip section={forecast} />
-        </div>
+        <ForecastStrip section={forecast} />
 
         {(metar.status === "ok" || taf.status === "ok") && (
           <details className="text-xs text-muted">

@@ -20,7 +20,7 @@ import { MobileTopBar } from "./mobile-top-bar";
 export function MobileChrome({ className }: { className?: string }) {
   const [snap, setSnap] = useState<SheetSnap>("peek");
   const { resetView } = useCameraActions();
-  const { selectedEntity } = useGlobeUi();
+  const { selectedEntity, searchedPlace } = useGlobeUi();
 
   // A selection (from the list or a tap on the globe) lifts a collapsed sheet
   // to half so its detail is visible. Adjusting state during render is the
@@ -29,6 +29,13 @@ export function MobileChrome({ className }: { className?: string }) {
   if (selectedEntity !== prevSelected) {
     setPrevSelected(selectedEntity);
     if (selectedEntity && snap === "peek") setSnap("half");
+  }
+
+  // Same for a search: the place report is the answer to it.
+  const [prevPlace, setPrevPlace] = useState(searchedPlace);
+  if (searchedPlace !== prevPlace) {
+    setPrevPlace(searchedPlace);
+    if (searchedPlace && snap === "peek") setSnap("half");
   }
 
   return (

@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   }));
 
   try {
-    let replyText = "I wasn't able to complete that — try rephrasing your question.";
+    let replyText = "I wasn't able to complete that. Try rephrasing your question.";
 
     for (let i = 0; i < MAX_ITERATIONS; i++) {
       const response = await client.messages.create({
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid ANTHROPIC_API_KEY" }, { status: 500 });
     }
     if (error instanceof Anthropic.RateLimitError) {
-      return Response.json({ error: "Rate limited — try again shortly" }, { status: 429 });
+      return Response.json({ error: "Rate limited, try again shortly" }, { status: 429 });
     }
     return Response.json({ error: "Copilot request failed" }, { status: 500 });
   }

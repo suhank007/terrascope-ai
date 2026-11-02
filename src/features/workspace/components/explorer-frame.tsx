@@ -69,7 +69,7 @@ export function ExplorerFrame({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <header className="px-5 pb-3 pt-3 xl:pb-4 xl:pt-5">
-        <p className="hidden font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted xl:block">Signal explorer</p>
+        <p className="hidden text-xs text-muted xl:block">Signal explorer</p>
         <div className="flex xl:mt-3 items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-2.5">
             <h2 className="truncate text-xl font-semibold tracking-tight text-foreground">{meta.label}</h2>
@@ -125,7 +125,7 @@ export function ExplorerFrame({
         </div>
       )}
 
-      <div className="hidden items-center justify-between border-y border-border px-5 py-2.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted xl:flex">
+      <div className="hidden items-center justify-between border-y border-border px-5 py-2.5 text-xs text-muted xl:flex">
         <span>{scope}</span>
         <span className="normal-case tracking-normal">{sortLabel}</span>
       </div>

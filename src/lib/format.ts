@@ -3,12 +3,12 @@ export function formatMagnitude(magnitude: number): string {
 }
 
 export function formatAltitudeFt(meters: number | null): string {
-  if (meters === null) return "—";
+  if (meters === null) return "n/a";
   return `${Math.round(meters * 3.28084).toLocaleString()} ft`;
 }
 
 export function formatSpeedKt(metersPerSecond: number | null): string {
-  if (metersPerSecond === null) return "—";
+  if (metersPerSecond === null) return "n/a";
   return `${Math.round(metersPerSecond * 1.94384)} kt`;
 }
 

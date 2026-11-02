@@ -37,10 +37,10 @@ export function AirportSearch({ autoFocus = false }: { autoFocus?: boolean }) {
 
   return (
     <div ref={ref} className="relative">
-      <label htmlFor="airport-search" className="mb-1.5 block text-xs font-medium text-muted">
+      <label htmlFor="airport-search" className="mb-1.5 block text-sm text-muted">
         Find an airport
       </label>
-      <div className="glass-panel-elevated flex items-center gap-2 rounded-xl py-3 pl-4 pr-3 transition-colors focus-within:border-accent/50">
+      <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-elevated py-3 pl-4 pr-3 transition-colors focus-within:border-accent/60">
         <Search className="h-4 w-4 shrink-0 text-muted" aria-hidden />
         <input
           id="airport-search"
@@ -70,7 +70,7 @@ export function AirportSearch({ autoFocus = false }: { autoFocus?: boolean }) {
       </div>
 
       {open && debounced.trim().length >= 2 && (
-        <ul id="airport-search-list" role="listbox" className="glass-panel-elevated absolute inset-x-0 top-full z-30 mt-2 max-h-80 overflow-y-auto rounded-xl p-1.5 shadow-2xl">
+        <ul id="airport-search-list" role="listbox" className="absolute inset-x-0 top-full z-30 mt-2 max-h-80 overflow-y-auto rounded-xl border border-border bg-surface-elevated p-1.5 shadow-2xl">
           {results.length === 0 && !isFetching && <li className="px-3 py-3 text-center text-sm text-muted">No airports found</li>}
           {results.map((a) => (
             <li key={a.iata} role="option" aria-selected={false}>

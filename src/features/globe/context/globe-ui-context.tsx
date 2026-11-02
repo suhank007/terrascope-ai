@@ -16,6 +16,7 @@ import type { Flight, BBox } from "@/features/flights/types";
 import type { WeatherCity } from "@/features/weather/types";
 import type { WildfireHotspot } from "@/features/wildfires/types";
 import type { SelectedEntity } from "@/features/side-panel/types";
+import type { SearchedPlace } from "@/features/place/types";
 
 export interface Layers {
   earthquakes: boolean;
@@ -28,6 +29,9 @@ export interface Layers {
 interface GlobeUiContextValue {
   selectedEntity: SelectedEntity | null;
   setSelectedEntity: (entity: SelectedEntity | null) => void;
+  /** The city or country the user last searched for; opens the place report. */
+  searchedPlace: SearchedPlace | null;
+  setSearchedPlace: (place: SearchedPlace | null) => void;
   layers: Layers;
   toggleLayer: (key: keyof Layers) => void;
   /** Which layer the docked Signal Explorer is currently listing. */
@@ -62,6 +66,7 @@ const GlobeUiContext = createContext<GlobeUiContextValue | null>(null);
 
 export function GlobeUiProvider({ children }: { children: ReactNode }) {
   const [selectedEntity, setSelectedEntity] = useState<SelectedEntity | null>(null);
+  const [searchedPlace, setSearchedPlace] = useState<SearchedPlace | null>(null);
   const [layers, setLayers] = useState<Layers>({
     earthquakes: true,
     weather: true,
@@ -117,6 +122,8 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
     () => ({
       selectedEntity,
       setSelectedEntity,
+      searchedPlace,
+      setSearchedPlace,
       layers,
       toggleLayer,
       focusedLayer,
@@ -141,6 +148,7 @@ export function GlobeUiProvider({ children }: { children: ReactNode }) {
     }),
     [
       selectedEntity,
+      searchedPlace,
       layers,
       toggleLayer,
       focusedLayer,

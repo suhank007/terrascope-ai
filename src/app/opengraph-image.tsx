@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "TerraScope AI — Real-Time Global Intelligence Platform";
+export const alt = "TerraScope AI: Real-Time Global Intelligence Platform";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -41,7 +41,7 @@ export default async function OgImage() {
           <div style={{ display: "flex", fontSize: 76, fontWeight: 700, color: "#35e0c8" }}>AI</div>
         </div>
         <div style={{ display: "flex", fontSize: 30, color: "#8891a1", marginTop: 20, maxWidth: 920 }}>
-          Real-time global intelligence — earthquakes, weather, flights, and wildfires, live on a 3D globe.
+          Real-time global intelligence: earthquakes, weather, flights, and wildfires, live on a 3D globe.
         </div>
       </div>
     ),

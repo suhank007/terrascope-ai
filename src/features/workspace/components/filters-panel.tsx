@@ -73,7 +73,7 @@ export function FilterControls() {
 
         {focusedLayer !== "earthquakes" && focusedLayer !== "flights" && (
           <p className="text-xs leading-relaxed text-muted">
-            {LAYER_META[focusedLayer].label} has no filters — every reading from {LAYER_META[focusedLayer].source} is
+            {LAYER_META[focusedLayer].label} has no filters. Every reading from {LAYER_META[focusedLayer].source} is
             shown. Try Earthquakes or Flights.
           </p>
         )}

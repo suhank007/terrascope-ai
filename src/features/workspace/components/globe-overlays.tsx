@@ -61,7 +61,7 @@ export function GlobeOverlays() {
   return (
     <div className="pointer-events-none absolute inset-0 z-10 hidden xl:block">
       <div className="glass-panel-elevated absolute left-5 top-5 rounded-xl px-4 py-3">
-        <p className="flex items-center gap-2 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted">
+        <p className="flex items-center gap-2 text-xs text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           Earth observation
         </p>
@@ -98,7 +98,7 @@ export function GlobeOverlays() {
         <EarthquakeStatusHint />
         <p className="glass-panel-elevated flex items-center gap-3 rounded-full px-4 py-1.5 text-xs">
           <span className="font-mono tabular-nums text-foreground">
-            {readout ? `${formatAxis(readout.latitude, "N", "S")}  |  ${formatAxis(readout.longitude, "E", "W")}` : "—"}
+            {readout ? `${formatAxis(readout.latitude, "N", "S")}  |  ${formatAxis(readout.longitude, "E", "W")}` : "Looking at space"}
           </span>
           <span className="hidden h-3 w-px bg-border 2xl:block" />
           <span className="hidden text-muted 2xl:block">Drag to orbit · Scroll or pinch to zoom</span>

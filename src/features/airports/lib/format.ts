@@ -16,14 +16,14 @@ export const CATEGORY_INFO: Record<FlightCategory, { label: string; meaning: str
 
 /** "230° at 12 kt, gusting 24" */
 export function describeWind(dir: number | "VRB" | null, speedKt: number | null, gustKt: number | null): string {
-  if (speedKt === null) return "—";
+  if (speedKt === null) return "Not reported";
   if (speedKt === 0) return "Calm";
   const from = dir === "VRB" ? "Variable" : dir === null ? "" : `${String(dir).padStart(3, "0")}°`;
   return `${from ? `${from} at ` : ""}${speedKt} kt${gustKt ? `, gusting ${gustKt}` : ""}`;
 }
 
 export function describeVisibility(sm: number | null): string {
-  if (sm === null) return "—";
+  if (sm === null) return "Not reported";
   return sm >= 6 ? "6+ mi" : `${sm.toFixed(sm < 1 ? 2 : 1).replace(/\.0$/, "")} mi`;
 }
 

@@ -32,6 +32,6 @@ describe("formatAltitude", () => {
   it("uses feet below that, and handles ground and unknown", () => {
     expect(formatAltitude(4500, false)).toBe("4,500 ft");
     expect(formatAltitude(0, true)).toBe("On the ground");
-    expect(formatAltitude(null, false)).toBe("—");
+    expect(formatAltitude(null, false)).toBe("Not reported");
   });
 });

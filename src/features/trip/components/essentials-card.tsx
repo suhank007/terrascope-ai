@@ -1,15 +1,6 @@
-import { Banknote } from "lucide-react";
+import { Facts } from "@/components/ui/facts";
 import type { TripBrief } from "../types";
 import { TripCard } from "./trip-card";
-
-function Fact({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-lg border border-border bg-background/40 p-3">
-      <dt className="text-xs text-muted">{label}</dt>
-      <dd className="mt-1 text-sm font-medium text-foreground">{children}</dd>
-    </div>
-  );
-}
 
 function localTime(timezone: string): string {
   try {
@@ -33,32 +24,30 @@ export function EssentialsCard({ brief, className }: { brief: TripBrief; classNa
   const time = forecast.status === "ok" ? localTime(forecast.data.timezone) : "";
 
   return (
-    <TripCard id="essentials" icon={Banknote} title="Essentials" className={className}>
-      <dl className="grid grid-cols-2 gap-2.5">
-        <Fact label="Currency">
-          {country.currencyCode ? (
-            <>
-              {country.currencyCode}
-              {country.currencySymbol ? ` (${country.currencySymbol})` : ""}
-              <span className="mt-0.5 block text-xs font-normal text-muted">
-                {currency.status === "ok"
-                  ? currency.data.code === currency.data.home
-                    ? "Same as your home currency"
-                    : describeRate(currency.data.home, currency.data.code, currency.data.rate)
-                  : currency.reason}
-              </span>
-            </>
-          ) : (
-            "Varies"
-          )}
-        </Fact>
-        <Fact label="Local time">{time || "—"}</Fact>
-        <Fact label="Languages">{country.languages.slice(0, 3).join(", ") || "—"}</Fact>
-        <Fact label="Calling code">{country.callingCode ?? "—"}</Fact>
-        <Fact label="Drives on the">{country.drivesOn}</Fact>
-        <Fact label="Capital">{country.capital ?? "—"}</Fact>
-      </dl>
-      {currency.status === "ok" && currency.data.date && (
+    <TripCard id="essentials" title="Essentials" className={className}>
+      <Facts
+        columns={2}
+        items={[
+          {
+            label: "Currency",
+            value: country.currencyCode ? `${country.currencyCode}${country.currencySymbol ? ` (${country.currencySymbol})` : ""}` : "Varies",
+            note:
+              country.currencyCode && currency.status === "ok"
+                ? currency.data.code === currency.data.home
+                  ? "Same as your home currency"
+                  : describeRate(currency.data.home, currency.data.code, currency.data.rate)
+                : country.currencyCode && currency.status === "unavailable"
+                  ? currency.reason
+                  : undefined,
+          },
+          { label: "Local time", value: time || "Not available" },
+          { label: "Languages", value: country.languages.slice(0, 3).join(", ") || "Not available" },
+          { label: "Calling code", value: country.callingCode ?? "Not available" },
+          { label: "Drives on the", value: country.drivesOn },
+          { label: "Capital", value: country.capital ?? "Not available" },
+        ]}
+      />
+      {currency.status === "ok" && currency.data.date && currency.data.code !== currency.data.home && (
         <p className="mt-3 text-xs text-muted">Reference rate from the European Central Bank, {currency.data.date}. Bank and card rates differ.</p>
       )}
     </TripCard>

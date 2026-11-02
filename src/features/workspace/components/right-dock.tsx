@@ -5,12 +5,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import { EntityDetailView } from "./entity-detail-view";
+import { PlaceReport } from "@/features/place/components/place-report";
 import { ExplorerForLayer } from "./explorer-for-layer";
 
 /** The right-hand dock: the Signal Explorer list, which swaps to the selected
  *  signal's detail (with a clear way back) instead of floating over the globe. */
 export function RightDock({ className }: { className?: string }) {
-  const { selectedEntity, setSelectedEntity } = useGlobeUi();
+  const { selectedEntity, setSelectedEntity, searchedPlace } = useGlobeUi();
 
   useEffect(() => {
     if (!selectedEntity) return;
@@ -37,14 +38,14 @@ export function RightDock({ className }: { className?: string }) {
           </motion.div>
         ) : (
           <motion.div
-            key="explorer"
+            key={searchedPlace ? "place" : "explorer"}
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -12 }}
             transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
             className="h-full min-h-0"
           >
-            <ExplorerForLayer />
+            {searchedPlace ? <PlaceReport place={searchedPlace} /> : <ExplorerForLayer />}
           </motion.div>
         )}
       </AnimatePresence>

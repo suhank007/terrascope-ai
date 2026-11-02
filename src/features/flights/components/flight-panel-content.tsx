@@ -50,7 +50,7 @@ export function FlightPanelContent({ data }: { data: Flight }) {
             <Navigation className="h-3 w-3" /> Heading
           </dt>
           <dd className="mt-1 font-medium text-foreground">
-            {data.trueTrack !== null ? `${Math.round(data.trueTrack)}°` : "—"}
+            {data.trueTrack !== null ? `${Math.round(data.trueTrack)}°` : "n/a"}
           </dd>
         </motion.div>
         <motion.div variants={STAGGER_LIST.item} className="rounded-lg border border-border bg-surface-elevated/40 p-3">

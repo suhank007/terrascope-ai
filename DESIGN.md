@@ -106,13 +106,12 @@ A near-monochrome dark palette with a single accent, so the one color that does 
 ### Hierarchy (current state — see Do's and Don'ts)
 - **Title** (600 weight, 14–16px): panel/card headers, the app wordmark.
 - **Body** (400 weight, 13–14px): primary content in side panels and lists.
-- **Label** (500 weight, 11–12px, slight letter-spacing, often uppercase): section headers, eyebrow labels, muted metadata.
+- **Label** (400–500 weight, 12px, sentence case): form labels, metadata, muted supporting lines. Never uppercase, never tracked out.
 - **Data** (500 weight, 13px, mono): numeric readings — coordinates, magnitudes, timestamps.
 
-- **Micro** (500 weight, 10px, muted): inline metadata riding beside a primary label in a compact row — relative timestamps, ICAO/registration codes, notification-count badges. Never used for a standalone interactive control or a section header; those are Label.
 
 ### Named Rules
-**The No-Ad-Hoc-Sizing Rule.** Every text element maps to one of the five roles above. If a new size doesn't fit Title/Body/Label/Data/Micro, that's a sign the hierarchy needs a sixth role defined deliberately, not a one-off `text-[13px]`. (Fixed this pass: several section headers and text-only buttons had drifted to an undeclared 10–11px size that belonged to Label, not Micro — see Do's and Don'ts.)
+**The No-Ad-Hoc-Sizing Rule.** Every text element maps to one of the four roles above (Title, Body, Label, Data). If a new size doesn't fit Title/Body/Label/Data, that's a sign the hierarchy needs a fifth role defined deliberately, not a one-off `text-[13px]`. There is no 10px role: anything that used to be one is Label (`text-xs`).
 
 ## 4. Elevation
 
@@ -177,6 +176,28 @@ At 1280px and wider the app is a docked **mission-control workspace** rather tha
 
 Phones and tablets keep the full-bleed globe. The chrome is a compact top bar (identity, alerts, account, then search at 16px so iOS doesn't zoom on focus) and a **bottom sheet** that carries the same Signal Explorer. The sheet has three snap points (peek, half, full); drag the handle, tap it, or tap a layer tab. A selection lifts a collapsed sheet to half and shows the detail with a back button. Half stays under the viewport midpoint because that is where the camera lands a flown-to signal. The explorer is compacted here (source and update time fold into one line; filters become a header icon), the top bar fades out at full height, and every touch target is at least 40px. The old floating HUD (`HudOverlay`) now only serves `/demo`.
 
+## 5c. The clean-UI rules (travel pages and the workspace)
+
+Written after an audit against Impeccable's product register. They apply to every screen.
+
+- **Two filled surfaces per page, at most.** On a travel page that is the answer (verdict, outlook or flight status) and the planner or search. Everything else is an **open section**: a heading, content, and a hairline above it. A section is never a card.
+- **No nested boxes.** Facts are a property list (`Facts`: label left, value right, hairline between rows). Links are rows (`LinkList`). Never a bordered tile inside a panel.
+- **No decorative glass.** Blur is for what floats over the globe (overlays, popovers, the mobile search). On a solid page, inputs and panels are solid.
+- **One answer first, then detail.** The verdict states the call and lists every reason with its source, and says what it couldn't check. Detail follows in reading order, with a sticky "On this page" list on wide screens and a chip bar on phones.
+- **Type is sentence case.** Four roles: Title (16 to 28), Body (14), Label (12), Data (mono, for codes and numbers only). No 10px text and no all-caps eyebrows.
+- **Colour is meaning.** Severity colour appears on the verdict, a flagged row, or a status word with a dot. It is never the only signal: a word always accompanies it.
+- **Phones put the answer on the first screen.** Planning controls fold to one line once a trip exists.
+- **Copy has no em dashes.** Use commas, colons or full stops. Empty values read "Not reported" or "n/a".
+
+## 5d. Front page (brand register)
+
+The front page at `/` is a **brand** surface, so it deliberately breaks the product rules above: full-bleed black, a starfield, a floating glass nav and a travelling-edge CTA, in the red-noir direction. It still follows the same honesty rules.
+
+- **Two signals, not one.** Red (`--noir`, `#ef233c`) means alert, threat or the primary action. Teal (`--accent`) keeps meaning all-clear and live, so the front page and the app read as one system.
+- **Real where it can be, labelled where it can't.** The hero globe, the Delays board, the Threats map and the feature counts run on live feeds. The Track and Plan tabs are examples and say so. No invented quotes, logos or prices.
+- **One container width** (`max-w-6xl`) for every section, balanced headings, and sentence-case copy with no em dashes.
+- **Motion carries meaning.** Entrance reveals, a route drawing in, counts rolling up, rings pulsing on alerts. All of it stops under `prefers-reduced-motion`.
+
 ## 6. Do's and Don'ts
 
 ### Do:
@@ -191,5 +212,5 @@ Phones and tablets keep the full-bleed globe. The chrome is a compact top bar (i
 - **Don't** use drop shadows as the primary depth cue on any panel that sits over the globe — blur and translucency only (see the Blur-Not-Shadow Rule). Exception: the one solid-fill Primary button (Copilot launcher) keeps a resting shadow, because it's the one HUD surface that isn't glass and has no blur to separate it from the scene.
 - **Don't** use a border-left/border-right colored stripe as an accent on any card, list item, or alert.
 - **Don't** use gradient text or glassmorphism as decoration — the existing glass treatment is functional (separation from a moving scene), not a visual flourish to add elsewhere.
-- **Don't** reach for an arbitrary Tailwind value (`text-[10px]`, `text-[11px]`) when a role already covers the case — that was this pass's most common bug. If it's inline metadata next to a label, it's Micro; if it's a section header or a clickable label, it's Label (`text-xs`), never a bespoke size in between.
+- **Don't** reach for an arbitrary Tailwind value (`text-[10px]`, `text-[11px]`) when a role already covers the case — that was the most common bug. Inline metadata, section headers and clickable labels are all Label (`text-xs`), never a bespoke size in between.
 - **Don't** use `text-white` / `bg-white` / `#fff` anywhere, including inside small badges — use `text-foreground`, which reads the same at a glance but keeps every "white" in the app on the one off-white token.

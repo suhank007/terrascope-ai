@@ -20,8 +20,8 @@ export function TopBar({ className }: { className?: string }) {
 
   return (
     <header className={cn("items-center gap-6 px-1", className)}>
-      <div className="flex min-w-0 flex-1 items-center gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-accent">
+      <Link href="/" aria-label="TerraScope AI home" className="flex min-w-0 flex-1 items-center gap-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center text-accent">
           <Globe2 className="h-[18px] w-[18px]" />
         </span>
         <div className="min-w-0 leading-tight">
@@ -36,18 +36,18 @@ export function TopBar({ className }: { className?: string }) {
                   status === "updating" && "animate-pulse"
                 )}
               />
-              <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted">
+              <span className="text-xs text-muted">
                 {STATUS_COPY[status]}
               </span>
             </span>
           </div>
-          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-muted">
+          <p className="text-xs text-muted">
             A world in motion
           </p>
         </div>
-      </div>
+      </Link>
 
-      <SearchBar className="max-w-xl" placeholder="Search a city or country…" />
+      <SearchBar solid className="max-w-xl" placeholder="Search a city or country…" />
 
       <div className="flex flex-1 items-center justify-end gap-1.5">
         <Link

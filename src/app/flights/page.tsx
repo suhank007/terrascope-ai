@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { FlightsExperience } from "@/features/flight-tracker/components/flights-experience";
 
 export const metadata: Metadata = {
-  title: "Flight tracker — TerraScope AI",
+  title: "Flight tracker | TerraScope AI",
   description: "Track a flight live by flight number, callsign or registration: position, altitude, speed and distance to go.",
 };
 

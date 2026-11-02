@@ -11,9 +11,9 @@ function resolve(code: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const airport = resolve((await params).code);
-  if (!airport) return { title: "Airport not found — TerraScope AI" };
+  if (!airport) return { title: "Airport not found | TerraScope AI" };
   return {
-    title: `${airport.name} (${airport.iata}): conditions and delays — TerraScope AI`,
+    title: `${airport.name} (${airport.iata}): conditions and delays | TerraScope AI`,
     description: `Live weather, delays and traffic at ${airport.name}, ${airport.city}.`,
   };
 }

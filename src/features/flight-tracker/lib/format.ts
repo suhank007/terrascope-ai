@@ -16,6 +16,6 @@ export function verticalTrend(fpm: number | null): "Climbing" | "Descending" | "
 
 export function formatAltitude(ft: number | null, onGround: boolean): string {
   if (onGround) return "On the ground";
-  if (ft === null) return "—";
+  if (ft === null) return "Not reported";
   return ft >= 18_000 ? `FL${String(Math.round(ft / 100)).padStart(3, "0")}` : `${ft.toLocaleString()} ft`;
 }

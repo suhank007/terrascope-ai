@@ -116,3 +116,16 @@ export interface AirportBrief {
   traffic: AirportSection<AirportTraffic>;
   forecast: AirportSection<ForecastData>;
 }
+
+/** One line of the live airport board on the front page. */
+export interface BoardRow {
+  iata: string;
+  city: string;
+  countryCode: string;
+  level: Severity;
+  headline: string;
+  /** The single most important reason, or null when nothing is wrong. */
+  reason: string | null;
+  category: FlightCategory | null;
+  basis: Outlook["basis"];
+}

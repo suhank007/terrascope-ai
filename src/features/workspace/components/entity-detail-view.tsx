@@ -21,11 +21,9 @@ export function EntityDetailView({ selected, onBack }: { selected: SelectedEntit
         >
           <ArrowLeft className="h-4 w-4" />
         </button>
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background/40 text-accent">
-          <header.icon className="h-4 w-4" />
-        </span>
+        <header.icon className="h-4 w-4 shrink-0 text-accent" />
         <div className="min-w-0">
-          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted">{header.subtitle}</p>
+          <p className="text-xs text-muted">{header.subtitle}</p>
           <h2 className="truncate text-sm font-medium text-foreground">{header.title}</h2>
         </div>
       </header>

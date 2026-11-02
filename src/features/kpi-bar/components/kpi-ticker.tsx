@@ -50,7 +50,7 @@ function MagnitudeStat({ magnitude }: { magnitude: number | null }) {
   const animated = useAnimatedNumber(magnitude ?? 0, 600, 1);
   return (
     <StatShell icon={Gauge} label="strongest">
-      {magnitude !== null ? `M${animated.toFixed(1)}` : "—"}
+      {magnitude !== null ? `M${animated.toFixed(1)}` : "n/a"}
     </StatShell>
   );
 }

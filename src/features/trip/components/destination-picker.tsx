@@ -46,10 +46,10 @@ export function DestinationPicker({ current, onPick }: { current: string | null;
 
   return (
     <div ref={ref} className="relative">
-      <label htmlFor="trip-destination" className="mb-1.5 block text-xs font-medium text-muted">
+      <label htmlFor="trip-destination" className="mb-1.5 block text-sm text-muted">
         Where are you going?
       </label>
-      <div className="glass-panel-elevated flex items-center gap-2 rounded-xl py-3 pl-4 pr-3 transition-colors focus-within:border-accent/50">
+      <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-elevated py-3 pl-4 pr-3 transition-colors focus-within:border-accent/60">
         <Search className="h-4 w-4 shrink-0 text-muted" aria-hidden />
         <input
           id="trip-destination"
@@ -78,7 +78,7 @@ export function DestinationPicker({ current, onPick }: { current: string | null;
         <ul
           id="trip-destination-list"
           role="listbox"
-          className="glass-panel-elevated absolute inset-x-0 top-full z-30 mt-2 max-h-72 overflow-y-auto rounded-xl p-1.5 shadow-2xl"
+          className="absolute inset-x-0 top-full z-30 mt-2 max-h-72 overflow-y-auto rounded-xl border border-border bg-surface-elevated p-1.5 shadow-2xl"
         >
           {results.length === 0 && !isFetching && <li className="px-3 py-3 text-center text-sm text-muted">No places found</li>}
           {results.map((r) => (

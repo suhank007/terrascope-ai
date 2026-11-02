@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { AlertCircle, PlaneTakeoff, RefreshCw } from "lucide-react";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { SectionLayout } from "@/features/travel/components/section-layout";
 import { TravelShell } from "@/features/travel/components/travel-shell";
 import { useAirportBrief } from "../hooks/use-airports";
 import { AirportConditionsCard } from "./airport-conditions-card";
@@ -13,23 +14,21 @@ import { OutlookBanner } from "./outlook-banner";
 
 function Skeleton() {
   return (
-    <div aria-busy="true" role="status" aria-label="Checking airport conditions" className="flex flex-col gap-4">
+    <div aria-busy="true" role="status" aria-label="Checking airport conditions" className="flex flex-col gap-8">
       <div className="dock-panel rounded-2xl p-6">
-        <div className="skeleton-shimmer h-10 w-32 rounded bg-surface-elevated" />
+        <div className="skeleton-shimmer h-8 w-28 rounded bg-surface-elevated" />
         <div className="skeleton-shimmer mt-4 h-5 w-1/2 rounded bg-surface-elevated" />
-        <p className="mt-5 text-xs text-muted">Checking weather, delay programmes and live traffic…</p>
+        <p className="mt-5 text-xs text-muted">Checking weather, delay programmes and live traffic.</p>
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="dock-panel rounded-2xl p-5">
-            <div className="skeleton-shimmer h-4 w-1/3 rounded bg-surface-elevated" />
-            <div className="mt-5 space-y-2.5">
-              <div className="skeleton-shimmer h-3 w-full rounded bg-surface-elevated" />
-              <div className="skeleton-shimmer h-3 w-3/4 rounded bg-surface-elevated" />
-            </div>
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="border-t border-border pt-8">
+          <div className="skeleton-shimmer h-4 w-1/4 rounded bg-surface-elevated" />
+          <div className="mt-5 space-y-2.5">
+            <div className="skeleton-shimmer h-3.5 w-full rounded bg-surface-elevated" />
+            <div className="skeleton-shimmer h-3.5 w-2/3 rounded bg-surface-elevated" />
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -38,12 +37,8 @@ export function AirportPage({ code }: { code: string }) {
   const { data, isLoading, isError, refetch } = useAirportBrief(code);
 
   return (
-    <TravelShell
-      icon={PlaneTakeoff}
-      title="Airport"
-      intro="Live weather, FAA delay programmes for US airports, and the aircraft arriving and departing right now."
-    >
-      <section aria-label="Find another airport" className="dock-panel rounded-2xl p-4 sm:p-5">
+    <TravelShell title="Airport" intro="Live weather, FAA delay programmes for US airports, and the aircraft arriving and departing right now.">
+      <section aria-label="Find another airport" className="dock-panel rounded-2xl p-5">
         <AirportSearch />
       </section>
 
@@ -64,25 +59,28 @@ export function AirportPage({ code }: { code: string }) {
           </div>
         </div>
       ) : (
-        <>
+        <div className="flex flex-col gap-10">
           <OutlookBanner brief={data} />
-          <div className="gap-4 lg:columns-2">
-            {[
-              <AirportDelaysCard key="delays" brief={data} />,
-              <AirportConditionsCard key="conditions" brief={data} />,
-              <AirportTrafficCard key="traffic" brief={data} />,
-              <AirportLinksCard key="links" airport={data.airport} />,
-            ].map((card) => (
-              <div key={card.key} className="mb-4 break-inside-avoid">
-                {card}
-              </div>
-            ))}
-          </div>
-          <p className="text-xs leading-relaxed text-muted">
-            Weather: NOAA Aviation Weather Center. Delays: FAA National Airspace System status (US only). Aircraft: adsb.fi community receivers.
-            Airport data: OurAirports. Refreshes every couple of minutes while this page is open.
-          </p>
-        </>
+          <SectionLayout
+            sections={[
+              { id: "airport-delays", label: "Delays" },
+              { id: "airport-conditions", label: "Conditions" },
+              { id: "airport-traffic", label: "Traffic" },
+              { id: "airport-links", label: "Getting around" },
+            ]}
+          >
+            <AirportDelaysCard brief={data} />
+            <AirportConditionsCard brief={data} />
+            <AirportTrafficCard brief={data} />
+            <AirportLinksCard airport={data.airport} />
+            <div className="border-t border-border pt-6">
+              <p className="max-w-prose text-xs leading-relaxed text-muted">
+                Weather: NOAA Aviation Weather Center. Delays: FAA National Airspace System status (US only). Aircraft: adsb.fi community receivers. Airport data: OurAirports.
+                Refreshes every couple of minutes while this page is open.
+              </p>
+            </div>
+          </SectionLayout>
+        </div>
       )}
     </TravelShell>
   );

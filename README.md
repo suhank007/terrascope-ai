@@ -78,6 +78,13 @@ A small bell icon that quietly counts up genuinely serious events — major eart
 ### 🤖 AI Copilot
 A chat assistant, built into the app, that you can ask questions like *"summarize today's strongest earthquakes"* or *"is there a wildfire near Sydney right now?"* It doesn't guess or make things up — it actually looks up the live data (the same data powering the globe) before answering, the same way a human analyst would check a dashboard before giving you a briefing.
 
+### 🏠 Front page (`/`) and the live globe (`/globe`)
+The root route is a red-noir front page; the interactive globe moved to `/globe`. The page is built to show the product working, not to describe it: a rotating globe with real earthquake and fire detections plotted on it and airport nodes coloured by live conditions, a tabbed showcase (**Delays** is a live airport board from NOAA and the FAA, **Threats** is a live USGS and NASA map, **Track** and **Plan** are clearly labelled examples), a "How it decides" walkthrough, a feature grid with live counts, and an honest list of what TerraScope doesn't know yet. It uses framer-motion for entrance and interaction motion and respects reduced-motion. There are no invented testimonials or pricing.
+
+### 🔎 Search a place, get its conditions (`/globe`)
+
+Search any city or country and the globe flies there while a report opens in the right dock (a bottom sheet on phones) with four tabs, each showing its live value before you click: **Weather** (now plus 7 days), **Air quality** (US AQI with the six pollutants and a plain-language health line), **Earthquakes** (M2.5+ in the past 24 hours near the place, strongest first) and **Wildfires** (satellite detections near the place, most intense first). Each tab has a "Show on globe" switch, and rows in the lists fly to and open that signal. Cities look 300 km for quakes and 100 km for fires; countries and regions use a radius capped by place type (1,000 km for a country, 400 km for a state or province), because geocoder bounding boxes include far-off islands and territories. If a feed can't be checked (for example no NASA key), the tab says so instead of showing "none". Served by `/api/place`.
+
 ### 🧭 Trip Brief (`/trip`)
 "Know before you go." Pick a destination, say whether you're travelling for business or leisure, and get one page that combines **official advisories** (UK FCDO and US State Dept), **health notices** (CDC travel notices and WHO outbreak news), **live hazards and the 7-day forecast** (this app's own feeds plus Open-Meteo), **essentials** (currency with an ECB exchange rate, language, calling code, driving side), **top things to see**, and **booking links**.
 

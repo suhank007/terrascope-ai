@@ -35,7 +35,7 @@ export function LayersPanel() {
             Data layers
           </h2>
         </div>
-        <span className="rounded-md bg-surface-elevated px-2 py-1 font-mono text-[10px] font-medium uppercase tracking-wider text-muted">
+        <span className="rounded-md bg-surface-elevated px-2 py-1 text-xs text-muted">
           {onCount} on
         </span>
       </header>
@@ -61,13 +61,8 @@ export function LayersPanel() {
                 aria-label={`Explore ${label}`}
                 className="flex min-w-0 flex-1 items-center gap-3 rounded-xl p-2.5 text-left"
               >
-                <span
-                  className={cn(
-                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background/40 transition-colors",
-                    enabled ? "text-accent" : "text-muted"
-                  )}
-                >
-                  <Icon className="h-[18px] w-[18px]" />
+                <span className={cn("flex h-6 w-6 shrink-0 items-center justify-center transition-colors", enabled ? "text-accent" : "text-muted")}>
+                  <Icon className="h-5 w-5" />
                 </span>
                 <span className="min-w-0">
                   <span className={cn("block text-sm font-medium", enabled ? "text-foreground" : "text-muted")}>
