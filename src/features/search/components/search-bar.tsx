@@ -70,6 +70,9 @@ export function SearchBar({ className, placeholder, solid = false }: { className
     // The report is useful even if the globe isn't ready yet, so open it first.
     setSelectedEntity(null);
     setSearchedPlace(placeFromResult(result));
+    setQuery(result.name);
+    setDebouncedQuery("");
+    setOpen(false);
 
     const live = cesiumRef.current;
     if (!live) return;
@@ -97,10 +100,6 @@ export function SearchBar({ className, placeholder, solid = false }: { className
         cancel: onSettled,
       });
     }
-
-    setQuery(result.name);
-    setDebouncedQuery("");
-    setOpen(false);
   };
 
   const clear = () => {

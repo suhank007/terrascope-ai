@@ -202,6 +202,11 @@ body {
   display: none !important;
 }
 
+/* If Cesium cannot start it paints its own red error box; the globe fallback replaces it. */
+.cesium-widget-errorPanel {
+  display: none !important;
+}
+
 .cesium-widget-credits {
   font-family: var(--font-sans) !important;
   font-size: 10px !important;

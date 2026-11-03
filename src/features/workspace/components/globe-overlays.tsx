@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Cartesian3 } from "cesium";
 import { Crosshair, Minus, Play, Plus } from "lucide-react";
@@ -11,6 +11,7 @@ import { EarthquakeStatusHint } from "@/features/earthquakes/components/earthqua
 import { MapLegend } from "@/features/globe/components/map-legend";
 import { useGlobeUi } from "@/features/globe/context/globe-ui-context";
 import { CLOSE_ZOOM_HEIGHT_THRESHOLD } from "@/features/globe/lib/cesium-config";
+import { hasWebGL } from "@/features/globe/lib/webgl";
 import { useAnimatedNumber } from "@/lib/use-animated-number";
 import { HOME_VIEW, useCameraActions } from "../hooks/use-fly-to";
 import { useCameraReadout } from "../hooks/use-camera-readout";
@@ -26,7 +27,11 @@ const controlClass =
 
 /** Everything that floats over the globe in the docked layout: caption, zoom
  *  controls, legend, coordinates, transient hints and the Ask AI button. */
+const subscribe = () => () => {};
+
 export function GlobeOverlays() {
+  // Without a globe, only the Ask AI button is useful; the rest is about the camera.
+  const globe = useSyncExternalStore(subscribe, hasWebGL, () => true);
   const { layers, cameraHeight, cesiumRef } = useGlobeUi();
   const stats = useLayerStats();
   const readout = useCameraReadout();
@@ -44,7 +49,11 @@ export function GlobeOverlays() {
       clearInterval(id);
       if (live && live.camera.positionCartographic.height > 12_000_000) {
         live.camera.setView({
-          destination: Cartesian3.fromDegrees(HOME_VIEW.longitude, HOME_VIEW.latitude, HOME_VIEW.height),
+          destination: Cartesian3.fromDegrees(
+            HOME_VIEW.longitude,
+            HOME_VIEW.latitude,
+            HOME_VIEW.height,
+          ),
         });
       }
     }, 100);
@@ -56,54 +65,90 @@ export function GlobeOverlays() {
     return layers[key] && stat.state === "ready" ? sum + stat.count : sum;
   }, 0);
   const animatedTotal = useAnimatedNumber(total);
-  const regional = cameraHeight !== null && cameraHeight < CLOSE_ZOOM_HEIGHT_THRESHOLD;
+  const regional =
+    cameraHeight !== null && cameraHeight < CLOSE_ZOOM_HEIGHT_THRESHOLD;
 
   return (
     <div className="pointer-events-none absolute inset-0 z-10 hidden xl:block">
-      <div className="glass-panel-elevated absolute left-5 top-5 rounded-xl px-4 py-3">
-        <p className="flex items-center gap-2 text-xs text-muted">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          Earth observation
-        </p>
-        <h2 className="mt-3 text-lg font-medium tracking-tight text-foreground">
-          {regional ? "A closer look" : "A global perspective"}
-        </h2>
-        <p className="mt-1 text-sm tabular-nums text-muted">
-          {Math.round(animatedTotal).toLocaleString()} visible signals
-        </p>
-      </div>
+      {globe && (
+        <div className="glass-panel-elevated absolute left-5 top-5 rounded-xl px-4 py-3">
+          <p className="flex items-center gap-2 text-xs text-muted">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            Earth observation
+          </p>
+          <h2 className="mt-3 text-lg font-medium tracking-tight text-foreground">
+            {regional ? "A closer look" : "A global perspective"}
+          </h2>
+          <p className="mt-1 text-sm tabular-nums text-muted">
+            {Math.round(animatedTotal).toLocaleString()} visible signals
+          </p>
+        </div>
+      )}
 
-      <div className="pointer-events-auto absolute right-5 top-5 flex flex-col divide-y divide-border overflow-hidden rounded-xl glass-panel-elevated">
-        <button type="button" onClick={() => zoomBy(0.4)} aria-label="Zoom in" title="Zoom in" className={controlClass}>
-          <Plus className="h-4 w-4" />
-        </button>
-        <button type="button" onClick={() => zoomBy(-0.6)} aria-label="Zoom out" title="Zoom out" className={controlClass}>
-          <Minus className="h-4 w-4" />
-        </button>
-        <button type="button" onClick={resetView} aria-label="Reset view" title="Reset view" className={controlClass}>
-          <Crosshair className="h-4 w-4" />
-        </button>
-        <Link href="/demo" aria-label="Start guided tour" title="Guided tour" className={controlClass}>
-          <Play className="h-4 w-4" />
-        </Link>
-      </div>
+      {globe && (
+        <div className="pointer-events-auto absolute right-5 top-5 flex flex-col divide-y divide-border overflow-hidden rounded-xl glass-panel-elevated">
+          <button
+            type="button"
+            onClick={() => zoomBy(0.4)}
+            aria-label="Zoom in"
+            title="Zoom in"
+            className={controlClass}
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => zoomBy(-0.6)}
+            aria-label="Zoom out"
+            title="Zoom out"
+            className={controlClass}
+          >
+            <Minus className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={resetView}
+            aria-label="Reset view"
+            title="Reset view"
+            className={controlClass}
+          >
+            <Crosshair className="h-4 w-4" />
+          </button>
+          <Link
+            href="/demo"
+            aria-label="Start guided tour"
+            title="Guided tour"
+            className={controlClass}
+          >
+            <Play className="h-4 w-4" />
+          </Link>
+        </div>
+      )}
 
-      <div className="pointer-events-auto absolute bottom-12 left-5">
-        <MapLegend />
-      </div>
+      {globe && (
+        <div className="pointer-events-auto absolute bottom-12 left-5">
+          <MapLegend />
+        </div>
+      )}
 
-      <div className="absolute inset-x-0 bottom-5 flex flex-col items-center gap-2">
-        <FlightZoomHint />
-        <WildfireStatusHint />
-        <EarthquakeStatusHint />
-        <p className="glass-panel-elevated flex items-center gap-3 rounded-full px-4 py-1.5 text-xs">
-          <span className="font-mono tabular-nums text-foreground">
-            {readout ? `${formatAxis(readout.latitude, "N", "S")}  |  ${formatAxis(readout.longitude, "E", "W")}` : "Looking at space"}
-          </span>
-          <span className="hidden h-3 w-px bg-border 2xl:block" />
-          <span className="hidden text-muted 2xl:block">Drag to orbit · Scroll or pinch to zoom</span>
-        </p>
-      </div>
+      {globe && (
+        <div className="absolute inset-x-0 bottom-5 flex flex-col items-center gap-2">
+          <FlightZoomHint />
+          <WildfireStatusHint />
+          <EarthquakeStatusHint />
+          <p className="glass-panel-elevated flex items-center gap-3 rounded-full px-4 py-1.5 text-xs">
+            <span className="font-mono tabular-nums text-foreground">
+              {readout
+                ? `${formatAxis(readout.latitude, "N", "S")}  |  ${formatAxis(readout.longitude, "E", "W")}`
+                : "Looking at space"}
+            </span>
+            <span className="hidden h-3 w-px bg-border 2xl:block" />
+            <span className="hidden text-muted 2xl:block">
+              Drag to orbit · Scroll or pinch to zoom
+            </span>
+          </p>
+        </div>
+      )}
 
       <div className="pointer-events-auto absolute bottom-5 right-5">
         <CopilotLauncher />
