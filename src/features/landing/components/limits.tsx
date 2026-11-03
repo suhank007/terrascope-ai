@@ -1,8 +1,8 @@
 const ROWS: { ask: string; why: string; instead: string }[] = [
-  { ask: "Is my flight late?", why: "Delays need airline schedules, which come from a paid data source.", instead: "We show where it is now, plus FAA delay programmes for US airports." },
+  { ask: "Is my flight late?", why: "Delays need airline schedules, which come from a paid data source.", instead: "We show where it is now, plus FAA delays for US airports." },
   { ask: "Hotel prices and availability", why: "Booking and Airbnb don't offer open data, and scraping breaks their terms.", instead: "Search links that open on their own sites, with your dates filled in." },
-  { ask: "Ratings and reviews", why: "TripAdvisor and similar need a paid or partner licence.", instead: "Top sights ranked by Wikipedia coverage, labelled as fame, not quality." },
-  { ask: "Live road traffic to the airport", why: "Traffic-aware routing is a paid API.", instead: "Ride and transit links from the airport page." },
+  { ask: "Ratings and reviews", why: "TripAdvisor and similar need a paid or partner licence.", instead: "Top sights, ranked by how well known they are on Wikipedia (fame, not quality)." },
+  { ask: "Live road traffic to the airport", why: "Live traffic data is a paid service.", instead: "Ride and transit links from the airport page." },
   { ask: "Transit and rail tickets", why: "There is no global ticketing API.", instead: "Rome2rio and an OpenStreetMap transit map." },
   { ask: "Alerts on your phone or watch", why: "They need a native app or a messaging service, and this is a web app.", instead: "Not available yet." },
 ];

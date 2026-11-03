@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils";
 type Tab = "trip" | "flight" | "airport";
 
 const TABS: { key: Tab; label: string; icon: typeof Compass; hint: string }[] = [
-  { key: "trip", label: "Trip Brief", icon: Compass, hint: "Advisories, health notices, live hazards, forecast and sights for a destination." },
+  { key: "trip", label: "Trip Brief", icon: Compass, hint: "Travel advice, health notices, hazards, forecast and sights for a destination." },
   { key: "flight", label: "Flight", icon: Plane, hint: "Where a flight is right now, how high and how fast." },
-  { key: "airport", label: "Airport", icon: PlaneTakeoff, hint: "Weather and delay programmes at an airport, right now." },
+  { key: "airport", label: "Airport", icon: PlaneTakeoff, hint: "Current weather and FAA delays at an airport." },
 ];
 
 function FlightField() {

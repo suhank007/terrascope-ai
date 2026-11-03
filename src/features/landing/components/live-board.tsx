@@ -18,7 +18,7 @@ export function LiveBoard() {
           <h2 id="board-title" className="text-2xl font-semibold tracking-tight sm:text-3xl">
             Airports right now
           </h2>
-          <p className="mt-1 text-base text-muted">Weather from NOAA, ground stops and delay programmes from the FAA (US airports).</p>
+          <p className="mt-1 text-base text-muted">Weather from NOAA, delays and flight holds from the FAA (US airports only).</p>
         </div>
         <p className="flex items-center gap-4 text-sm text-muted">
           <span className="flex items-center gap-1.5">

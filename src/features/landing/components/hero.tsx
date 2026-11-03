@@ -27,7 +27,7 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.08, ease: EASE_OUT_EXPO }}
             className="mt-4 max-w-xl text-lg leading-relaxed text-white"
           >
-            Live hazards, advisories, weather and airport conditions for any trip, with the source for every line.
+            Live hazards, travel advisories, weather and airport conditions for any trip. Every fact shows where it came from.
           </motion.p>
         </div>
       </div>

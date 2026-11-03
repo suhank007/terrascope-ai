@@ -1,12 +1,12 @@
 import { CloudSun, Flame, HeartPulse, PlaneTakeoff, Radar, ShieldCheck, type LucideIcon } from "lucide-react";
 
 const ITEMS: { icon: LucideIcon; title: string; text: string; sources: string }[] = [
-  { icon: ShieldCheck, title: "Safety and entry", text: "Official travel advice for the country, with the level each government gives it.", sources: "UK FCDO, US State Department" },
-  { icon: HeartPulse, title: "Health", text: "Current travel health notices and outbreak reports that mention the destination.", sources: "CDC, WHO" },
-  { icon: Flame, title: "Live hazards", text: "Earthquakes and fires near the place, counted within a radius that suits a city or a region.", sources: "USGS, NASA FIRMS" },
-  { icon: CloudSun, title: "Weather and air", text: "Conditions now, the seven-day forecast and the air quality index.", sources: "Open-Meteo" },
-  { icon: PlaneTakeoff, title: "Airports", text: "Decoded weather, FAA ground stops and delay programmes, scored per airport.", sources: "NOAA Aviation Weather, FAA" },
-  { icon: Radar, title: "Flights", text: "Position, altitude, speed and distance to go for any flight in the air.", sources: "adsb.fi, adsbdb" },
+  { icon: ShieldCheck, title: "Safety and entry", text: "Official travel advice for the country, and the risk level each government gives it.", sources: "UK FCDO, US State Department" },
+  { icon: HeartPulse, title: "Health", text: "Current travel health notices and outbreaks that mention the destination.", sources: "CDC, WHO" },
+  { icon: Flame, title: "Live hazards", text: "Recent earthquakes and fires near the destination. A city gets a small search area, a region a larger one.", sources: "USGS, NASA FIRMS" },
+  { icon: CloudSun, title: "Weather and air", text: "Conditions now, a seven-day forecast and the air quality rating.", sources: "Open-Meteo" },
+  { icon: PlaneTakeoff, title: "Airports", text: "Current airport weather, plus delays and flight holds reported by the FAA (US airports only).", sources: "NOAA Aviation Weather, FAA" },
+  { icon: Radar, title: "Flights", text: "Where any flight in the air is now: position, height, speed and distance left.", sources: "adsb.fi, adsbdb" },
 ];
 
 export function Checks() {
