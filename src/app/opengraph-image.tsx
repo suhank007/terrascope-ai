@@ -14,7 +14,7 @@ export default async function OgImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          backgroundColor: "#05070a",
+          backgroundColor: "#ffffff",
           padding: "90px",
         }}
       >
@@ -25,23 +25,23 @@ export default async function OgImage() {
               width: 56,
               height: 56,
               borderRadius: 16,
-              border: "1px solid rgba(53, 224, 200, 0.35)",
-              backgroundColor: "rgba(53, 224, 200, 0.12)",
+              border: "1px solid rgba(0, 98, 227, 0.35)",
+              backgroundColor: "rgba(0, 98, 227, 0.08)",
             }}
           />
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ display: "flex", width: 10, height: 10, borderRadius: 999, backgroundColor: "#35e0c8" }} />
-            <div style={{ display: "flex", fontSize: 22, color: "#8891a1", letterSpacing: 3, textTransform: "uppercase" }}>
+            <div style={{ display: "flex", width: 10, height: 10, borderRadius: 999, backgroundColor: "#0a7d4e" }} />
+            <div style={{ display: "flex", fontSize: 22, color: "#55657a", letterSpacing: 3, textTransform: "uppercase" }}>
               Live
             </div>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "baseline", gap: 16 }}>
-          <div style={{ display: "flex", fontSize: 76, fontWeight: 700, color: "#eef1f5" }}>TerraScope</div>
-          <div style={{ display: "flex", fontSize: 76, fontWeight: 700, color: "#35e0c8" }}>AI</div>
+          <div style={{ display: "flex", fontSize: 76, fontWeight: 700, color: "#0b1d33" }}>TerraScope</div>
+          <div style={{ display: "flex", fontSize: 76, fontWeight: 700, color: "#0062e3" }}>AI</div>
         </div>
-        <div style={{ display: "flex", fontSize: 30, color: "#8891a1", marginTop: 20, maxWidth: 920 }}>
-          Real-time global intelligence: earthquakes, weather, flights, and wildfires, live on a 3D globe.
+        <div style={{ display: "flex", fontSize: 30, color: "#55657a", marginTop: 20, maxWidth: 920 }}>
+          Know what is happening before you go: live hazards, advisories, weather and airport conditions, with sources.
         </div>
       </div>
     ),

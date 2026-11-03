@@ -12,7 +12,7 @@ interface SeverityStyle {
 }
 
 export const SEVERITY: Record<Severity, SeverityStyle> = {
-  none: { label: "No flags", icon: ShieldCheck, text: "text-accent", bg: "bg-accent-soft", border: "border-accent/30", dot: "bg-accent" },
+  none: { label: "No flags", icon: ShieldCheck, text: "text-success", bg: "bg-success-soft", border: "border-success/30", dot: "bg-success" },
   caution: { label: "Caution", icon: AlertTriangle, text: "text-alert", bg: "bg-alert/10", border: "border-alert/30", dot: "bg-alert" },
   high: { label: "High risk", icon: ShieldAlert, text: "text-danger", bg: "bg-danger/10", border: "border-danger/30", dot: "bg-danger" },
   critical: { label: "Do not travel", icon: OctagonAlert, text: "text-danger", bg: "bg-danger/15", border: "border-danger/60", dot: "bg-danger" },

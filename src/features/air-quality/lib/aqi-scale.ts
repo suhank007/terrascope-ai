@@ -6,11 +6,11 @@ interface AqiBand {
 }
 
 export const AQI_LEGEND: AqiBand[] = [
-  { label: "Good", hex: "#4ade80" },
-  { label: "Moderate", hex: "#facc15" },
-  { label: "Unhealthy for sensitive groups", hex: "#fb923c" },
-  { label: "Unhealthy", hex: "#f2545b" },
-  { label: "Very unhealthy", hex: "#c084fc" },
+  { label: "Good", hex: "#15803d" },
+  { label: "Moderate", hex: "#a16207" },
+  { label: "Unhealthy for sensitive groups", hex: "#c2410c" },
+  { label: "Unhealthy", hex: "#b91c1c" },
+  { label: "Very unhealthy", hex: "#7e22ce" },
   { label: "Hazardous", hex: "#7f1d1d" },
 ];
 

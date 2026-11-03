@@ -1,28 +1,31 @@
 @import "tailwindcss";
 
+/* Light, flat and quiet: a white page, one blue for actions, and separate
+   greens/ambers/reds that only ever mean status. */
 :root {
-  --background: #05070a;
-  --surface: #0c0f14;
-  --surface-elevated: #12161e;
-  --foreground: #eef1f5;
-  --muted: #8891a1;
-  --border: rgba(238, 241, 245, 0.09);
-  --accent: #35e0c8;
-  --accent-soft: rgba(53, 224, 200, 0.12);
-  --accent-strong: #7df9e6;
-  --alert: #f5a623;
-  --danger: #f2545b;
-  --ring: rgba(53, 224, 200, 0.4);
+  --background: #ffffff;
+  --surface: #f5f7fa;
+  --surface-elevated: #ebeff5;
+  --foreground: #0b1d33;
+  --muted: #55657a;
+  --border: rgba(11, 29, 51, 0.12);
+  --accent: #0062e3;
+  --accent-soft: rgba(0, 98, 227, 0.08);
+  --accent-strong: #004db3;
+  --success: #0a7d4e;
+  --success-soft: rgba(10, 125, 78, 0.09);
+  --alert: #b25e00;
+  --danger: #c4262e;
+  --ring: rgba(0, 98, 227, 0.4);
 
-  --glass-bg: rgba(12, 15, 20, 0.6);
-  --glass-bg-elevated: rgba(18, 22, 30, 0.72);
-  --glass-border: rgba(238, 241, 245, 0.08);
-  --glass-blur: 20px;
+  /* Panels that float over the map. */
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.96);
+  --glass-border: rgba(11, 29, 51, 0.12);
+  --glass-blur: 12px;
 
-  /* Front page: red noir. Red is the alert signal, teal (--accent) stays the all-clear signal. */
-  --noir: #ef233c;
-  --noir-deep: #1a0709;
-  --noir-ink: #070405;
+  --shadow-card: 0 1px 2px rgba(11, 29, 51, 0.06), 0 1px 3px rgba(11, 29, 51, 0.04);
+  --shadow-float: 0 4px 16px rgba(11, 29, 51, 0.12);
 }
 
 @theme inline {
@@ -35,12 +38,11 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-accent-strong: var(--accent-strong);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
   --color-alert: var(--alert);
   --color-danger: var(--danger);
   --color-ring: var(--ring);
-  --color-noir: var(--noir);
-  --color-noir-deep: var(--noir-deep);
-  --color-noir-ink: var(--noir-ink);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -96,6 +98,8 @@ a,
 input,
 select,
 textarea {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition-property: color, background-color, border-color, box-shadow, opacity, transform;
   transition-duration: 0.15s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
@@ -103,7 +107,7 @@ textarea {
 
 html {
   scroll-behavior: auto;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -115,7 +119,7 @@ body {
 
 ::selection {
   background: var(--accent);
-  color: var(--background);
+  color: #fff;
 }
 
 ::-webkit-scrollbar {
@@ -126,7 +130,7 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: rgba(11, 29, 51, 0.18);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -136,6 +140,7 @@ body {
 .glass-panel {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-card);
   -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
 }
@@ -143,16 +148,17 @@ body {
 .glass-panel-elevated {
   background: var(--glass-bg-elevated);
   border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-float);
   -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
 }
 
-/* Docked workspace panels (desktop layout). Unlike .glass-panel these sit on
-   the solid page background beside the globe, not over it — so they use an
-   opaque surface and the same hairline border, no blur. */
+/* Docked workspace panels (desktop layout): white cards with a hairline
+   border and the faintest shadow, like the result cards on a flight search. */
 .dock-panel {
-  background: var(--surface);
+  background: #fff;
   border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
 }
 
 .kbd {
@@ -163,12 +169,12 @@ body {
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 3px 5px;
-  background: rgba(238, 241, 245, 0.03);
+  background: var(--surface);
 }
 
 /* Skeleton loading: a soft light-band sweep, not an opacity flicker. Apply
    directly to each placeholder shape (its own bg/rounded/size utilities
-   still apply — this only adds the sweep, clipped to that shape). */
+   still apply, this only adds the sweep, clipped to that shape). */
 .skeleton-shimmer {
   position: relative;
   overflow: hidden;
@@ -178,7 +184,7 @@ body {
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(238, 241, 245, 0.07), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
   animation: shimmer 1.8s ease-in-out infinite;
 }
 @keyframes shimmer {
@@ -199,11 +205,7 @@ body {
 .cesium-widget-credits {
   font-family: var(--font-sans) !important;
   font-size: 10px !important;
-  opacity: 0.5;
-}
-.cesium-credit-textContainer,
-.cesium-credit-imageContainer {
-  filter: grayscale(1) brightness(1.6);
+  opacity: 0.7;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -215,82 +217,4 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* ---- Front page: red noir ---------------------------------------------- */
-
-@property --noir-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes noir-spin {
-  to {
-    --noir-angle: 360deg;
-  }
-}
-
-@keyframes noir-drift {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-2000px);
-  }
-}
-
-/* The primary call to action: a black pill whose red edge travels around it. */
-.noir-cta {
-  position: relative;
-  isolation: isolate;
-  border: 2px solid transparent;
-  border-radius: 9999px;
-  background:
-    linear-gradient(var(--noir-ink), var(--noir-ink)) padding-box,
-    conic-gradient(from var(--noir-angle), transparent 0%, var(--noir) 6%, var(--noir) 16%, var(--noir) 30%, transparent 42%, transparent 100%) border-box;
-  animation: noir-spin 3s linear infinite;
-}
-
-.noir-stars-a,
-.noir-stars-b {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 9999px;
-  background: transparent;
-}
-.noir-stars-a {
-  width: 1px;
-  height: 1px;
-  animation: noir-drift 90s linear infinite;
-  box-shadow: 234px 124px #fff8, 654px 345px #fff6, 876px 12px #fff8, 1200px 800px #fff6, 400px 1500px #fff8, 1800px 200px #fff6, 100px 1000px #fff8, 900px 1900px #fff6,
-    500px 600px #fff8, 1400px 100px #fff6, 300px 400px #fff8, 1600px 1200px #fff6, 1100px 1500px #fff6, 700px 1100px #fff8;
-}
-.noir-stars-b {
-  width: 2px;
-  height: 2px;
-  animation: noir-drift 140s linear infinite;
-  box-shadow: 123px 456px #ffffff55, 789px 234px #ffffff44, 456px 890px #ffffff55, 1100px 300px #ffffff44, 200px 1200px #ffffff55, 1500px 500px #ffffff44, 600px 1700px #ffffff55,
-    1300px 900px #ffffff44;
-}
-
-.noir-grid {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(circle at 50% 35%, black 25%, transparent 75%);
-}
-
-.noir-outline-text {
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
-  color: transparent;
-}
-
-::selection {
-  background: var(--accent);
-  color: var(--background);
-}
-.noir ::selection {
-  background: var(--noir);
-  color: #fff;
 }

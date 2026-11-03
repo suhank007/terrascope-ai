@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Activity, CloudSun, Flame, Loader2, MapPinned, Wind, X, type LucideIcon } from "lucide-react";
-import { Art, type ArtKind } from "@/components/ui/art";
 import { Facts } from "@/components/ui/facts";
 import { useGlobeUi, type Layers } from "@/features/globe/context/globe-ui-context";
 import { colorForMagnitude } from "@/features/earthquakes/lib/color-scale";
@@ -22,8 +21,6 @@ import { aqiAdvice, compassPoint, fireIntensity, quakeFeel } from "../lib/advice
 import type { PlaceReport as Report, SearchedPlace } from "../types";
 
 type TabKey = "weather" | "airQuality" | "earthquakes" | "wildfires";
-
-const TAB_ART: Record<TabKey, ArtKind> = { weather: "weather", airQuality: "air", earthquakes: "quake", wildfires: "fire" };
 
 const TABS: { key: TabKey; label: string; icon: LucideIcon }[] = [
   { key: "weather", label: "Weather", icon: CloudSun },
@@ -286,7 +283,7 @@ export function PlaceReport({ place }: { place: SearchedPlace }) {
       </header>
 
       <div role="tablist" aria-label="Conditions" className="sticky top-0 z-10 grid shrink-0 grid-cols-4 gap-1 border-y border-border bg-surface px-3 py-2 xl:static">
-        {TABS.map(({ key, label }) => {
+        {TABS.map(({ key, label, icon: Icon }) => {
           const s = summary(key, data);
           const active = tab === key;
           return (
@@ -301,7 +298,7 @@ export function PlaceReport({ place }: { place: SearchedPlace }) {
                 active ? "bg-accent-soft text-accent" : "text-foreground/80 hover:bg-surface-elevated"
               )}
             >
-              <Art kind={TAB_ART[key]} size={36} float={active} className={cn("transition-[opacity,filter] duration-300", !active && "opacity-70")} />
+              <Icon className="h-4 w-4" aria-hidden />
               <span className="text-xs font-medium">{label}</span>
               <span className="font-mono text-xs tabular-nums" style={!active && s.tone ? { color: s.tone } : undefined}>
                 {isLoading ? <Loader2 className="inline h-3 w-3 animate-spin" aria-label="Loading" /> : s.text}

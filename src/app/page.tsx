@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Landing } from "@/features/landing/components/landing";
 
 export const metadata: Metadata = {
-  title: "TerraScope AI: every threat, delay and detour before you fly",
+  title: "TerraScope AI: know what's happening before you go",
   description:
-    "Live earthquakes, wildfires, weather and aircraft, government advisories and airport conditions, scored into one verdict that names its sources and says what it could not check.",
+    "Live hazards, government advisories, weather and airport conditions for any trip, with the source for every line and a clear note of what could not be checked.",
 };
 
 export default function Home() {

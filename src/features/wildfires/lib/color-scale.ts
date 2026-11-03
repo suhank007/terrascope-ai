@@ -1,15 +1,15 @@
 import { Color } from "cesium";
 
 export const WILDFIRE_LEGEND = [
-  { label: "Low confidence", hex: "#facc15" },
-  { label: "Nominal confidence", hex: "#fb923c" },
-  { label: "High confidence", hex: "#f2545b" },
+  { label: "Low confidence", hex: "#a16207" },
+  { label: "Nominal confidence", hex: "#c2410c" },
+  { label: "High confidence", hex: "#b91c1c" },
 ];
 
 export function colorForConfidence(confidence: "low" | "nominal" | "high"): Color {
-  if (confidence === "high") return Color.fromCssColorString("#f2545b");
-  if (confidence === "nominal") return Color.fromCssColorString("#fb923c");
-  return Color.fromCssColorString("#facc15");
+  if (confidence === "high") return Color.fromCssColorString("#b91c1c");
+  if (confidence === "nominal") return Color.fromCssColorString("#c2410c");
+  return Color.fromCssColorString("#a16207");
 }
 
 export function pixelSizeForFrp(frp: number): number {

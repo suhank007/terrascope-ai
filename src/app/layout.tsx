@@ -11,8 +11,8 @@ const description =
 
 export const viewport: Viewport = {
   viewportFit: "cover",
-  themeColor: "#05070a",
-  colorScheme: "dark",
+  themeColor: "#ffffff",
+  colorScheme: "light",
 };
 
 export const metadata: Metadata = {
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} dark`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body>
         <AppMotionProvider>
           <AppQueryProvider>{children}</AppQueryProvider>
