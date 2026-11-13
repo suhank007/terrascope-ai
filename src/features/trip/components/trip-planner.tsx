@@ -59,7 +59,7 @@ export function TripPlanner({ query, mode, onChange }: { query: TripQuery | null
                 title={m.hint}
                 onClick={() => onChange({ mode: m.key })}
                 className={cn(
-                  "flex h-9 flex-1 items-center justify-center gap-2 rounded-lg px-4 text-sm transition-colors active:scale-[0.98]",
+                  "flex h-11 flex-1 items-center justify-center gap-2 rounded-lg px-4 text-sm sm:h-9 transition-colors active:scale-[0.98]",
                   mode === m.key ? "bg-background font-medium text-foreground" : "text-muted hover:text-foreground"
                 )}
               >
@@ -72,18 +72,14 @@ export function TripPlanner({ query, mode, onChange }: { query: TripQuery | null
       </div>
 
       {!query ? (
-        <p className="mt-4 text-sm text-muted">
-          Try{" "}
-          {EXAMPLE_DESTINATIONS.map((d, i) => (
-            <span key={d.name}>
-              <button type="button" onClick={() => onChange(d)} className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-accent hover:decoration-accent">
-                {d.name}
-              </button>
-              {i < EXAMPLE_DESTINATIONS.length - 1 ? ", " : ""}
-            </span>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="text-sm text-muted">Try</span>
+          {EXAMPLE_DESTINATIONS.map((d) => (
+            <button key={d.name} type="button" onClick={() => onChange(d)} className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-background px-4 text-sm text-foreground transition-colors hover:border-accent/50 hover:text-accent active:scale-95 sm:min-h-9 sm:px-3.5">
+              {d.name}
+            </button>
           ))}
-          .
-        </p>
+        </div>
       ) : (
         <div className="mt-3">
           <button
@@ -91,7 +87,7 @@ export function TripPlanner({ query, mode, onChange }: { query: TripQuery | null
             onClick={() => setOptionsOpen((o) => !o)}
             aria-expanded={optionsOpen}
             aria-controls="trip-options"
-            className="-ml-1 flex min-h-9 items-center gap-1.5 rounded-lg px-1 text-sm text-muted transition-colors hover:text-foreground"
+            className="-ml-1 flex min-h-11 items-center gap-1.5 sm:min-h-9 rounded-lg px-1 text-sm text-muted transition-colors hover:text-foreground"
           >
             <ChevronDown className={cn("h-4 w-4 transition-transform", optionsOpen && "rotate-180")} aria-hidden />
             Dates and currency <span className="text-muted/70">({summary})</span>

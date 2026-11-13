@@ -32,7 +32,7 @@ export function LandingFooter() {
           <ul className="mt-4 flex flex-col gap-1 text-base text-muted">
             {EXPLORE.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="inline-flex min-h-9 items-center transition-colors hover:text-foreground">
+                <Link href={l.href} className="inline-flex min-h-11 items-center transition-colors hover:text-foreground sm:min-h-9">
                   {l.label}
                 </Link>
               </li>
@@ -44,7 +44,7 @@ export function LandingFooter() {
           <ul className="mt-4 flex flex-col gap-1 text-base text-muted">
             {DATA.map((l) => (
               <li key={l.href}>
-                <a href={l.href} target="_blank" rel="noreferrer noopener" className="inline-flex min-h-9 items-center transition-colors hover:text-foreground">
+                <a href={l.href} target="_blank" rel="noreferrer noopener" className="inline-flex min-h-11 items-center transition-colors hover:text-foreground sm:min-h-9">
                   {l.label}
                 </a>
               </li>
@@ -55,7 +55,7 @@ export function LandingFooter() {
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col justify-between gap-2 px-4 py-5 text-sm text-muted sm:px-6 md:flex-row">
           <p>Built by Ankit Parihar. Map tiles from Esri. Airport data from OurAirports (public domain).</p>
-          <a href="https://github.com/suhank007/terrascope-ai" target="_blank" rel="noreferrer noopener" className="hover:text-foreground">
+          <a href="https://github.com/suhank007/terrascope-ai" target="_blank" rel="noreferrer noopener" className="inline-flex min-h-11 items-center hover:text-foreground sm:min-h-0">
             GitHub
           </a>
         </div>

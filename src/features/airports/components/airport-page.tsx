@@ -18,7 +18,7 @@ function Skeleton() {
       <div className="dock-panel rounded-2xl p-6">
         <div className="skeleton-shimmer h-8 w-28 rounded bg-surface-elevated" />
         <div className="skeleton-shimmer mt-4 h-5 w-1/2 rounded bg-surface-elevated" />
-        <p className="mt-5 text-xs text-muted">Checking weather, delay programmes and live traffic.</p>
+        <p className="mt-5 text-xs text-muted">Checking weather, FAA delays and live traffic.</p>
       </div>
       {Array.from({ length: 3 }).map((_, i) => (
         <div key={i} className="border-t border-border pt-8">
@@ -37,7 +37,7 @@ export function AirportPage({ code }: { code: string }) {
   const { data, isLoading, isError, refetch } = useAirportBrief(code);
 
   return (
-    <TravelShell title="Airport" intro="Live weather, FAA delay programmes for US airports, and the aircraft arriving and departing right now.">
+    <TravelShell title="Airport" intro="Live weather, FAA delays for US airports, and the aircraft arriving and departing right now.">
       <section aria-label="Find another airport" className="dock-panel rounded-2xl p-5">
         <AirportSearch />
       </section>

@@ -21,7 +21,7 @@ export function TravelShell({ title, intro, children }: { title: string; intro: 
     <div className="h-dvh overflow-y-auto bg-background">
       <header className="sticky top-0 z-20 border-b border-border bg-white/95 pt-[env(safe-area-inset-top)] backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
-          <Link href="/" className="flex min-h-11 items-center gap-2 text-base font-semibold tracking-tight text-foreground" aria-label="TerraScope home">
+          <Link href="/" className="flex min-h-11 min-w-11 items-center gap-2 text-base font-semibold tracking-tight text-foreground" aria-label="TerraScope home">
             <Globe2 className="h-5 w-5 text-accent" aria-hidden />
             <span translate="no" className="hidden sm:inline">TerraScope</span>
           </Link>
@@ -43,7 +43,7 @@ export function TravelShell({ title, intro, children }: { title: string; intro: 
             })}
           </nav>
 
-          <Link href="/globe" className="flex min-h-11 items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-foreground" aria-label="Open the live globe">
+          <Link href="/globe" className="flex min-h-11 min-w-11 items-center justify-end gap-1.5 text-sm font-medium text-muted transition-colors hover:text-foreground" aria-label="Open the live globe">
             <Map className="h-4 w-4" aria-hidden />
             <span className="hidden sm:inline">Live globe</span>
           </Link>

@@ -54,7 +54,7 @@ export function AirportSearch({ autoFocus = false }: { autoFocus?: boolean }) {
           onKeyDown={(e) => {
             if (e.key === "Enter" && results[0]) router.push(`/airports/${results[0].iata}`);
           }}
-          placeholder="City, airport name or code, e.g. Heathrow or LHR"
+          placeholder="City, airport or code, e.g. LHR"
           autoComplete="off"
           role="combobox"
           aria-expanded={open}

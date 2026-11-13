@@ -37,7 +37,7 @@ export function FlightSearch({ initial, onSearch }: { initial: string; onSearch:
                 setText(e.target.value);
                 setInvalid(false);
               }}
-              placeholder="BA117, BAW117 or G-BODO"
+              placeholder="e.g. BA117"
               autoComplete="off"
               autoCapitalize="characters"
               spellCheck={false}
@@ -57,25 +57,22 @@ export function FlightSearch({ initial, onSearch }: { initial: string; onSearch:
         )}
       </form>
 
-      <p className="mt-4 text-sm text-muted">
-        Try{" "}
-        {EXAMPLES.map((ex, i) => (
-          <span key={ex}>
-            <button
-              type="button"
-              onClick={() => {
-                setText(ex);
-                submit(ex);
-              }}
-              className="font-mono text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
-            >
-              {ex}
-            </button>
-            {i < EXAMPLES.length - 1 ? ", " : ""}
-          </span>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <span className="text-sm text-muted">Try</span>
+        {EXAMPLES.map((ex) => (
+          <button
+            key={ex}
+            type="button"
+            onClick={() => {
+              setText(ex);
+              submit(ex);
+            }}
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-background px-4 text-sm text-foreground transition-colors hover:border-accent/50 hover:text-accent active:scale-95 sm:min-h-9 sm:px-3.5 font-mono"
+          >
+            {ex}
+          </button>
         ))}
-        .
-      </p>
+      </div>
     </section>
   );
 }

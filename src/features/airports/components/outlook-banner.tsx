@@ -48,7 +48,7 @@ export function OutlookBanner({ brief }: { brief: AirportBrief }) {
 
       <p className="mt-5 max-w-prose text-xs leading-relaxed text-muted">
         {outlook.basis === "faa-and-weather"
-          ? "Built from the FAA's live delay programmes and the airport's weather reports and forecast."
+          ? "Built from the FAA's live delay reports and the airport's weather reports and forecast."
           : "Built from weather only. Outside the US there is no free public delay feed, so this can't see air traffic control restrictions or airline delays."}{" "}
         Checked {formatRelativeTime(brief.generatedAt)}. Confirm your own flight with your airline.
       </p>

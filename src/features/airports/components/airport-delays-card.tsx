@@ -19,8 +19,8 @@ export function AirportDelaysCard({ brief, className }: { brief: AirportBrief; c
       {faa === null ? (
         <div className="flex max-w-prose flex-col gap-3 text-sm leading-relaxed text-muted">
           <p>
-            <span className="text-foreground">There is no free public delay feed for airports outside the US.</span> The FAA publishes live ground stops and delay
-            programmes for US airports only, so the outlook above for {airport.iata} is based on weather.
+            <span className="text-foreground">There is no free public delay feed for airports outside the US.</span> The FAA publishes live delays and flight
+            holds for US airports only, so the outlook above for {airport.iata} is based on weather.
           </p>
           <p>
             For the delay on a specific flight, check your airline or{" "}
@@ -39,7 +39,7 @@ export function AirportDelaysCard({ brief, className }: { brief: AirportBrief; c
       ) : (
         <div className="flex flex-col gap-4">
           {!faa.data.groundStop && !faa.data.groundDelay && faa.data.delays.length === 0 ? (
-            <p className="text-sm text-muted">The FAA reports no ground stops or delay programmes for {airport.iata} right now.</p>
+            <p className="text-sm text-muted">The FAA reports no delays or flight holds for {airport.iata} right now.</p>
           ) : (
             <ul>
               {faa.data.groundStop && (

@@ -41,7 +41,7 @@ function FlightField() {
           autoCapitalize="characters"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="BA117, EK1 or G-BODO…"
+          placeholder="e.g. BA117"
           autoComplete="off"
           className="min-w-0 flex-1 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-base text-foreground placeholder:text-muted focus-visible:border-accent"
         />
